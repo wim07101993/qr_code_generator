@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/models/epc_data.dart';
-import 'package:qr_code_generator/settings_sheet.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/widgets/settings_sheet.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class EpcQrCode extends StatefulWidget {

@@ -1,6 +1,4 @@
-import 'package:qr_code_generator/models/epc_data_writer.dart';
-
-enum EpcVersion implements EpcDataWriter {
+enum EpcVersion {
   version1(1),
   version2(2);
 
@@ -8,6 +6,5 @@ enum EpcVersion implements EpcDataWriter {
 
   final int value;
 
-  @override
   String toEpcDataString() => value.toString().padLeft(3, '0');
 }

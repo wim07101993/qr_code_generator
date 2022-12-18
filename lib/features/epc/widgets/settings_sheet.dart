@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/models/epc_character_set.dart';
-import 'package:qr_code_generator/models/epc_data.dart';
-import 'package:qr_code_generator/models/epc_version.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
 
 class SettingsSheet extends StatefulWidget {
   const SettingsSheet({

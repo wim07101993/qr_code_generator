@@ -1,6 +1,4 @@
-import 'package:qr_code_generator/models/epc_data_writer.dart';
-
-enum EpcCharacterSet implements EpcDataWriter {
+enum EpcCharacterSet {
   utf8(1),
   iso8859_1(2),
   iso8859_2(3),
@@ -14,6 +12,5 @@ enum EpcCharacterSet implements EpcDataWriter {
 
   final int value;
 
-  @override
   String toEpcDataString() => value.toString();
 }
