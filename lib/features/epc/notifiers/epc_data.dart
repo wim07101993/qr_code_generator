@@ -47,6 +47,9 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
 
   static final RegExp alphaNumericRegex = RegExp(r'^[A-Za-z0-9]*$');
   static final RegExp nameRegex = RegExp(r'^[A-Za-z0-9 ]*$');
+  static final RegExp unstructuredRemittanceInfoRegex =
+      RegExp(r'^[A-Za-z0-9 ]*$');
+  static final RegExp originatorInfoRegex = RegExp(r'^[A-Za-z0-9 ]*$');
   static final RegExp amountRegex = RegExp(r'^[0-9]+(?:\.[0-9]{1,2})?$');
 
   EpcVersion _version;
@@ -259,13 +262,18 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
     if (value == null || value.isEmpty) {
       return null;
     }
-    if (isStructured && value.length > 35) {
-      return 'Structured remittance info can only contain 35 characters';
-    } else if (value.length > 140) {
-      return 'Remittance info can only contain 140 characters';
-    }
-    if (!alphaNumericRegex.hasMatch(value)) {
-      return 'Remittance info can only be alpha-numeric characters';
+    if (isStructured) {
+      if (value.length > 35) {
+        return 'Structured remittance info can only contain 35 characters';
+      } else if (!alphaNumericRegex.hasMatch(value)) {
+        return 'Remittance info can only be alpha-numeric characters';
+      }
+    } else {
+      if (value.length > 140) {
+        return 'Remittance info can only contain 140 characters';
+      } else if (!unstructuredRemittanceInfoRegex.hasMatch(value)) {
+        return 'Remittance info can only be alpha-numeric characters or spaces';
+      }
     }
     return null;
   }
@@ -277,7 +285,7 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
     if (value.length > 70) {
       return 'Originator info can only be 70 characters';
     }
-    if (!alphaNumericRegex.hasMatch(value)) {
+    if (!originatorInfoRegex.hasMatch(value)) {
       return 'Originator info can only contain alpha-numeric characters';
     }
     return null;
