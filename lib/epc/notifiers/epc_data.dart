@@ -1,19 +1,115 @@
 import 'package:flutter/foundation.dart';
-import 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
-import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
+import 'package:flutter/material.dart';
+import 'package:qr_code_generator/epc/notifiers/epc_character_set.dart';
+import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
 
-class EpcData extends ChangeNotifier implements ValueListenable<String> {
+class EpcDataNotifier extends ChangeNotifier
+    implements ValueListenable<EpcData?> {
+  EpcDataNotifier() {
+    for (final notifier in notifiers) {
+      notifier.addListener(notifyListeners);
+    }
+  }
+
+  final TextEditingController amount =
+      TextEditingController(text: EpcData.defaultAmount);
+  final TextEditingController iban =
+      TextEditingController(text: EpcData.defaultIban);
+  final TextEditingController beneficiaryName =
+      TextEditingController(text: EpcData.defaultBeneficiaryName);
+  final TextEditingController bic = TextEditingController();
+  final TextEditingController purpose = TextEditingController();
+  final TextEditingController remittanceInfo = TextEditingController();
+  final TextEditingController originatorInfo = TextEditingController();
+  final ValueNotifier<EpcCharacterSet> characterSet =
+      ValueNotifier(EpcData.defaultCharacterSet);
+  final ValueNotifier<EpcVersion> version =
+      ValueNotifier(EpcData.defaultVersion);
+  final ValueNotifier<bool> useStructuredRemittanceInfo = ValueNotifier(false);
+
+  List<ChangeNotifier> get notifiers => [
+        amount,
+        iban,
+        beneficiaryName,
+        bic,
+        purpose,
+        remittanceInfo,
+        originatorInfo,
+        characterSet,
+        version,
+        useStructuredRemittanceInfo,
+      ];
+
+  @override
+  EpcData? get value {
+    if (EpcData.validateAmount(amount.text) != null &&
+        EpcData.validateIban(iban.text) != null &&
+        EpcData.validateBeneficiaryName(beneficiaryName.text) != null &&
+        EpcData.validateOriginatorInfo(originatorInfo.text) != null &&
+        EpcData.validateRemittanceInfo(
+              remittanceInfo.text,
+              isStructured: useStructuredRemittanceInfo.value,
+            ) !=
+            null &&
+        EpcData.validatePurpose(purpose.text) != null &&
+        EpcData.validateBic(bic.text, version.value) != null) {
+      return null;
+    }
+    return EpcData(
+      amount: amount.text,
+      iban: iban.text,
+      beneficiaryName: beneficiaryName.text,
+      originatorInfo: originatorInfo.text,
+      useStructuredRemittanceInfo: useStructuredRemittanceInfo.value,
+      characterSet: characterSet.value,
+      purpose: purpose.text,
+      bic: bic.text,
+      remittanceInfo: remittanceInfo.text,
+      version: version.value,
+    );
+  }
+
+  void loadEpcData(EpcData data) {
+    amount.text = data.amount;
+    iban.text = data.iban;
+    beneficiaryName.text = data.beneficiaryName;
+    originatorInfo.text = data.originatorInfo ?? '';
+    useStructuredRemittanceInfo.value = data.useStructuredRemittanceInfo;
+    characterSet.value = data.characterSet;
+    purpose.text = data.purpose ?? '';
+    bic.text = data.bic ?? '';
+    remittanceInfo.text = data.remittanceInfo ?? '';
+    version.value = data.version;
+  }
+
+  @override
+  void dispose() {
+    for (final notifier in notifiers) {
+      notifier.removeListener(notifyListeners);
+      notifier.dispose();
+    }
+    super.dispose();
+  }
+}
+
+class EpcData {
+  static const String defaultAmount = '3.14';
+  static const String defaultIban = 'BE10779597575204';
+  static const String defaultBeneficiaryName = 'Wim Van Laer';
+  static const EpcVersion defaultVersion = EpcVersion.version2;
+  static const EpcCharacterSet defaultCharacterSet = EpcCharacterSet.utf8;
+
   EpcData({
-    required String amount,
-    required String iban,
-    required String beneficiaryName,
-    EpcVersion version = EpcVersion.version2,
-    String? bic,
-    String? purpose,
-    EpcCharacterSet characterSet = EpcCharacterSet.utf8,
-    String? remittanceInfo,
-    bool useStructuredRemittanceInfo = false,
-    String? originatorInfo,
+    required this.amount,
+    required this.iban,
+    required this.beneficiaryName,
+    this.version = defaultVersion,
+    this.bic,
+    this.purpose,
+    this.characterSet = defaultCharacterSet,
+    this.remittanceInfo,
+    this.useStructuredRemittanceInfo = false,
+    this.originatorInfo,
   })  : assert(EpcData.validateVersion(version, bic)?.throwException() == null),
         assert(EpcData.validateAmount(amount)?.throwException() == null),
         assert(EpcData.validateIban(iban)?.throwException() == null),
@@ -30,17 +126,14 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
               ) ==
               null,
         ),
-        assert(EpcData.validateOriginatorInfo(originatorInfo) == null),
-        _version = version,
-        _amount = amount,
-        _iban = iban,
-        _beneficiaryName = beneficiaryName,
-        _bic = bic,
-        _purpose = purpose,
-        _characterSet = characterSet,
-        _remittanceInfo = remittanceInfo,
-        _useStructuredRemittanceInfo = useStructuredRemittanceInfo,
-        _originatorInfo = originatorInfo;
+        assert(EpcData.validateOriginatorInfo(originatorInfo) == null);
+
+  EpcData.defaultValue()
+      : this(
+          beneficiaryName: defaultBeneficiaryName,
+          iban: defaultIban,
+          amount: defaultAmount,
+        );
 
   static const String serviceTag = 'BCD';
   static const String identification = 'SCT';
@@ -52,119 +145,18 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
   static final RegExp originatorInfoRegex = RegExp(r'^[A-Za-z0-9 ]*$');
   static final RegExp amountRegex = RegExp(r'^[0-9]+(?:\.[0-9]{1,2})?$');
 
-  EpcVersion _version;
-  EpcVersion get version => _version;
-  set version(EpcVersion value) {
-    if (value == version) {
-      return;
-    }
-    validateVersion(value, bic)?.throwException();
-    _version = value;
-    notifyListeners();
-  }
+  final EpcVersion version;
+  final EpcCharacterSet characterSet;
+  final String beneficiaryName;
+  final String? bic;
+  final String iban;
+  final String amount;
+  final String? purpose;
+  final String? remittanceInfo;
+  final bool useStructuredRemittanceInfo;
+  final String? originatorInfo;
 
-  EpcCharacterSet _characterSet;
-  EpcCharacterSet get characterSet => _characterSet;
-  set characterSet(EpcCharacterSet value) {
-    if (value == version) {
-      return;
-    }
-    _characterSet = value;
-    notifyListeners();
-  }
-
-  String _beneficiaryName;
-  String get beneficiaryName => _beneficiaryName;
-  set beneficiaryName(String value) {
-    if (value == _beneficiaryName) {
-      return;
-    }
-    validateBeneficiaryName(value)?.throwException();
-    _beneficiaryName = value;
-    notifyListeners();
-  }
-
-  String? _bic;
-  String? get bic => _bic;
-  set bic(String? value) {
-    if (value == _bic) {
-      return;
-    }
-    validateBic(value, version)?.throwException();
-    _bic = value;
-    notifyListeners();
-  }
-
-  String _iban;
-  String get iban => _iban;
-  set iban(String value) {
-    if (value == _iban) {
-      return;
-    }
-    validateIban(value)?.throwException();
-    _iban = value;
-    notifyListeners();
-  }
-
-  String _amount;
-  String get amount => _amount;
-  set amount(String value) {
-    if (value == _amount) {
-      return;
-    }
-    validateAmount(value)?.throwException();
-    _amount = value;
-    notifyListeners();
-  }
-
-  String? _purpose;
-  String? get purpose => _purpose;
-  set purpose(String? value) {
-    if (value == _purpose) {
-      return;
-    }
-    validatePurpose(value)?.throwException();
-    _purpose = value;
-    notifyListeners();
-  }
-
-  String? _remittanceInfo;
-  String? get remittanceInfo => _remittanceInfo;
-  set remittanceInfo(String? value) {
-    if (value == _remittanceInfo) {
-      return;
-    }
-    validateRemittanceInfo(value, isStructured: useStructuredRemittanceInfo)
-        ?.throwException();
-    _remittanceInfo = value;
-    notifyListeners();
-  }
-
-  bool _useStructuredRemittanceInfo;
-  bool get useStructuredRemittanceInfo => _useStructuredRemittanceInfo;
-  set useStructuredRemittanceInfo(bool value) {
-    if (value == _useStructuredRemittanceInfo) {
-      return;
-    }
-    validateRemittanceInfo(remittanceInfo, isStructured: value)
-        ?.throwException();
-    _useStructuredRemittanceInfo = value;
-    notifyListeners();
-  }
-
-  String? _originatorInfo;
-  String? get originatorInfo => _originatorInfo;
-  set originatorInfo(String? value) {
-    if (value == _originatorInfo) {
-      return;
-    }
-    validateOriginatorInfo(value)?.throwException();
-    _originatorInfo = value;
-    notifyListeners();
-  }
-
-  @override
-  String get value {
+  String get qrData {
     return [
       serviceTag,
       version.toEpcDataString(),
@@ -175,10 +167,24 @@ class EpcData extends ChangeNotifier implements ValueListenable<String> {
       iban,
       'EUR$amount',
       purpose,
-      // TODO structured vs unstructured remittance info
       remittanceInfo,
       originatorInfo
     ].map((s) => s ?? '').join('\n').trim();
+  }
+
+  EpcData copyWithAmount(String amount) {
+    return EpcData(
+      version: version,
+      characterSet: characterSet,
+      beneficiaryName: beneficiaryName,
+      bic: bic,
+      iban: iban,
+      amount: amount,
+      purpose: purpose,
+      remittanceInfo: remittanceInfo,
+      useStructuredRemittanceInfo: useStructuredRemittanceInfo,
+      originatorInfo: originatorInfo,
+    );
   }
 
   static String? validateVersion(EpcVersion? value, String? bic) {

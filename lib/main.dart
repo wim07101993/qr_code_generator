@@ -1,25 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/features/epc/data/shared_preferrences_functions.dart';
-import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/features/epc/widgets/epc_qr_code.dart';
+import 'package:get_it/get_it.dart';
+import 'package:qr_code_generator/app_router.dart';
+import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
+import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/qr_code_style/notifiers/qr_code_style_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+GetIt getIt = GetIt.asNewInstance();
+AppRouter router = AppRouter();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final data = EpcData(
-    amount: '3.14',
-    iban: 'BE10779597575204',
-    beneficiaryName: "Wim Van Laer",
-  );
   final sharedPreferences = await SharedPreferences.getInstance();
-  sharedPreferences.loadEpcDataTo(data);
-
-  data.addListener(() => sharedPreferences.saveEpcData(data));
+  getIt.registerSingleton(sharedPreferences);
+  getIt.registerLazySingleton(
+    () {
+      final notifier = EpcDataNotifier();
+      final epcData = getIt<SharedPreferences>().loadEpcData();
+      if (epcData != null) {
+        notifier.loadEpcData(epcData);
+      }
+      return notifier;
+    },
+    dispose: (notifier) => notifier.dispose(),
+  );
+  getIt.registerLazySingleton(() {
+    final notifier = QrCodeStyleSettingsNotifier();
+    // final settings = getIt<SharedPreferences>().
+    // TODO load
+    return notifier;
+  }, dispose: (notifier) => notifier.dispose());
 
   runApp(
-    MaterialApp(
+    MaterialApp.router(
       title: 'QR-code generator',
-      home: EpcQrCode(data: data),
+      routerDelegate: router.delegate(),
+      routeInformationParser: router.defaultRouteParser(),
       debugShowCheckedModeBanner: false,
     ),
   );
