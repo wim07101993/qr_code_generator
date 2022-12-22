@@ -42,16 +42,16 @@ class EpcDataNotifier extends ChangeNotifier
 
   @override
   EpcData? get value {
-    if (EpcData.validateAmount(amount.text) != null &&
-        EpcData.validateIban(iban.text) != null &&
-        EpcData.validateBeneficiaryName(beneficiaryName.text) != null &&
-        EpcData.validateOriginatorInfo(originatorInfo.text) != null &&
+    if (EpcData.validateAmount(amount.text) != null ||
+        EpcData.validateIban(iban.text) != null ||
+        EpcData.validateBeneficiaryName(beneficiaryName.text) != null ||
+        EpcData.validateOriginatorInfo(originatorInfo.text) != null ||
         EpcData.validateRemittanceInfo(
               remittanceInfo.text,
               isStructured: useStructuredRemittanceInfo.value,
             ) !=
-            null &&
-        EpcData.validatePurpose(purpose.text) != null &&
+            null ||
+        EpcData.validatePurpose(purpose.text) != null ||
         EpcData.validateBic(bic.text, version.value) != null) {
       return null;
     }
@@ -69,17 +69,19 @@ class EpcDataNotifier extends ChangeNotifier
     );
   }
 
-  void loadEpcData(EpcData data) {
-    amount.text = data.amount;
-    iban.text = data.iban;
-    beneficiaryName.text = data.beneficiaryName;
-    originatorInfo.text = data.originatorInfo ?? '';
-    useStructuredRemittanceInfo.value = data.useStructuredRemittanceInfo;
-    characterSet.value = data.characterSet;
-    purpose.text = data.purpose ?? '';
-    bic.text = data.bic ?? '';
-    remittanceInfo.text = data.remittanceInfo ?? '';
-    version.value = data.version;
+  set value(EpcData? epcData) {
+    amount.text = epcData?.amount ?? EpcData.defaultAmount;
+    iban.text = epcData?.iban ?? EpcData.defaultIban;
+    beneficiaryName.text =
+        epcData?.beneficiaryName ?? EpcData.defaultBeneficiaryName;
+    originatorInfo.text = epcData?.originatorInfo ?? '';
+    useStructuredRemittanceInfo.value =
+        epcData?.useStructuredRemittanceInfo ?? false;
+    characterSet.value = epcData?.characterSet ?? EpcData.defaultCharacterSet;
+    purpose.text = epcData?.purpose ?? '';
+    bic.text = epcData?.bic ?? '';
+    remittanceInfo.text = epcData?.remittanceInfo ?? '';
+    version.value = epcData?.version ?? EpcData.defaultVersion;
   }
 
   @override
@@ -143,6 +145,7 @@ class EpcData {
   static final RegExp unstructuredRemittanceInfoRegex =
       RegExp(r'^[A-Za-z0-9 ]*$');
   static final RegExp originatorInfoRegex = RegExp(r'^[A-Za-z0-9 ]*$');
+  // static final RegExp amountRegex = RegExp(r'^[0-9]+$');
   static final RegExp amountRegex = RegExp(r'^[0-9]+(?:\.[0-9]{1,2})?$');
 
   final EpcVersion version;

@@ -10,12 +10,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'shared_preferences_extensions.loading.dart';
 part 'shared_preferences_extensions.saving.dart';
 
-const epcDataKey = 'epcData';
+const _epcDataKey = 'epcData';
 
 extension EpcSharedPreferencesExtensions on SharedPreferences {
   EpcData? loadEpcData() {
     try {
-      final jsonData = get(epcDataKey) as String?;
+      final jsonData = get(_epcDataKey) as String?;
       if (jsonData == null) {
         return null;
       }
@@ -34,7 +34,7 @@ extension EpcSharedPreferencesExtensions on SharedPreferences {
   Future<void> saveEpcData(EpcData data) async {
     try {
       final map = data.toJson();
-      await setString(epcDataKey, jsonEncode(map));
+      await setString(_epcDataKey, jsonEncode(map));
     } catch (e, stackTrace) {
       log(
         'Error while reading previously stored epc data',

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:qr_code_generator/app_router.dart';
 import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/epc/widgets/settings_sheet.dart';
 import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/qr_code_style/notifiers/qr_code_style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -49,10 +48,17 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
       valueListenable: getIt<QrCodeStyleSettingsNotifier>(),
       builder: (context, styleSettings, _) => Scaffold(
         appBar: AppBar(
+          backgroundColor: styleSettings.backgroundColor,
+          elevation: 0,
+          actionsIconTheme: IconThemeData(
+            color: styleSettings.dataModuleStyle.color,
+            size: 32,
+          ),
           actions: [
             PopupMenuButton(
               itemBuilder: (context) => [
                 _qrCodeStyleItem(context, theme),
+                _paymentSettingsItem(context, theme),
                 _aboutItem(context),
               ],
             ),
@@ -62,8 +68,9 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
         body: SafeArea(
           child: Column(
             children: [
-              _amountForm(context),
-              Expanded(child: Center(child: _qrCode(styleSettings))),
+              _amount(context),
+              const SizedBox(height: 8),
+              Expanded(child: _qrCode(styleSettings)),
             ],
           ),
         ),
@@ -71,30 +78,25 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
     );
   }
 
-  Widget _amountForm(BuildContext context) {
-    return Form(
-      key: formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextFormField(
-                controller: epcDataNotifier.amount,
-                validator: EpcData.validateAmount,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(label: Text('Amount')),
+  Widget _amount(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          const Text('€', style: TextStyle(fontSize: 35)),
+          Expanded(
+            child: TextField(
+              controller: epcDataNotifier.amount,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                errorText: amountErrorMessage,
               ),
+              style: const TextStyle(fontSize: 35),
+              textAlign: TextAlign.center,
             ),
-            IconButton(
-              onPressed: () => showModalBottomSheet(
-                context: context,
-                builder: (context) => const SettingsSheet(),
-              ),
-              icon: const Icon(Icons.settings),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -116,10 +118,27 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
       child: Row(
         children: [
           Icon(
-            Icons.style,
+            Icons.color_lens,
             color: theme.textTheme.bodyText2?.color,
           ),
+          const SizedBox(width: 8),
           const Text('QR-code style'),
+        ],
+      ),
+    );
+  }
+
+  PopupMenuItem _paymentSettingsItem(BuildContext context, ThemeData theme) {
+    return PopupMenuItem(
+      onTap: () => AutoRouter.of(context).push(const QrCodeStyleRoute()),
+      child: Row(
+        children: [
+          Icon(
+            Icons.payment,
+            color: theme.textTheme.bodyText2?.color,
+          ),
+          const SizedBox(width: 8),
+          const Text('Payment settings'),
         ],
       ),
     );
