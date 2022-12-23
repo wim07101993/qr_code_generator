@@ -1,6 +1,6 @@
 part of 'shared_preferences_extensions.dart';
 
-extension _QrCodeStyleSettingsExtensions on QrCodeStyleSettings {
+extension _StyleSettingsExtensions on StyleSettings {
   Map<String, dynamic> toJson() {
     return {
       'backgroundColor': backgroundColor.value,

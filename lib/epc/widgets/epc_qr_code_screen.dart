@@ -1,10 +1,8 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/app_router.dart';
 import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/qr_code_style/notifiers/qr_code_style_settings.dart';
+import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,37 +41,14 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return ValueListenableBuilder<QrCodeStyleSettings>(
-      valueListenable: getIt<QrCodeStyleSettingsNotifier>(),
-      builder: (context, styleSettings, _) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: styleSettings.backgroundColor,
-          elevation: 0,
-          actionsIconTheme: IconThemeData(
-            color: styleSettings.dataModuleStyle.color,
-            size: 32,
-          ),
-          actions: [
-            PopupMenuButton(
-              itemBuilder: (context) => [
-                _qrCodeStyleItem(context, theme),
-                _paymentSettingsItem(context, theme),
-                _aboutItem(context),
-              ],
-            ),
-          ],
-        ),
-        backgroundColor: styleSettings.backgroundColor.withAlpha(255),
-        body: SafeArea(
-          child: Column(
-            children: [
-              _amount(context),
-              const SizedBox(height: 8),
-              Expanded(child: _qrCode(styleSettings)),
-            ],
-          ),
-        ),
+    return ValueListenableBuilder<StyleSettings>(
+      valueListenable: getIt<StyleSettingsNotifier>(),
+      builder: (context, styleSettings, _) => Column(
+        children: [
+          _amount(context),
+          const SizedBox(height: 8),
+          Expanded(child: _qrCode(styleSettings)),
+        ],
       ),
     );
   }
@@ -101,7 +76,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
     );
   }
 
-  Widget _qrCode(QrCodeStyleSettings settings) {
+  Widget _qrCode(StyleSettings settings) {
     return QrImage(
       data: (epcDataNotifier.value ?? lastValidEpcData).qrData,
       dataModuleStyle: settings.dataModuleStyle,
@@ -109,48 +84,6 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
       embeddedImageStyle: settings.embeddedImageStyle,
       eyeStyle: settings.eyeStyle,
       gapless: settings.gapless,
-    );
-  }
-
-  PopupMenuItem _qrCodeStyleItem(BuildContext context, ThemeData theme) {
-    return PopupMenuItem(
-      onTap: () => AutoRouter.of(context).push(const QrCodeStyleRoute()),
-      child: Row(
-        children: [
-          Icon(
-            Icons.color_lens,
-            color: theme.textTheme.bodyText2?.color,
-          ),
-          const SizedBox(width: 8),
-          const Text('QR-code style'),
-        ],
-      ),
-    );
-  }
-
-  PopupMenuItem _paymentSettingsItem(BuildContext context, ThemeData theme) {
-    return PopupMenuItem(
-      onTap: () => AutoRouter.of(context).push(const QrCodeStyleRoute()),
-      child: Row(
-        children: [
-          Icon(
-            Icons.payment,
-            color: theme.textTheme.bodyText2?.color,
-          ),
-          const SizedBox(width: 8),
-          const Text('Payment settings'),
-        ],
-      ),
-    );
-  }
-
-  PopupMenuItem _aboutItem(BuildContext context) {
-    return PopupMenuItem(
-      onTap: () => showAboutDialog(
-        context: context,
-        applicationName: 'QR-code generator',
-      ),
-      child: const Text('About'),
     );
   }
 }

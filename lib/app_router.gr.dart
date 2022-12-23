@@ -17,16 +17,22 @@ class _$AppRouter extends RootStackRouter {
 
   @override
   final Map<String, PageFactory> pagesMap = {
+    HomeRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const HomeScreen(),
+      );
+    },
     EpcQrCodeRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: const EpcQrCodeScreen(),
       );
     },
-    QrCodeStyleRoute.name: (routeData) {
+    StyleRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const QrCodeStyleScreen(),
+        child: const StyleScreen(),
       );
     },
   };
@@ -34,14 +40,49 @@ class _$AppRouter extends RootStackRouter {
   @override
   List<RouteConfig> get routes => [
         RouteConfig(
-          EpcQrCodeRoute.name,
+          HomeRoute.name,
           path: '/',
-        ),
-        RouteConfig(
-          QrCodeStyleRoute.name,
-          path: '/qr-code-style-screen',
-        ),
+          children: [
+            RouteConfig(
+              '#redirect',
+              path: '',
+              parent: HomeRoute.name,
+              redirectTo: 'epc',
+              fullMatch: true,
+            ),
+            RouteConfig(
+              '/#redirect',
+              path: '/',
+              parent: HomeRoute.name,
+              redirectTo: 'epc',
+              fullMatch: true,
+            ),
+            RouteConfig(
+              EpcQrCodeRoute.name,
+              path: 'epc',
+              parent: HomeRoute.name,
+            ),
+            RouteConfig(
+              StyleRoute.name,
+              path: 'style',
+              parent: HomeRoute.name,
+            ),
+          ],
+        )
       ];
+}
+
+/// generated route for
+/// [HomeScreen]
+class HomeRoute extends PageRouteInfo<void> {
+  const HomeRoute({List<PageRouteInfo>? children})
+      : super(
+          HomeRoute.name,
+          path: '/',
+          initialChildren: children,
+        );
+
+  static const String name = 'HomeRoute';
 }
 
 /// generated route for
@@ -50,20 +91,20 @@ class EpcQrCodeRoute extends PageRouteInfo<void> {
   const EpcQrCodeRoute()
       : super(
           EpcQrCodeRoute.name,
-          path: '/',
+          path: 'epc',
         );
 
   static const String name = 'EpcQrCodeRoute';
 }
 
 /// generated route for
-/// [QrCodeStyleScreen]
-class QrCodeStyleRoute extends PageRouteInfo<void> {
-  const QrCodeStyleRoute()
+/// [StyleScreen]
+class StyleRoute extends PageRouteInfo<void> {
+  const StyleRoute()
       : super(
-          QrCodeStyleRoute.name,
-          path: '/qr-code-style-screen',
+          StyleRoute.name,
+          path: 'style',
         );
 
-  static const String name = 'QrCodeStyleRoute';
+  static const String name = 'StyleRoute';
 }

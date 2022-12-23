@@ -2,26 +2,23 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/qr_code_style/notifiers/qr_code_style_settings.dart';
+import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-class QrCodeStyleScreen extends StatelessWidget {
-  const QrCodeStyleScreen({super.key});
+class StyleScreen extends StatelessWidget {
+  const StyleScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: ValueListenableBuilder<QrCodeStyleSettings>(
-        valueListenable: getIt<QrCodeStyleSettingsNotifier>(),
-        builder: (context, notifier, _) => _settings(context, notifier),
-      ),
+    return ValueListenableBuilder<StyleSettings>(
+      valueListenable: getIt<StyleSettingsNotifier>(),
+      builder: (context, notifier, _) => _settings(context, notifier),
     );
   }
 
-  Widget _settings(BuildContext context, QrCodeStyleSettings settings) {
+  Widget _settings(BuildContext context, StyleSettings settings) {
     final theme = Theme.of(context);
-    final notifier = getIt<QrCodeStyleSettingsNotifier>();
+    final notifier = getIt<StyleSettingsNotifier>();
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
@@ -141,7 +138,7 @@ class QrCodeStyleScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _selectFile(QrCodeStyleSettingsNotifier notifier) async {
+  Future<void> _selectFile(StyleSettingsNotifier notifier) async {
     final result = await FilePicker.platform.pickFiles();
 
     if (result != null) {

@@ -1,18 +1,18 @@
 part of 'shared_preferences_extensions.dart';
 
 extension _JsonExtensions on Map<String, dynamic> {
-  QrCodeStyleSettings toQrCodeStyleSettings() {
-    return QrCodeStyleSettings(
-      backgroundColor: getColor('backgroundColor') ??
-          QrCodeStyleSettings.defaultBackgroundColor,
+  StyleSettings toStyleSettings() {
+    return StyleSettings(
+      backgroundColor:
+          getColor('backgroundColor') ?? StyleSettings.defaultBackgroundColor,
       dataModuleStyle: getObject('dataModuleStyle')?.toQrDataModuleStyle() ??
-          QrCodeStyleSettings.defaultDataModuleStyle,
+          StyleSettings.defaultDataModuleStyle,
       embeddedImageFilePath: getString('embeddedImageFilePath'),
       embeddedImageStyle:
           getObject('embeddedImageStyle')?.toQrEmbeddedImageStyle(),
       eyeStyle: getObject('eyeStyle')?.toQrEyeStyle() ??
-          QrCodeStyleSettings.defaultEyeStyle,
-      gapless: getBool('gapless') ?? QrCodeStyleSettings.defaultGapless,
+          StyleSettings.defaultEyeStyle,
+      gapless: getBool('gapless') ?? StyleSettings.defaultGapless,
     );
   }
 
