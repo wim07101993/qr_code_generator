@@ -16,6 +16,11 @@ class HomeDrawer extends StatelessWidget {
             onTap: () => context.replaceRoute(const EpcQrCodeRoute()),
           ),
           ListTile(
+            leading: const Icon(Icons.text_fields),
+            title: const Text('Text'),
+            onTap: () => context.replaceRoute(const TextQrCodeRoute()),
+          ),
+          ListTile(
             leading: const Icon(Icons.color_lens),
             title: const Text('QR-code style'),
             onTap: () => context.replaceRoute(const StyleRoute()),

@@ -29,6 +29,12 @@ class _$AppRouter extends RootStackRouter {
         child: const EpcQrCodeScreen(),
       );
     },
+    TextQrCodeRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const TextQrCodeScreen(),
+      );
+    },
     StyleRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
@@ -60,6 +66,11 @@ class _$AppRouter extends RootStackRouter {
             RouteConfig(
               EpcQrCodeRoute.name,
               path: 'epc',
+              parent: HomeRoute.name,
+            ),
+            RouteConfig(
+              TextQrCodeRoute.name,
+              path: 'text',
               parent: HomeRoute.name,
             ),
             RouteConfig(
@@ -95,6 +106,18 @@ class EpcQrCodeRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'EpcQrCodeRoute';
+}
+
+/// generated route for
+/// [TextQrCodeScreen]
+class TextQrCodeRoute extends PageRouteInfo<void> {
+  const TextQrCodeRoute()
+      : super(
+          TextQrCodeRoute.name,
+          path: 'text',
+        );
+
+  static const String name = 'TextQrCodeRoute';
 }
 
 /// generated route for
