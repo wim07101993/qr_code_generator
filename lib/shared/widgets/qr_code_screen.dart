@@ -20,31 +20,43 @@ class QrCodeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final qrSize = min(constraints.maxWidth, constraints.maxHeight);
-        return ListView(
-          children: [
-            Center(
-              child: ValueListenableBuilder<StyleSettings>(
-                valueListenable: getIt<StyleSettingsNotifier>(),
-                builder: (context, style, _) => ValueListenableBuilder<String>(
-                  valueListenable: qrData,
-                  builder: (context, qrData, _) => QrImage(
-                    size: qrSize,
-                    data: qrData,
-                    dataModuleStyle: style.dataModuleStyle,
-                    embeddedImage: style.embeddedImage,
-                    embeddedImageStyle: style.embeddedImageStyle,
-                    eyeStyle: style.eyeStyle,
-                    gapless: style.gapless,
-                  ),
-                ),
-              ),
+        final qrCode = ValueListenableBuilder<StyleSettings>(
+          valueListenable: getIt<StyleSettingsNotifier>(),
+          builder: (context, style, _) => ValueListenableBuilder<String>(
+            valueListenable: qrData,
+            builder: (context, qrData, _) => QrImage(
+              size: min(constraints.maxWidth, constraints.maxHeight),
+              data: qrData,
+              dataModuleStyle: style.dataModuleStyle,
+              embeddedImage: style.embeddedImage,
+              embeddedImageStyle: style.embeddedImageStyle,
+              eyeStyle: style.eyeStyle,
+              gapless: style.gapless,
             ),
-            const SizedBox(height: 8),
-            inputBuilder(context),
-            const SizedBox(height: 8),
-          ],
+          ),
         );
+
+        if (constraints.maxWidth > constraints.maxHeight) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: inputBuilder(context)),
+              const SizedBox(height: 8),
+              qrCode,
+            ],
+          );
+        } else {
+          return ListView(
+            children: [
+              Center(
+                child: qrCode,
+              ),
+              const SizedBox(height: 8),
+              inputBuilder(context),
+              const SizedBox(height: 8),
+            ],
+          );
+        }
       },
     );
   }

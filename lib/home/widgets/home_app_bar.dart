@@ -1,8 +1,19 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_generator/app_router.dart';
+import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/epc/widgets/settings_sheet.dart';
+import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
+import 'package:qr_code_generator/style/notifiers/style_settings.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
@@ -13,32 +24,82 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
-    // final iconTheme = IconThemeData(
-    //   color: styleSettings.dataModuleStyle.color,
-    //   size: 32,
-    // );
     return ListenableBuilder(
       valueListenable: router,
-      builder: (context) {
-        final childController = router.childControllers.first;
-        final routerPath = childController.current.path;
-        return AppBar(
-          // iconTheme: iconTheme,
-          // backgroundColor: styleSettings.backgroundColor,
-          elevation: 0,
-          // actionsIconTheme: iconTheme,
-          actions: [
-            if (routerPath == const EpcQrCodeRoute().path)
-              IconButton(
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  builder: (context) => const SettingsSheet(),
-                ),
-                icon: const Icon(Icons.settings),
-              ),
-          ],
-        );
-      },
+      builder: (context) => AppBar(
+        elevation: 0,
+        actions: [
+          _shareButton(context, router),
+          _settingsButton(context, router),
+        ].whereType<Widget>().toList(),
+      ),
     );
+  }
+
+  Widget? _settingsButton(BuildContext context, StackRouter router) {
+    final path = router.childControllers.first.current.path;
+    VoidCallback? action;
+    if (path == const EpcQrCodeRoute().path) {
+      action = () => showModalBottomSheet(
+            context: context,
+            builder: (context) => const SettingsSheet(),
+          );
+    }
+    if (action == null) {
+      return null;
+    }
+    return IconButton(
+      onPressed: action,
+      icon: const Icon(Icons.settings),
+    );
+  }
+
+  Widget? _shareButton(BuildContext context, StackRouter router) {
+    final path = router.childControllers.first.current.path;
+    VoidCallback? action;
+    if (path == const EpcQrCodeRoute().path) {
+      action = () => shareQrData(getIt<EpcDataNotifier>().value.qrData);
+    }
+
+    if (action == null) {
+      return null;
+    }
+    return IconButton(
+      onPressed: action,
+      icon: Platform.isLinux ? const Icon(Icons.save) : const Icon(Icons.share),
+    );
+  }
+
+  Future<void> shareQrData(String qrData) async {
+    final styleSettings = getIt<StyleSettingsNotifier>().value;
+    final image = await QrPainter(
+      version: QrVersions.auto,
+      data: qrData,
+      // TODO add image
+      dataModuleStyle: styleSettings.dataModuleStyle,
+      eyeStyle: styleSettings.eyeStyle,
+      gapless: styleSettings.gapless,
+      embeddedImageStyle: styleSettings.embeddedImageStyle,
+    ).toImageData(1024);
+    if (image == null) {
+      // error handling
+      return;
+    }
+
+    if (Platform.isLinux) {
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save qr-code',
+        fileName: 'qr-code.png',
+      );
+      if (result != null) {
+        await File(result).writeAsBytes(image.buffer.asUint8List());
+      }
+    } else {
+      final file = await getTemporaryDirectory()
+          .then((directory) => join(directory.path, 'qr-code.png'))
+          .then((path) => File(path))
+          .then((file) => file.writeAsBytes(image.buffer.asInt8List()));
+      await Share.shareXFiles([XFile(file.path)], text: 'QR-code');
+    }
   }
 }

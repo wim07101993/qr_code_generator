@@ -4,7 +4,7 @@ import 'package:qr_code_generator/epc/notifiers/epc_character_set.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
 
 class EpcDataNotifier extends ChangeNotifier
-    implements ValueListenable<EpcData?> {
+    implements ValueListenable<EpcData> {
   EpcDataNotifier() {
     for (final notifier in notifiers) {
       notifier.addListener(notifyListeners);
@@ -27,6 +27,12 @@ class EpcDataNotifier extends ChangeNotifier
       ValueNotifier(EpcData.defaultVersion);
   final ValueNotifier<bool> useStructuredRemittanceInfo = ValueNotifier(false);
 
+  EpcData _lastValidValue = EpcData(
+    amount: EpcData.defaultAmount,
+    iban: EpcData.defaultIban,
+    beneficiaryName: EpcData.defaultBeneficiaryName,
+  );
+
   List<ChangeNotifier> get notifiers => [
         amount,
         iban,
@@ -41,32 +47,33 @@ class EpcDataNotifier extends ChangeNotifier
       ];
 
   @override
-  EpcData? get value {
-    if (EpcData.validateAmount(amount.text) != null ||
-        EpcData.validateIban(iban.text) != null ||
-        EpcData.validateBeneficiaryName(beneficiaryName.text) != null ||
-        EpcData.validateOriginatorInfo(originatorInfo.text) != null ||
+  EpcData get value {
+    if (EpcData.validateAmount(amount.text) == null &&
+        EpcData.validateIban(iban.text) == null &&
+        EpcData.validateBeneficiaryName(beneficiaryName.text) == null &&
+        EpcData.validateOriginatorInfo(originatorInfo.text) == null &&
         EpcData.validateRemittanceInfo(
               remittanceInfo.text,
               isStructured: useStructuredRemittanceInfo.value,
-            ) !=
-            null ||
-        EpcData.validatePurpose(purpose.text) != null ||
-        EpcData.validateBic(bic.text, version.value) != null) {
-      return null;
+            ) ==
+            null &&
+        EpcData.validatePurpose(purpose.text) == null &&
+        EpcData.validateBic(bic.text, version.value) == null) {}
+    {
+      _lastValidValue = EpcData(
+        amount: amount.text,
+        iban: iban.text,
+        beneficiaryName: beneficiaryName.text,
+        originatorInfo: originatorInfo.text,
+        useStructuredRemittanceInfo: useStructuredRemittanceInfo.value,
+        characterSet: characterSet.value,
+        purpose: purpose.text,
+        bic: bic.text,
+        remittanceInfo: remittanceInfo.text,
+        version: version.value,
+      );
     }
-    return EpcData(
-      amount: amount.text,
-      iban: iban.text,
-      beneficiaryName: beneficiaryName.text,
-      originatorInfo: originatorInfo.text,
-      useStructuredRemittanceInfo: useStructuredRemittanceInfo.value,
-      characterSet: characterSet.value,
-      purpose: purpose.text,
-      bic: bic.text,
-      remittanceInfo: remittanceInfo.text,
-      version: version.value,
-    );
+    return _lastValidValue;
   }
 
   set value(EpcData? epcData) {
