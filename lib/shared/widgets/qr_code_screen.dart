@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/main.dart';
@@ -16,27 +18,34 @@ class QrCodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        inputBuilder(context),
-        const SizedBox(height: 8),
-        Expanded(
-          child: ValueListenableBuilder<StyleSettings>(
-            valueListenable: getIt<StyleSettingsNotifier>(),
-            builder: (context, style, _) => ValueListenableBuilder<String>(
-              valueListenable: qrData,
-              builder: (context, qrData, _) => QrImage(
-                data: qrData,
-                dataModuleStyle: style.dataModuleStyle,
-                embeddedImage: style.embeddedImage,
-                embeddedImageStyle: style.embeddedImageStyle,
-                eyeStyle: style.eyeStyle,
-                gapless: style.gapless,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final qrSize = min(constraints.maxWidth, constraints.maxHeight);
+        return ListView(
+          children: [
+            Center(
+              child: ValueListenableBuilder<StyleSettings>(
+                valueListenable: getIt<StyleSettingsNotifier>(),
+                builder: (context, style, _) => ValueListenableBuilder<String>(
+                  valueListenable: qrData,
+                  builder: (context, qrData, _) => QrImage(
+                    size: qrSize,
+                    data: qrData,
+                    dataModuleStyle: style.dataModuleStyle,
+                    embeddedImage: style.embeddedImage,
+                    embeddedImageStyle: style.embeddedImageStyle,
+                    eyeStyle: style.eyeStyle,
+                    gapless: style.gapless,
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+            const SizedBox(height: 8),
+            inputBuilder(context),
+            const SizedBox(height: 8),
+          ],
+        );
+      },
     );
   }
 }
