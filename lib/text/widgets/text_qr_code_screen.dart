@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/style/notifiers/style_settings.dart';
-import 'package:qr_flutter/qr_flutter.dart';
+import 'package:qr_code_generator/shared/notifier/forwarding_notifier.dart';
+import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 
 class TextQrCodeScreen extends StatefulWidget {
   const TextQrCodeScreen({super.key});
@@ -12,40 +11,20 @@ class TextQrCodeScreen extends StatefulWidget {
 
 class _TextQrCodeScreenState extends State<TextQrCodeScreen> {
   final controller = TextEditingController();
+  late final qrDataNotifier = ForwardingNotifier<String>(
+    listenable: controller,
+    valueGetter: () => controller.text,
+  );
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<StyleSettings>(
-      valueListenable: getIt<StyleSettingsNotifier>(),
-      builder: (context, styleSettings, _) => Column(
-        children: [
-          _text(context),
-          const SizedBox(height: 8),
-          Expanded(child: _qrCode(styleSettings)),
-        ],
+    return QrCodeScreen(
+      inputBuilder: (context) => TextField(
+        controller: controller,
+        maxLines: null,
+        keyboardType: TextInputType.multiline,
       ),
-    );
-  }
-
-  Widget _text(BuildContext context) {
-    return TextField(
-      controller: controller,
-      maxLines: null,
-      keyboardType: TextInputType.multiline,
-    );
-  }
-
-  Widget _qrCode(StyleSettings settings) {
-    return ValueListenableBuilder(
-      valueListenable: controller,
-      builder: (context, value, _) => QrImage(
-        data: controller.text,
-        dataModuleStyle: settings.dataModuleStyle,
-        embeddedImage: settings.embeddedImage,
-        embeddedImageStyle: settings.embeddedImageStyle,
-        eyeStyle: settings.eyeStyle,
-        gapless: settings.gapless,
-      ),
+      qrData: qrDataNotifier,
     );
   }
 }

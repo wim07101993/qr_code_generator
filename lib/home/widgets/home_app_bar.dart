@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/app_router.dart';
 import 'package:qr_code_generator/epc/widgets/settings_sheet.dart';
-import 'package:qr_code_generator/widgets/listenable_builder.dart';
+import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
 
 class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
