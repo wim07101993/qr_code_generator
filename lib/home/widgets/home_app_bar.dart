@@ -1,9 +1,10 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_generator/app_router.dart';
@@ -75,14 +76,13 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     final image = await QrPainter(
       version: QrVersions.auto,
       data: qrData,
-      // TODO add image
       dataModuleStyle: styleSettings.dataModuleStyle,
       eyeStyle: styleSettings.eyeStyle,
       gapless: styleSettings.gapless,
       embeddedImageStyle: styleSettings.embeddedImageStyle,
+      embeddedImage: await loadImage(styleSettings.embeddedImageFilePath),
     ).toImageData(1024);
     if (image == null) {
-      // error handling
       return;
     }
 
@@ -100,6 +100,27 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           .then((path) => File(path))
           .then((file) => file.writeAsBytes(image.buffer.asInt8List()));
       await Share.shareXFiles([XFile(file.path)], text: 'QR-code');
+    }
+  }
+
+  Future<ui.Image?> loadImage(String? path) async {
+    try {
+      if (path == null) {
+        return null;
+      }
+      final file = File(path);
+      if (!await file.exists()) {
+        return null;
+      }
+
+      final bytes = await file.readAsBytes();
+
+      final imageCompleter = Completer<ui.Image?>();
+      ui.decodeImageFromList(
+          bytes, (result) => imageCompleter.complete(result));
+      return imageCompleter.future;
+    } catch (e) {
+      return null;
     }
   }
 }
