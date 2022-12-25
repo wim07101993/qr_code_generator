@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/notifier/forwarding_notifier.dart';
@@ -19,7 +18,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   final EpcDataNotifier epcDataNotifier = getIt();
   late final qrDataNotifier = ForwardingNotifier<String>(
     listenable: epcDataNotifier,
-    valueGetter: () => (epcDataNotifier.value ?? lastValidEpcData).qrData,
+    valueGetter: () => (epcDataNotifier.value).qrData,
   );
 
   late EpcData lastValidEpcData;
@@ -27,16 +26,18 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   String? get amountErrorMessage =>
       EpcData.validateAmount(epcDataNotifier.amount.text);
 
+  void amountChanged() => setState(() {});
+
   @override
   void initState() {
-    lastValidEpcData = epcDataNotifier.value ??
-        sharedPreferences.loadEpcData() ??
-        EpcData.defaultValue();
+    lastValidEpcData = epcDataNotifier.value;
+    epcDataNotifier.amount.addListener(amountChanged);
     super.initState();
   }
 
   @override
   void dispose() {
+    epcDataNotifier.amount.removeListener(amountChanged);
     qrDataNotifier.dispose();
     super.dispose();
   }
@@ -48,15 +49,19 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
       inputBuilder: (context) => Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('€', style: TextStyle(fontSize: 35)),
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
+              child: Text('€', style: TextStyle(fontSize: 35)),
+            ),
             Expanded(
               child: TextField(
                 controller: epcDataNotifier.amount,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   errorText: amountErrorMessage,
+                  errorMaxLines: 3,
                 ),
                 style: const TextStyle(fontSize: 35),
                 textAlign: TextAlign.center,

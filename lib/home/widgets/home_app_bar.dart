@@ -117,7 +117,9 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       final imageCompleter = Completer<ui.Image?>();
       ui.decodeImageFromList(
-          bytes, (result) => imageCompleter.complete(result));
+        bytes,
+        (result) => imageCompleter.complete(result),
+      );
       return imageCompleter.future;
     } catch (e) {
       return null;

@@ -45,11 +45,9 @@ Future<void> main() async {
 }
 
 Future<void> saveEpcData() {
-  final value = getIt<EpcDataNotifier>().value;
-  if (value != null) {
-    return getIt<SharedPreferences>().saveEpcData(value);
-  }
-  return Future.value();
+  return getIt<SharedPreferences>().saveEpcData(
+    getIt<EpcDataNotifier>().value,
+  );
 }
 
 Future<void> saveStyleSettings() {
