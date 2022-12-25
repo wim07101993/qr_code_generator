@@ -48,7 +48,7 @@ class EpcDataNotifier extends ChangeNotifier
 
   @override
   EpcData get value {
-    if (EpcData.validateAmount(amount.text) == null &&
+    final isValid = EpcData.validateAmount(amount.text) == null &&
         EpcData.validateIban(iban.text) == null &&
         EpcData.validateBeneficiaryName(beneficiaryName.text) == null &&
         EpcData.validateOriginatorInfo(originatorInfo.text) == null &&
@@ -58,8 +58,8 @@ class EpcDataNotifier extends ChangeNotifier
             ) ==
             null &&
         EpcData.validatePurpose(purpose.text) == null &&
-        EpcData.validateBic(bic.text, version.value) == null) {}
-    {
+        EpcData.validateBic(bic.text, version.value) == null;
+    if (isValid) {
       _lastValidValue = EpcData(
         amount: amount.text,
         iban: iban.text,
