@@ -4,6 +4,8 @@
   "beneficiaryName": "Naam van de ontvanger",
   "beneficiaryNameSettingHelperText": "Naam van de persoon naar wie het geld moet worden overgeschreven",
   "version": "Versie",
+  "version1": "Versie 1",
+  "version2": "Versie 2",
   "versionSettingHelperText": "De versie van de EPC (betaal) QR-code",
   "purpose": "Doel",
   "purposeSettingHelperText": "Het doel van de SEPA credit transactie.",

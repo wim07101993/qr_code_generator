@@ -75,7 +75,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
           items: EpcVersion.values.map((e) {
             return DropdownMenuItem<EpcVersion>(
               value: e,
-              child: Text(e.name),
+              child: Text(e.translate(s)),
             );
           }).toList(),
           onChanged: (v) => notifier.version.value = v ?? EpcVersion.version2,

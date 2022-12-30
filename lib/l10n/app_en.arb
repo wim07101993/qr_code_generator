@@ -13,6 +13,8 @@
     "description": "Helper text for the beneficiary name input field on the settings sheet of the epc qr-code"
   },
   "version": "Version",
+  "version1": "Version 1",
+  "version2": "Version 2",
   "versionSettingHelperText": "The version of the EPC (Payment) QR-code",
   "@versionSettingHelperText": {
     "description": "Helper text for the epc version input field on the settings sheet of the epc qr-code"

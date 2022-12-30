@@ -1,7 +1,19 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 export 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+extension EpcVersionExtension on EpcVersion {
+  String translate(AppLocalizations s) {
+    switch (this) {
+      case EpcVersion.version1:
+        return s.version1;
+      case EpcVersion.version2:
+        return s.version2;
+    }
+  }
+}
 
 extension QrDataModuleShapeExtension on QrDataModuleShape {
   String translate(AppLocalizations s) {
