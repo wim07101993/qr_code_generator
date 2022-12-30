@@ -10,18 +10,24 @@ import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_generator/app_router.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/epc/widgets/settings_sheet.dart';
+import 'package:qr_code_generator/l10n/localization.dart';
 import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
 import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
+class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
   const HomeAppBar({super.key});
 
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
 
+  @override
+  State<HomeAppBar> createState() => _HomeAppBarState();
+}
+
+class _HomeAppBarState extends State<HomeAppBar> {
   @override
   Widget build(BuildContext context) {
     final router = AutoRouter.of(context);
@@ -59,7 +65,8 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     final path = router.childControllers.first.current.path;
     VoidCallback? action;
     if (path == const EpcQrCodeRoute().path) {
-      action = () => shareQrData(getIt<EpcDataNotifier>().value.qrData);
+      action =
+          () => shareQrData(context, getIt<EpcDataNotifier>().value.qrData);
     }
 
     if (action == null) {
@@ -71,7 +78,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 
-  Future<void> shareQrData(String qrData) async {
+  Future<void> shareQrData(BuildContext context, String qrData) async {
     final styleSettings = getIt<StyleSettingsNotifier>().value;
     final image = await QrPainter(
       version: QrVersions.auto,
@@ -82,13 +89,14 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
       embeddedImageStyle: styleSettings.embeddedImageStyle,
       embeddedImage: await loadImage(styleSettings.embeddedImageFilePath),
     ).toImageData(1024);
-    if (image == null) {
+    if (image == null || !mounted) {
       return;
     }
 
+    final s = AppLocalizations.of(context)!;
     if (Platform.isLinux) {
       final result = await FilePicker.platform.saveFile(
-        dialogTitle: 'Save qr-code',
+        dialogTitle: s.saveQrDialogTitle,
         fileName: 'qr-code.png',
       );
       if (result != null) {
@@ -99,7 +107,7 @@ class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
           .then((directory) => join(directory.path, 'qr-code.png'))
           .then((path) => File(path))
           .then((file) => file.writeAsBytes(image.buffer.asInt8List()));
-      await Share.shareXFiles([XFile(file.path)], text: 'QR-code');
+      await Share.shareXFiles([XFile(file.path)], text: s.qrCode);
     }
   }
 

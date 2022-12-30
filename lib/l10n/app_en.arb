@@ -1,0 +1,58 @@
+{
+  "ibanSettingHelperText": "The IBAN number of the bank account to send money too.",
+  "@ibanSettingHelperText": {
+    "description": "Helper text for the IBAN input field on the settings sheet of the epc qr-code"
+  },
+  "bicSettingHelperText": "The BIC number of the bank to send money too.",
+  "@bicSettingHelperText": {
+    "description": "Helper text for the BIC input field on the settings sheet of the epc qr-code"
+  },
+  "beneficiaryName": "Beneficiary name",
+  "beneficiaryNameSettingHelperText": "The name of the receiver of the money.",
+  "@beneficiaryNameSettingHelperText": {
+    "description": "Helper text for the beneficiary name input field on the settings sheet of the epc qr-code"
+  },
+  "version": "Version",
+  "versionSettingHelperText": "The version of the EPC (Payment) QR-code",
+  "@versionSettingHelperText": {
+    "description": "Helper text for the epc version input field on the settings sheet of the epc qr-code"
+  },
+  "purpose": "Purpose",
+  "purposeSettingHelperText": "Purpose of the SEPA credit transfer.",
+  "@purposeSettingHelperText": {
+    "description": "Helper text for the purpose input field on the settings sheet of the epc qr-code"
+  },
+  "useStructuredRemittanceInfoCheckboxLabel": "Use structured remittance info",
+  "remittanceInfo": "Remittance information",
+  "remittanceInfoSettingHelperText": "Information about the payment.",
+  "@remittanceInfoSettingHelperText": {
+    "description": "Helper text for the remittance info input field on the settings sheet of the epc qr-code"
+  },
+  "originatorInfo": "Originator information",
+  "originatorInfoSettingHelperText": "Information about the originator.",
+  "@originatorInfoSettingHelperText": {
+    "description": "Helper text for the originator info input field on the settings sheet of the epc qr-code"
+  },
+  "saveQrDialogTitle": "Save QR-code",
+  "qrCode": "QR-code",
+  "epcPaymentDrawerOption": "Payment request (EPC)",
+  "textQrDrawerOption": "Text",
+  "qrCodeStyleDrawerOption": "QR-code style",
+  "aboutDrawerOption": "About",
+  "qrCodeStyleScreenTitle": "QR-code style",
+  "qrDataModuleStyle": "QR data module style",
+  "qrEyeStyle": "QR eye style",
+  "shape": "Shape",
+  "square": "Square",
+  "circle": "Circle",
+  "color": "Color",
+  "backgroundColor": "Background color",
+  "image": "Image",
+  "none": "none",
+  "removeImageButtonLabel": "Remove",
+  "selectImageFileButtonLabel": "Select file",
+  "textInputHelperText": "Text to encode in the QR-code",
+  "@textInputHelperText": {
+    "decoration": "Helper text for the input field on the text qr-code screen"
+  }
+}

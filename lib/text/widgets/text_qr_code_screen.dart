@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_code_generator/l10n/localization.dart';
 import 'package:qr_code_generator/shared/notifier/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 
@@ -18,11 +19,15 @@ class _TextQrCodeScreenState extends State<TextQrCodeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final s = AppLocalizations.of(context)!;
     return QrCodeScreen(
       inputBuilder: (context) => TextField(
         controller: controller,
         maxLines: null,
         keyboardType: TextInputType.multiline,
+        decoration: InputDecoration(
+          helperText: s.textInputHelperText,
+        ),
       ),
       qrData: qrDataNotifier,
     );

@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:qr_code_generator/l10n/localization.dart';
 import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -17,34 +18,22 @@ class StyleScreen extends StatelessWidget {
   }
 
   Widget _settings(BuildContext context, StyleSettings settings) {
+    final s = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final notifier = getIt<StyleSettingsNotifier>();
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text('QR-code style', style: theme.textTheme.headline4),
-        const Text('Gapless'),
-        Row(
-          children: [
-            Checkbox(
-              value: !settings.gapless,
-              onChanged: (value) => notifier.value = settings.copyWithGapless(
-                gapless: !(value ?? false),
-              ),
-            ),
-            const Expanded(child: Text('Enable gaps between the modules')),
-          ],
-        ),
-        const Divider(),
-        Text('Qr data module style', style: theme.textTheme.headline5),
-        const Text('Shape'),
+        Text(s.qrCodeStyleScreenTitle, style: theme.textTheme.headline4),
+        Text(s.qrDataModuleStyle, style: theme.textTheme.headline5),
+        Text(s.shape),
         DropdownButtonFormField<QrDataModuleShape>(
           value: settings.dataModuleStyle.dataModuleShape,
           items: QrDataModuleShape.values
               .map(
                 (shape) => DropdownMenuItem(
                   value: shape,
-                  child: Text(shape.name),
+                  child: Text(shape.translate(s)),
                 ),
               )
               .toList(),
@@ -57,7 +46,7 @@ class StyleScreen extends StatelessWidget {
             );
           },
         ),
-        const Text('Color'),
+        Text(s.color),
         ColorPicker(
           pickerColor: settings.dataModuleStyle.color ?? Colors.black,
           displayThumbColor: true,
@@ -73,15 +62,15 @@ class StyleScreen extends StatelessWidget {
           },
         ),
         const Divider(),
-        Text('Qr eye style', style: theme.textTheme.headline5),
-        const Text('Shape'),
+        Text(s.qrEyeStyle, style: theme.textTheme.headline5),
+        Text(s.shape),
         DropdownButtonFormField<QrEyeShape>(
           value: settings.eyeStyle.eyeShape,
           items: QrEyeShape.values
               .map(
                 (shape) => DropdownMenuItem(
                   value: shape,
-                  child: Text(shape.name),
+                  child: Text(shape.translate(s)),
                 ),
               )
               .toList(),
@@ -92,7 +81,7 @@ class StyleScreen extends StatelessWidget {
             ),
           ),
         ),
-        const Text('Color'),
+        Text(s.color),
         ColorPicker(
           pickerColor: settings.eyeStyle.color ?? Colors.black,
           displayThumbColor: true,
@@ -106,7 +95,7 @@ class StyleScreen extends StatelessWidget {
           ),
         ),
         const Divider(),
-        Text('Background color', style: theme.textTheme.headline5),
+        Text(s.backgroundColor, style: theme.textTheme.headline5),
         ColorPicker(
           pickerColor: settings.backgroundColor,
           displayThumbColor: true,
@@ -117,12 +106,12 @@ class StyleScreen extends StatelessWidget {
           },
         ),
         const Divider(),
-        Text('Image', style: theme.textTheme.headline5),
+        Text(s.image, style: theme.textTheme.headline5),
         Row(
           children: [
             Expanded(
               child: Text(
-                settings.embeddedImageFilePath ?? 'none',
+                settings.embeddedImageFilePath ?? s.none,
                 overflow: TextOverflow.clip,
               ),
             ),
@@ -130,11 +119,11 @@ class StyleScreen extends StatelessWidget {
               TextButton(
                 onPressed: () => notifier.value =
                     settings.copyWithEmbeddedImageFilePath(null),
-                child: const Text('Remove'),
+                child: Text(s.removeImageButtonLabel),
               ),
             TextButton(
               onPressed: () => _selectFile(notifier),
-              child: const Text('Select file'),
+              child: Text(s.selectImageFileButtonLabel),
             ),
           ],
         ),

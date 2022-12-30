@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
+import 'package:qr_code_generator/l10n/localization.dart';
 import 'package:qr_code_generator/main.dart';
 
 class SettingsSheet extends StatefulWidget {
@@ -32,15 +33,15 @@ class _SettingsSheetState extends State<SettingsSheet> {
   }
 
   Widget _formFields(BuildContext context, EpcDataNotifier notifier) {
+    final s = AppLocalizations.of(context)!;
     return Column(
       children: [
         TextFormField(
           controller: notifier.iban,
           validator: EpcData.validateIban,
-          decoration: const InputDecoration(
-            label: Text('IBAN'),
-            helperText:
-                'The IBAN number of the bank account to the send money to.',
+          decoration: InputDecoration(
+            label: const Text('IBAN'),
+            helperText: s.ibanSettingHelperText,
           ),
         ),
         const SizedBox(height: 8),
@@ -48,18 +49,18 @@ class _SettingsSheetState extends State<SettingsSheet> {
           controller: notifier.bic,
           validator: (value) =>
               EpcData.validateBic(value, notifier.version.value),
-          decoration: const InputDecoration(
-            label: Text('BIC'),
-            helperText: 'The BIC number of the bank to send the money to.',
+          decoration: InputDecoration(
+            label: const Text('BIC'),
+            helperText: s.bicSettingHelperText,
           ),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: notifier.beneficiaryName,
           validator: EpcData.validateBeneficiaryName,
-          decoration: const InputDecoration(
-            label: Text('Beneficiary name'),
-            helperText: 'The name of the receiver of the money.',
+          decoration: InputDecoration(
+            label: Text(s.beneficiaryName),
+            helperText: s.beneficiaryNameSettingHelperText,
           ),
         ),
         const SizedBox(height: 8),
@@ -67,9 +68,9 @@ class _SettingsSheetState extends State<SettingsSheet> {
           value: notifier.version.value,
           validator: (value) =>
               EpcData.validateVersion(value, notifier.bic.text),
-          decoration: const InputDecoration(
-            label: Text('Version'),
-            helperText: 'The version of the EPC QR code.',
+          decoration: InputDecoration(
+            label: Text(s.version),
+            helperText: s.versionSettingHelperText,
           ),
           items: EpcVersion.values.map((e) {
             return DropdownMenuItem<EpcVersion>(
@@ -83,15 +84,15 @@ class _SettingsSheetState extends State<SettingsSheet> {
         TextFormField(
           controller: notifier.purpose,
           validator: EpcData.validatePurpose,
-          decoration: const InputDecoration(
-            label: Text('Purpose'),
-            helperText: 'Purpose of the SEPA credit transfer.',
+          decoration: InputDecoration(
+            label: Text(s.purpose),
+            helperText: s.purposeSettingHelperText,
           ),
         ),
         const SizedBox(height: 8),
         Row(
           children: [
-            const Text('Use structured remittance info'),
+            Text(s.useStructuredRemittanceInfoCheckboxLabel),
             ValueListenableBuilder<bool>(
               valueListenable: notifier.useStructuredRemittanceInfo,
               builder: (context, value, _) => Checkbox(
@@ -108,18 +109,18 @@ class _SettingsSheetState extends State<SettingsSheet> {
             value,
             isStructured: notifier.useStructuredRemittanceInfo.value,
           ),
-          decoration: const InputDecoration(
-            label: Text('Remittance information'),
-            helperText: 'Information about the payment.',
+          decoration: InputDecoration(
+            label: Text(s.remittanceInfo),
+            helperText: s.remittanceInfoSettingHelperText,
           ),
         ),
         const SizedBox(height: 8),
         TextFormField(
           controller: notifier.originatorInfo,
           validator: EpcData.validateOriginatorInfo,
-          decoration: const InputDecoration(
-            label: Text('Originator information'),
-            helperText: 'Information about the originator.',
+          decoration: InputDecoration(
+            label: Text(s.originatorInfo),
+            helperText: s.originatorInfoSettingHelperText,
           ),
         ),
       ],

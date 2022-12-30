@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/app_router.dart';
 import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/l10n/localization.dart';
 import 'package:qr_code_generator/style/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +38,17 @@ Future<void> main() async {
       builder: (context, settings, _) => MaterialApp.router(
         title: 'QR-code generator',
         theme: settings.toThemeData(),
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('nl'),
+        ],
+        locale: const Locale('nl'),
         routerDelegate: router.delegate(),
         routeInformationParser: router.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
