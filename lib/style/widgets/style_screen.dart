@@ -25,8 +25,11 @@ class StyleScreen extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       children: [
         Text(s.qrCodeStyleScreenTitle, style: theme.textTheme.headline4),
+        const SizedBox(height: 24),
         Text(s.qrDataModuleStyle, style: theme.textTheme.headline5),
-        Text(s.shape),
+        const SizedBox(height: 16),
+        Text(s.shape, style: theme.textTheme.headline6),
+        const SizedBox(height: 16),
         DropdownButtonFormField<QrDataModuleShape>(
           value: settings.dataModuleStyle.dataModuleShape,
           items: QrDataModuleShape.values
@@ -46,7 +49,9 @@ class StyleScreen extends StatelessWidget {
             );
           },
         ),
-        Text(s.color),
+        const SizedBox(height: 16),
+        Text(s.color, style: theme.textTheme.headline6),
+        const SizedBox(height: 16),
         ColorPicker(
           pickerColor: settings.dataModuleStyle.color ?? Colors.black,
           displayThumbColor: true,
@@ -62,8 +67,11 @@ class StyleScreen extends StatelessWidget {
           },
         ),
         const Divider(),
+        const SizedBox(height: 24),
         Text(s.qrEyeStyle, style: theme.textTheme.headline5),
-        Text(s.shape),
+        const SizedBox(height: 16),
+        Text(s.shape, style: theme.textTheme.headline6),
+        const SizedBox(height: 16),
         DropdownButtonFormField<QrEyeShape>(
           value: settings.eyeStyle.eyeShape,
           items: QrEyeShape.values
@@ -81,7 +89,9 @@ class StyleScreen extends StatelessWidget {
             ),
           ),
         ),
-        Text(s.color),
+        const SizedBox(height: 16),
+        Text(s.color, style: theme.textTheme.headline6),
+        const SizedBox(height: 16),
         ColorPicker(
           pickerColor: settings.eyeStyle.color ?? Colors.black,
           displayThumbColor: true,
@@ -94,8 +104,11 @@ class StyleScreen extends StatelessWidget {
             ),
           ),
         ),
+        const SizedBox(height: 16),
         const Divider(),
+        const SizedBox(height: 24),
         Text(s.backgroundColor, style: theme.textTheme.headline5),
+        const SizedBox(height: 16),
         ColorPicker(
           pickerColor: settings.backgroundColor,
           displayThumbColor: true,
@@ -105,8 +118,11 @@ class StyleScreen extends StatelessWidget {
             notifier.value = settings.copyWithBackgroundColor(color);
           },
         ),
+        const SizedBox(height: 16),
         const Divider(),
+        const SizedBox(height: 24),
         Text(s.image, style: theme.textTheme.headline5),
+        const SizedBox(height: 16),
         Row(
           children: [
             Expanded(
