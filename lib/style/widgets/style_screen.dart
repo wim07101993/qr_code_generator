@@ -32,7 +32,7 @@ class StyleScreen extends StatelessWidget {
                 gapless: !(value ?? false),
               ),
             ),
-            const Text('Enable gaps between the modules'),
+            const Expanded(child: Text('Enable gaps between the modules')),
           ],
         ),
         const Divider(),
@@ -120,8 +120,12 @@ class StyleScreen extends StatelessWidget {
         Text('Image', style: theme.textTheme.headline5),
         Row(
           children: [
-            Text(settings.embeddedImageFilePath ?? 'none'),
-            const Spacer(),
+            Expanded(
+              child: Text(
+                settings.embeddedImageFilePath ?? 'none',
+                overflow: TextOverflow.clip,
+              ),
+            ),
             if (settings.embeddedImageFilePath != null)
               TextButton(
                 onPressed: () => notifier.value =
