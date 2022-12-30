@@ -36,35 +36,6 @@ class StyleScreen extends StatelessWidget {
           ],
         ),
         const Divider(),
-        const Text('Background color'),
-        ColorPicker(
-          pickerColor: settings.backgroundColor,
-          displayThumbColor: true,
-          enableAlpha: false,
-          paletteType: PaletteType.hslWithHue,
-          onColorChanged: (color) {
-            notifier.value = settings.copyWithBackgroundColor(color);
-          },
-        ),
-        const Divider(),
-        Text('Image', style: theme.textTheme.headline5),
-        Row(
-          children: [
-            Text(settings.embeddedImageFilePath ?? 'none'),
-            const Spacer(),
-            if (settings.embeddedImageFilePath != null)
-              TextButton(
-                onPressed: () => notifier.value =
-                    settings.copyWithEmbeddedImageFilePath(null),
-                child: const Text('Remove'),
-              ),
-            TextButton(
-              onPressed: () => _selectFile(notifier),
-              child: const Text('Select file'),
-            ),
-          ],
-        ),
-        const Divider(),
         Text('Qr data module style', style: theme.textTheme.headline5),
         const Text('Shape'),
         DropdownButtonFormField<QrDataModuleShape>(
@@ -133,6 +104,35 @@ class StyleScreen extends StatelessWidget {
               eyeShape: settings.eyeStyle.eyeShape,
             ),
           ),
+        ),
+        const Divider(),
+        Text('Background color', style: theme.textTheme.headline5),
+        ColorPicker(
+          pickerColor: settings.backgroundColor,
+          displayThumbColor: true,
+          enableAlpha: false,
+          paletteType: PaletteType.hslWithHue,
+          onColorChanged: (color) {
+            notifier.value = settings.copyWithBackgroundColor(color);
+          },
+        ),
+        const Divider(),
+        Text('Image', style: theme.textTheme.headline5),
+        Row(
+          children: [
+            Text(settings.embeddedImageFilePath ?? 'none'),
+            const Spacer(),
+            if (settings.embeddedImageFilePath != null)
+              TextButton(
+                onPressed: () => notifier.value =
+                    settings.copyWithEmbeddedImageFilePath(null),
+                child: const Text('Remove'),
+              ),
+            TextButton(
+              onPressed: () => _selectFile(notifier),
+              child: const Text('Select file'),
+            ),
+          ],
         ),
       ],
     );

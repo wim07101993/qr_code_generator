@@ -1,4 +1,5 @@
 apply from: 'flutter_settings.gradle'
+apply from: 'signing_settings.gradle'
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
@@ -13,6 +14,21 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreKeyAlias
+            keyPassword keystoreKeyPassword
+            storeFile keystoreFile
+            storePassword keystorePassword
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
     }
 
     compileOptions {
