@@ -1,7 +1,7 @@
 name: qr_code_generator
 description: Generates different kinds of QR-codes, like a link or a payment request.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-version: 0.3.1+2
+version: 0.3.2+3
 
 environment:
   sdk: '>=2.18.2 <3.0.0'
