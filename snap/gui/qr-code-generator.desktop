@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=QR-code generator
+Comment=Generates different kinds of QR-codes, like a link or a payment request.
+Exec=qr-code-generator
+Icon=${SNAP}/meta/gui/qr-code-generator.png
+Terminal=false
+Type=Application
+Categories=Utilities;

@@ -1,0 +1,25 @@
+name: qr-code-generator
+version: 0.2.0+2
+summary: Generates different kinds of QR-codes, like a link or a payment request.
+description: The QR-code generator is an application with which you can generate different types of QR-codes. For the moment the only supported types are "text" and "payment". A text QR-code is the most common code. It encodes the given text so that when someone scans the QR-code, he/she will see it. A payment QR-code is a code with which you can create a payment request just as when you create one with your banking app. Please do not forget to adjust the settings so that the money is transferred to your bank account.
+
+confinement: strict
+base: core18
+grade: stable
+
+slots:
+  dbus-qr-code-generator:
+    interface: dbus
+    bus: session
+    name: be.wimvanlaer.qr_code_generator
+
+apps:
+  qr-code-generator:
+    command: qr_code_generator
+    extensions: [flutter-master]
+
+parts:
+  qr-code-generator:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart
