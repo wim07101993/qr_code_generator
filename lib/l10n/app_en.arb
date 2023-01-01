@@ -48,7 +48,7 @@
   "square": "Square",
   "circle": "Circle",
   "color": "Color",
-  "backgroundColor": "Background color",
+  "background": "Background",
   "image": "Image",
   "none": "none",
   "removeImageButtonLabel": "Remove",

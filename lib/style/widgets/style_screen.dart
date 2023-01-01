@@ -9,6 +9,15 @@ import 'package:qr_flutter/qr_flutter.dart';
 class StyleScreen extends StatelessWidget {
   const StyleScreen({super.key});
 
+  Future<void> _selectFile(StyleSettingsNotifier notifier) async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      notifier.value = notifier.value
+          .copyWithEmbeddedImageFilePath(result.files.single.path);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<StyleSettings>(
@@ -24,104 +33,17 @@ class StyleScreen extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [
-        Text(s.qrCodeStyleScreenTitle, style: theme.textTheme.headline4),
+        Text(s.qrCodeStyleScreenTitle, style: theme.textTheme.headlineMedium),
         const SizedBox(height: 24),
-        Text(s.qrDataModuleStyle, style: theme.textTheme.headline5),
-        const SizedBox(height: 16),
-        Text(s.shape, style: theme.textTheme.headline6),
-        const SizedBox(height: 16),
-        DropdownButtonFormField<QrDataModuleShape>(
-          value: settings.dataModuleStyle.dataModuleShape,
-          items: QrDataModuleShape.values
-              .map(
-                (shape) => DropdownMenuItem(
-                  value: shape,
-                  child: Text(shape.translate(s)),
-                ),
-              )
-              .toList(),
-          onChanged: (shape) {
-            notifier.value = settings.copyWithDataModuleStyle(
-              QrDataModuleStyle(
-                color: settings.dataModuleStyle.color,
-                dataModuleShape: shape,
-              ),
-            );
-          },
-        ),
-        const SizedBox(height: 16),
-        Text(s.color, style: theme.textTheme.headline6),
-        const SizedBox(height: 16),
-        ColorPicker(
-          pickerColor: settings.dataModuleStyle.color ?? Colors.black,
-          displayThumbColor: true,
-          enableAlpha: false,
-          paletteType: PaletteType.hslWithHue,
-          onColorChanged: (color) {
-            notifier.value = settings.copyWithDataModuleStyle(
-              QrDataModuleStyle(
-                color: color,
-                dataModuleShape: settings.dataModuleStyle.dataModuleShape,
-              ),
-            );
-          },
-        ),
-        const Divider(),
-        const SizedBox(height: 24),
-        Text(s.qrEyeStyle, style: theme.textTheme.headline5),
-        const SizedBox(height: 16),
-        Text(s.shape, style: theme.textTheme.headline6),
-        const SizedBox(height: 16),
-        DropdownButtonFormField<QrEyeShape>(
-          value: settings.eyeStyle.eyeShape,
-          items: QrEyeShape.values
-              .map(
-                (shape) => DropdownMenuItem(
-                  value: shape,
-                  child: Text(shape.translate(s)),
-                ),
-              )
-              .toList(),
-          onChanged: (shape) => notifier.value = settings.copyWithEyeStyle(
-            QrEyeStyle(
-              color: settings.eyeStyle.color,
-              eyeShape: shape,
-            ),
-          ),
-        ),
-        const SizedBox(height: 16),
-        Text(s.color, style: theme.textTheme.headline6),
-        const SizedBox(height: 16),
-        ColorPicker(
-          pickerColor: settings.eyeStyle.color ?? Colors.black,
-          displayThumbColor: true,
-          enableAlpha: false,
-          paletteType: PaletteType.hslWithHue,
-          onColorChanged: (color) => notifier.value = settings.copyWithEyeStyle(
-            QrEyeStyle(
-              color: color,
-              eyeShape: settings.eyeStyle.eyeShape,
-            ),
-          ),
-        ),
+        ..._dataModuleStyle(s, theme, notifier, settings),
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 24),
-        Text(s.backgroundColor, style: theme.textTheme.headline5),
-        const SizedBox(height: 16),
-        ColorPicker(
-          pickerColor: settings.backgroundColor,
-          displayThumbColor: true,
-          enableAlpha: false,
-          paletteType: PaletteType.hslWithHue,
-          onColorChanged: (color) {
-            notifier.value = settings.copyWithBackgroundColor(color);
-          },
-        ),
+        ..._eyeStyle(s, theme, notifier, settings),
         const SizedBox(height: 16),
         const Divider(),
         const SizedBox(height: 24),
-        Text(s.image, style: theme.textTheme.headline5),
+        Text(s.image, style: theme.textTheme.titleLarge),
         const SizedBox(height: 16),
         Row(
           children: [
@@ -143,16 +65,128 @@ class StyleScreen extends StatelessWidget {
             ),
           ],
         ),
+        const SizedBox(height: 16),
+        const Divider(),
+        const SizedBox(height: 24),
+        ..._background(s, theme, notifier, settings),
       ],
     );
   }
 
-  Future<void> _selectFile(StyleSettingsNotifier notifier) async {
-    final result = await FilePicker.platform.pickFiles();
+  List<Widget> _dataModuleStyle(
+    AppLocalizations s,
+    ThemeData theme,
+    StyleSettingsNotifier notifier,
+    StyleSettings settings,
+  ) {
+    return [
+      Text(s.qrDataModuleStyle, style: theme.textTheme.titleLarge),
+      const SizedBox(height: 16),
+      DropdownButtonFormField<QrDataModuleShape>(
+        value: settings.dataModuleStyle.dataModuleShape,
+        decoration: InputDecoration(label: Text(s.shape)),
+        items: QrDataModuleShape.values
+            .map(
+              (shape) => DropdownMenuItem(
+                value: shape,
+                child: Text(shape.translate(s)),
+              ),
+            )
+            .toList(),
+        onChanged: (shape) => notifier.value = settings.copyWithDataModuleStyle(
+          QrDataModuleStyle(
+            color: settings.dataModuleStyle.color,
+            dataModuleShape: shape,
+          ),
+        ),
+      ),
+      const SizedBox(height: 16),
+      Text(s.color, style: theme.textTheme.titleSmall),
+      const SizedBox(height: 12),
+      _colorPicker(
+        settings.dataModuleStyle.color ?? Colors.black,
+        (color) => notifier.value = settings.copyWithDataModuleStyle(
+          QrDataModuleStyle(
+            color: color,
+            dataModuleShape: settings.dataModuleStyle.dataModuleShape,
+          ),
+        ),
+      ),
+    ];
+  }
 
-    if (result != null) {
-      notifier.value = notifier.value
-          .copyWithEmbeddedImageFilePath(result.files.single.path);
-    }
+  List<Widget> _eyeStyle(
+    AppLocalizations s,
+    ThemeData theme,
+    StyleSettingsNotifier notifier,
+    StyleSettings settings,
+  ) {
+    return [
+      Text(s.qrEyeStyle, style: theme.textTheme.titleLarge),
+      const SizedBox(height: 16),
+      DropdownButtonFormField<QrEyeShape>(
+        value: settings.eyeStyle.eyeShape,
+        items: QrEyeShape.values
+            .map(
+              (shape) => DropdownMenuItem(
+                value: shape,
+                child: Text(shape.translate(s)),
+              ),
+            )
+            .toList(),
+        decoration: InputDecoration(label: Text(s.shape)),
+        onChanged: (shape) => notifier.value = settings.copyWithEyeStyle(
+          QrEyeStyle(
+            color: settings.eyeStyle.color,
+            eyeShape: shape,
+          ),
+        ),
+      ),
+      const SizedBox(height: 16),
+      Text(s.color, style: theme.textTheme.titleSmall),
+      const SizedBox(height: 12),
+      _colorPicker(
+        settings.eyeStyle.color ?? Colors.black,
+        (color) => notifier.value = settings.copyWithEyeStyle(
+          QrEyeStyle(
+            color: color,
+            eyeShape: settings.eyeStyle.eyeShape,
+          ),
+        ),
+      ),
+    ];
+  }
+
+  List<Widget> _background(
+    AppLocalizations s,
+    ThemeData theme,
+    StyleSettingsNotifier notifier,
+    StyleSettings settings,
+  ) {
+    return [
+      Text(s.background, style: theme.textTheme.titleLarge),
+      const SizedBox(height: 16),
+      Text(s.color, style: theme.textTheme.titleSmall),
+      const SizedBox(height: 12),
+      ColorPicker(
+        pickerColor: settings.backgroundColor,
+        displayThumbColor: true,
+        enableAlpha: false,
+        paletteType: PaletteType.hslWithHue,
+        onColorChanged: (color) {
+          notifier.value = settings.copyWithBackgroundColor(color);
+        },
+      ),
+    ];
+  }
+
+  Widget _colorPicker(Color color, void Function(Color) onColorChanged) {
+    return ColorPicker(
+      pickerColor: color,
+      displayThumbColor: true,
+      enableAlpha: false,
+      paletteType: PaletteType.hslWithHue,
+      onColorChanged: onColorChanged,
+    );
   }
 }
