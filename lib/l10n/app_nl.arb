@@ -26,7 +26,7 @@
   "square": "Vierkant",
   "circle": "Rond",
   "color": "Kleur",
-  "backgroundColor": "Kleur van de achtergrond",
+  "background": "Achtergrond",
   "image": "Afbeelding",
   "none": "geen",
   "removeImageButtonLabel": "Verwijderen",
