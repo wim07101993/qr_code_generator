@@ -42,7 +42,7 @@ jobs:
         
       - run: ls android
         
-      - run: cat app/upload-keystore.jks
+      - run: base64 app/upload-keystore.jks
         working-directory: android
       
       
