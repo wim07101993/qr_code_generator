@@ -48,7 +48,6 @@ Future<void> main() async {
           Locale('en'),
           Locale('nl'),
         ],
-        locale: const Locale('nl'),
         routerDelegate: router.delegate(),
         routeInformationParser: router.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
