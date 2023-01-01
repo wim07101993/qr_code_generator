@@ -34,17 +34,10 @@ jobs:
           echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
         env:
           PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
-          KEYSTORE_STORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         working-directory: android
-        
-        
-      - run: ls android
-        
-      - run: base64 app/upload-keystore.jks
-        working-directory: android
-      
       
       - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
