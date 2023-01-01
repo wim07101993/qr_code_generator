@@ -1,0 +1,5 @@
+The QR-code generator is an application with which you can generate different types of QR-codes. For the moment the only supported types are "text" and "payment".
+
+A text QR-code is the most common code. It encodes the given text so that when someone scans the QR-code, he/she will see it.
+
+A payment QR-code is a code with which you can create a payment request just as when you create one with your banking app. Please do not forget to adjust the settings so that the money is transferred to your bank account.

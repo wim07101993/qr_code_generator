@@ -1,0 +1,1 @@
+Generates different kinds of QR-codes, like a link or a payment request.
