@@ -39,6 +39,13 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         working-directory: android
         
+        
+      - run: ls android
+        
+      - run: cat app/upload-keystore.jks
+        working-directory: android
+      
+      
       - run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
