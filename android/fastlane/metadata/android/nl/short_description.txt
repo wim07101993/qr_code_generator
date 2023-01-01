@@ -1,0 +1,1 @@
+Genereert verschillende soorten QR-codes, zoals een link of een betaalverzoek
