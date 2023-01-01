@@ -1,0 +1,8 @@
+De QR-code generator is een applicatie waarmee je op een eenvoudige manier QR-codes kan genereren van verschillende types. Momenteel ondersteunt de app alleen "tekst" en "betaalverzoek".
+
+Een tekst QR-code is het meest voorkomend. De tekst wordt geëncodeerd zodat wanneer de iemand de code scant, hij/zij de tekst te zien krijgt.
+
+Een betaal QR-code is een code waarmee je een betaalverzoek kan genereren net als met je bank app. Vergeet hierbij alsjeblieft niet om de instellingen aan te passen zodat het geld naar jouw bankrekening wordt overgeschreven.
+Deze "betaal QR-code" werkt volgens de Europese standaard van betaalverzoeken (de EPC).
+
+Als je vragen hebt over de app of graag een nieuw soort QR-code geïmplementeerd zou zien, aarzel dan niet om mij te contacteren.
