@@ -12,10 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       
+      
       - name: Clone Flutter repository with master channel
-        uses: subosito/flutter-action@dbf1fa04f4d2e52c33185153d06cdb5443aa189d
-        with:
-          channel: master
+        uses: subosito/flutter-action@v2.8.0
       - run: flutter doctor -v
 
       - name: Install dependencies
