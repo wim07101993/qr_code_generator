@@ -15,7 +15,7 @@ jobs:
       - run: flutter doctor -v
 
       - name: Checkout code
-      - uses: actions/checkout@v3
+        uses: actions/checkout@v3
       - run: flutter pub get
 
       - name: Setup Fastlane
