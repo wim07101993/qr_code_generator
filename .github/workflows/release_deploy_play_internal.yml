@@ -10,23 +10,24 @@ jobs:
   fastlane-deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+            
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
           versionSpec: '5.x'
           
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+
       - name: Determine Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
     
-      - name: Install flutter
-        uses: subosito/flutter-action@v2.8.0
-      - run: flutter doctor -v
-
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - run: flutter pub get
-
       - name: Setup Fastlane
         uses: ruby/setup-ruby-pkgs@v1.32.3
         with:
