@@ -13,7 +13,7 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.7
         with:
-          versionSpec: '6.x'
+          versionSpec: '5.x'
           
       - name: Determine Version
         id: gitversion
@@ -51,7 +51,7 @@ jobs:
       - name: Run fastlane
         run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
-          VERSION: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+          VERSION: ${{ steps.gitversion.outputs.fullSemVer }}"
           BUILD_NUMBER: ${{ github.run_number }}
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
         working-directory: android
