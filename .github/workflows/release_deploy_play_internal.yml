@@ -1,9 +1,8 @@
 name: Deploy to Google Play internal
 
 on:
-  workflow_dispatch:
-#   push:
-#     branches: [ "main" ]
+  push:
+    branches: [ "main" ]
 
 
 jobs:
