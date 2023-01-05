@@ -30,13 +30,6 @@ jobs:
       - run: flutter doctor -v
       - run: flutter pub get
 
-      - name: Setup Fastlane
-        uses: ruby/setup-ruby-pkgs@v1.32.3
-        with:
-          ruby-version: "2.6"
-          bundler-cache: true
-          working-directory: android
-
       - name: Configure Keystore
         run: |
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
@@ -50,11 +43,17 @@ jobs:
           KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         working-directory: android
+        
+      - name: Build app
+        run: flutter build appbundle --build-name ${{ steps.gitversion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
       
-      - name: Run fastlane
-        run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
-        env:
-          VERSION: ${{ steps.gitversion.outputs.fullSemVer }}
-          BUILD_NUMBER: ${{ github.run_number }}
-          PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
-        working-directory: android
+      - name: Create service_account.json
+        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
+        
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.wimvanlaer.qr_code_generator
+          releaseFile: build/app/outputs/bundle/release/app-release.aab
+          track: internal
