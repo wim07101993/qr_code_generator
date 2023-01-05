@@ -8,7 +8,7 @@ platform :android do
 
   desc "Submit a new internal build to Google Play"
   lane :internal do
-    sh "flutter build appbundle -v"
+    sh "flutter build appbundle --build-name #{ENV['VERSION']} --build-number #{ENV['BUILD_NUMBER']}"
     upload_to_play_store(
       track: 'internal',
       aab: '../build/app/outputs/bundle/release/app-release.aab',
