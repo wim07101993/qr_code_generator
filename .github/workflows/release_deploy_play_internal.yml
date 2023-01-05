@@ -10,12 +10,24 @@ jobs:
   fastlane-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Install flutter
-        uses: subosito/flutter-action@v2.8.0
-      - run: flutter doctor -v
-
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+              
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
       - run: flutter pub get
 
       - name: Setup Fastlane
@@ -42,5 +54,7 @@ jobs:
       - name: Run fastlane
         run: bundle exec fastlane ${{ github.event.inputs.lane || 'internal' }}
         env:
+          VERSION: ${{ steps.gitversion.outputs.fullSemVer }}"
+          BUILD_NUMBER: ${{ github.run_number }}
           PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
         working-directory: android
