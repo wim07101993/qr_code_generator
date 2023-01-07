@@ -6,6 +6,7 @@ import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/get_it/get_it_extensions.dart';
 import 'package:qr_code_generator/shared/get_it/installer.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
+import 'package:qr_code_generator/shared/logging/installer.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/installer.dart';
 import 'package:qr_code_generator/shared/shared_preferences_installer.dart';
@@ -15,6 +16,7 @@ final getIt = GetIt.asNewInstance();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   getIt.registerSingleton<List<Installer>>([
+    LoggingInstaller(),
     SharedPreferencesInstaller(),
     RouterInstaller(),
     EpcInstaller(),

@@ -16,12 +16,14 @@ class EpcInstaller extends Installer {
 
     getIt.registerFactoryAsync(
       () async => LoadEpcData(
+        monitor: getIt(),
         sharedPreferences: await getIt.getAsync(),
         epcDataNotifier: getIt(),
       ),
     );
     getIt.registerFactory(
       () => SaveEpcData(
+        monitor: getIt(),
         sharedPreferences: getIt(),
         epcDataNotifier: getIt(),
       ),

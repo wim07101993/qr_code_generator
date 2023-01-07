@@ -16,12 +16,14 @@ class QrCodeStyleInstaller extends Installer {
 
     getIt.registerFactoryAsync(
       () async => LoadStyleSettings(
+        monitor: getIt(),
         sharedPreferences: await getIt.getAsync(),
         styleSettingsNotifier: getIt(),
       ),
     );
     getIt.registerFactory(
       () => SaveStyleSettings(
+        monitor: getIt(),
         sharedPreferences: getIt(),
         styleSettingsNotifier: getIt(),
       ),
