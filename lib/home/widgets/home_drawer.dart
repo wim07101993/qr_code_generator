@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/app_router.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
+import 'package:qr_code_generator/shared/router/app_router.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});

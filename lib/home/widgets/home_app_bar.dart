@@ -7,13 +7,13 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_code_generator/app_router.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/epc/widgets/settings_sheet.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/widgets/settings_sheet.dart';
+import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
+import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
-import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 

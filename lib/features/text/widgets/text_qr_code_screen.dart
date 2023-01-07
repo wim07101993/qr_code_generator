@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/notifier/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 

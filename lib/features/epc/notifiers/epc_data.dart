@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_character_set.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
 
 class EpcDataNotifier extends ChangeNotifier
     implements ValueListenable<EpcData> {

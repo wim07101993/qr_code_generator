@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
 
 class SettingsSheet extends StatefulWidget {
   const SettingsSheet({

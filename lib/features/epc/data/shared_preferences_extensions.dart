@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:qr_code_generator/epc/notifiers/epc_character_set.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_version.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
 import 'package:qr_code_generator/shared/data/json_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

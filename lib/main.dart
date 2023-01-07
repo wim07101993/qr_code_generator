@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
-import 'package:qr_code_generator/app_router.dart';
-import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
-import 'package:qr_code_generator/style/data/shared_preferences_extensions.dart';
-import 'package:qr_code_generator/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/features/epc/data/shared_preferences_extensions.dart';
+import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/style/data/shared_preferences_extensions.dart';
+import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
+import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 GetIt getIt = GetIt.asNewInstance();
