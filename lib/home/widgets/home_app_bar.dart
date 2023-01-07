@@ -14,7 +14,6 @@ import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:share_plus/share_plus.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {

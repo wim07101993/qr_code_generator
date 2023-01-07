@@ -4,7 +4,6 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
 class StyleScreen extends StatelessWidget {
   const StyleScreen({super.key});
