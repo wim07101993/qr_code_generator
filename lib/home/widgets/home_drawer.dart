@@ -13,14 +13,14 @@ class HomeDrawer extends StatelessWidget {
       child: ListView(
         children: [
           ListTile(
-            leading: const Icon(Icons.payment),
-            title: Text(s.epcPaymentDrawerOption),
-            onTap: () => context.replaceRoute(const EpcQrCodeRoute()),
-          ),
-          ListTile(
             leading: const Icon(Icons.text_fields),
             title: Text(s.textQrDrawerOption),
             onTap: () => context.replaceRoute(const TextQrCodeRoute()),
+          ),
+          ListTile(
+            leading: const Icon(Icons.payment),
+            title: Text(s.epcPaymentDrawerOption),
+            onTap: () => context.replaceRoute(const EpcQrCodeRoute()),
           ),
           ListTile(
             leading: const Icon(Icons.color_lens),

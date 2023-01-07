@@ -23,16 +23,16 @@ class _$AppRouter extends RootStackRouter {
         child: const HomeScreen(),
       );
     },
-    EpcQrCodeRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: const EpcQrCodeScreen(),
-      );
-    },
     TextQrCodeRoute.name: (routeData) {
       return MaterialPageX<dynamic>(
         routeData: routeData,
         child: const TextQrCodeScreen(),
+      );
+    },
+    EpcQrCodeRoute.name: (routeData) {
+      return MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const EpcQrCodeScreen(),
       );
     },
     StyleRoute.name: (routeData) {
@@ -53,24 +53,24 @@ class _$AppRouter extends RootStackRouter {
               '#redirect',
               path: '',
               parent: HomeRoute.name,
-              redirectTo: 'epc',
+              redirectTo: 'text',
               fullMatch: true,
             ),
             RouteConfig(
               '/#redirect',
               path: '/',
               parent: HomeRoute.name,
-              redirectTo: 'epc',
+              redirectTo: 'text',
               fullMatch: true,
-            ),
-            RouteConfig(
-              EpcQrCodeRoute.name,
-              path: 'epc',
-              parent: HomeRoute.name,
             ),
             RouteConfig(
               TextQrCodeRoute.name,
               path: 'text',
+              parent: HomeRoute.name,
+            ),
+            RouteConfig(
+              EpcQrCodeRoute.name,
+              path: 'epc',
               parent: HomeRoute.name,
             ),
             RouteConfig(
@@ -97,18 +97,6 @@ class HomeRoute extends PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [EpcQrCodeScreen]
-class EpcQrCodeRoute extends PageRouteInfo<void> {
-  const EpcQrCodeRoute()
-      : super(
-          EpcQrCodeRoute.name,
-          path: 'epc',
-        );
-
-  static const String name = 'EpcQrCodeRoute';
-}
-
-/// generated route for
 /// [TextQrCodeScreen]
 class TextQrCodeRoute extends PageRouteInfo<void> {
   const TextQrCodeRoute()
@@ -118,6 +106,18 @@ class TextQrCodeRoute extends PageRouteInfo<void> {
         );
 
   static const String name = 'TextQrCodeRoute';
+}
+
+/// generated route for
+/// [EpcQrCodeScreen]
+class EpcQrCodeRoute extends PageRouteInfo<void> {
+  const EpcQrCodeRoute()
+      : super(
+          EpcQrCodeRoute.name,
+          path: 'epc',
+        );
+
+  static const String name = 'EpcQrCodeRoute';
 }
 
 /// generated route for

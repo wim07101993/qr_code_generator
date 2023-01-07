@@ -14,9 +14,9 @@ part 'app_router.gr.dart';
       page: HomeScreen,
       initial: true,
       children: [
-        RedirectRoute(path: '/', redirectTo: 'epc'),
-        AutoRoute(page: EpcQrCodeScreen, path: 'epc', initial: true),
-        AutoRoute(page: TextQrCodeScreen, path: 'text'),
+        RedirectRoute(path: '/', redirectTo: 'text'),
+        AutoRoute(page: TextQrCodeScreen, path: 'text', initial: true),
+        AutoRoute(page: EpcQrCodeScreen, path: 'epc'),
         AutoRoute(page: StyleScreen, path: 'style'),
       ],
     ),
