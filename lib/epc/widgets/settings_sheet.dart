@@ -46,16 +46,6 @@ class _SettingsSheetState extends State<SettingsSheet> {
         ),
         const SizedBox(height: 8),
         TextFormField(
-          controller: notifier.bic,
-          validator: (value) =>
-              EpcData.validateBic(value, notifier.version.value),
-          decoration: InputDecoration(
-            label: const Text('BIC'),
-            helperText: s.bicSettingHelperText,
-          ),
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
           controller: notifier.beneficiaryName,
           validator: EpcData.validateBeneficiaryName,
           decoration: InputDecoration(
@@ -63,33 +53,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
             helperText: s.beneficiaryNameSettingHelperText,
           ),
         ),
-        const SizedBox(height: 8),
-        DropdownButtonFormField(
-          value: notifier.version.value,
-          validator: (value) =>
-              EpcData.validateVersion(value, notifier.bic.text),
-          decoration: InputDecoration(
-            label: Text(s.version),
-            helperText: s.versionSettingHelperText,
-          ),
-          items: EpcVersion.values.map((e) {
-            return DropdownMenuItem<EpcVersion>(
-              value: e,
-              child: Text(e.translate(s)),
-            );
-          }).toList(),
-          onChanged: (v) => notifier.version.value = v ?? EpcVersion.version2,
-        ),
-        const SizedBox(height: 8),
-        TextFormField(
-          controller: notifier.purpose,
-          validator: EpcData.validatePurpose,
-          decoration: InputDecoration(
-            label: Text(s.purpose),
-            helperText: s.purposeSettingHelperText,
-          ),
-        ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         Row(
           children: [
             Text(s.useStructuredRemittanceInfoCheckboxLabel),
@@ -114,6 +78,24 @@ class _SettingsSheetState extends State<SettingsSheet> {
             helperText: s.remittanceInfoSettingHelperText,
           ),
         ),
+        TextFormField(
+          controller: notifier.bic,
+          validator: (value) =>
+              EpcData.validateBic(value, notifier.version.value),
+          decoration: InputDecoration(
+            label: const Text('BIC'),
+            helperText: s.bicSettingHelperText,
+          ),
+        ),
+        const SizedBox(height: 8),
+        TextFormField(
+          controller: notifier.purpose,
+          validator: EpcData.validatePurpose,
+          decoration: InputDecoration(
+            label: Text(s.purpose),
+            helperText: s.purposeSettingHelperText,
+          ),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           controller: notifier.originatorInfo,
@@ -122,6 +104,23 @@ class _SettingsSheetState extends State<SettingsSheet> {
             label: Text(s.originatorInfo),
             helperText: s.originatorInfoSettingHelperText,
           ),
+        ),
+        const SizedBox(height: 8),
+        DropdownButtonFormField(
+          value: notifier.version.value,
+          validator: (value) =>
+              EpcData.validateVersion(value, notifier.bic.text),
+          decoration: InputDecoration(
+            label: Text(s.version),
+            helperText: s.versionSettingHelperText,
+          ),
+          items: EpcVersion.values.map((e) {
+            return DropdownMenuItem<EpcVersion>(
+              value: e,
+              child: Text(e.translate(s)),
+            );
+          }).toList(),
+          onChanged: (v) => notifier.version.value = v ?? EpcVersion.version2,
         ),
       ],
     );
