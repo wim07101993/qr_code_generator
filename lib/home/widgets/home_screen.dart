@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/home/widgets/home_app_bar.dart';
 import 'package:qr_code_generator/home/widgets/home_drawer.dart';
 import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/style/notifiers/style_settings.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

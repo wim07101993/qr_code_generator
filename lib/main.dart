@@ -1,37 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get_it/get_it.dart';
-import 'package:qr_code_generator/app_router.dart';
-import 'package:qr_code_generator/epc/data/shared_preferences_extensions.dart';
-import 'package:qr_code_generator/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/l10n/localization.dart';
-import 'package:qr_code_generator/style/data/shared_preferences_extensions.dart';
-import 'package:qr_code_generator/style/notifiers/style_settings.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:qr_code_generator/features/epc/installer.dart';
+import 'package:qr_code_generator/features/style/installer.dart';
+import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/shared/get_it/get_it_extensions.dart';
+import 'package:qr_code_generator/shared/get_it/installer.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
+import 'package:qr_code_generator/shared/logging/installer.dart';
+import 'package:qr_code_generator/shared/router/app_router.dart';
+import 'package:qr_code_generator/shared/router/installer.dart';
+import 'package:qr_code_generator/shared/shared_preferences_installer.dart';
 
-GetIt getIt = GetIt.asNewInstance();
-AppRouter router = AppRouter();
+final getIt = GetIt.asNewInstance();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final sharedPreferences = await SharedPreferences.getInstance();
-  getIt.registerSingleton(sharedPreferences);
+  getIt.registerSingleton<List<Installer>>([
+    LoggingInstaller(),
+    SharedPreferencesInstaller(),
+    RouterInstaller(),
+    EpcInstaller(),
+    QrCodeStyleInstaller(),
+  ]);
+  getIt.registerDependenciesOfInstallers();
+  await getIt.installInstallers();
 
-  getIt.registerLazySingleton(
-    () => EpcDataNotifier()
-      ..value = getIt<SharedPreferences>().loadEpcData()
-      ..addListener(saveEpcData),
-    dispose: (notifier) => notifier.dispose(),
-  );
-
-  getIt.registerLazySingleton(
-    () => StyleSettingsNotifier()
-      ..value =
-          getIt<SharedPreferences>().loadStyleSettings() ?? StyleSettings()
-      ..addListener(saveStyleSettings),
-    dispose: (notifier) => notifier.dispose(),
-  );
-
+  final router = getIt<AppRouter>();
   runApp(
     ValueListenableBuilder<StyleSettings>(
       valueListenable: getIt<StyleSettingsNotifier>(),
@@ -53,17 +47,5 @@ Future<void> main() async {
         debugShowCheckedModeBanner: false,
       ),
     ),
-  );
-}
-
-Future<void> saveEpcData() {
-  return getIt<SharedPreferences>().saveEpcData(
-    getIt<EpcDataNotifier>().value,
-  );
-}
-
-Future<void> saveStyleSettings() {
-  return getIt<SharedPreferences>().saveStyleSettings(
-    getIt<StyleSettingsNotifier>().value,
   );
 }
