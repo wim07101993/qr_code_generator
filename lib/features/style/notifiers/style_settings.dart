@@ -4,6 +4,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
+export 'package:flutter/material.dart' show Color, Size;
+export 'package:qr_flutter/qr_flutter.dart';
+
 class StyleSettingsNotifier extends ValueNotifier<StyleSettings> {
   StyleSettingsNotifier() : super(StyleSettings());
 }

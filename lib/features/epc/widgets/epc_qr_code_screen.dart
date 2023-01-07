@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/shared/notifier/forwarding_notifier.dart';
+import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
