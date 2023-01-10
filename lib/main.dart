@@ -9,7 +9,7 @@ import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/logging/installer.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/installer.dart';
-import 'package:qr_code_generator/shared/shared_preferences_installer.dart';
+import 'package:qr_code_generator/shared/shared_preferences/installer.dart';
 
 final getIt = GetIt.asNewInstance();
 
@@ -42,7 +42,11 @@ Future<void> main() async {
           Locale('en'),
           Locale('nl'),
         ],
-        routerDelegate: router.delegate(),
+        routerDelegate: router.delegate(
+          initialRoutes: [
+            const HomeRoute(),
+          ],
+        ),
         routeInformationParser: router.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
       ),

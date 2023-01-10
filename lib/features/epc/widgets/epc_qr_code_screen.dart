@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +31,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
 
   @override
   void initState() {
+    getIt<CurrentQrCodeTypeNotifier>().value = QrCodeType.epc;
     lastValidEpcData = epcDataNotifier.value;
     epcDataNotifier.amount.addListener(amountChanged);
     super.initState();

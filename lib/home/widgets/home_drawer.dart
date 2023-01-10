@@ -1,7 +1,8 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
-import 'package:qr_code_generator/shared/router/app_router.dart';
+import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
+import 'package:qr_code_generator/shared/router/notifier/is_updating_style_notifier.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -15,17 +16,28 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.text_fields),
             title: Text(s.textQrDrawerOption),
-            onTap: () => context.replaceRoute(const TextQrCodeRoute()),
+            onTap: () {
+              getIt<CurrentQrCodeTypeNotifier>().value = QrCodeType.text;
+              getIt<IsUpdatingStyleNotifier>().value = false;
+              Navigator.pop(context);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.payment),
             title: Text(s.epcPaymentDrawerOption),
-            onTap: () => context.replaceRoute(const EpcQrCodeRoute()),
+            onTap: () {
+              getIt<CurrentQrCodeTypeNotifier>().value = QrCodeType.epc;
+              getIt<IsUpdatingStyleNotifier>().value = false;
+              Navigator.pop(context);
+            },
           ),
           ListTile(
             leading: const Icon(Icons.color_lens),
             title: Text(s.qrCodeStyleDrawerOption),
-            onTap: () => context.replaceRoute(const StyleRoute()),
+            onTap: () {
+              getIt<IsUpdatingStyleNotifier>().value = true;
+              Navigator.pop(context);
+            },
           ),
           ListTile(
             title: Text(s.aboutDrawerOption),
