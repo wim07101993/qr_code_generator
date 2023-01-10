@@ -48,29 +48,26 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   Widget build(BuildContext context) {
     return QrCodeScreen(
       qrData: qrDataNotifier,
-      inputBuilder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text('€', style: TextStyle(fontSize: 35)),
-            ),
-            Expanded(
-              child: TextField(
-                controller: epcDataNotifier.amount,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  errorText: amountErrorMessage,
-                  errorMaxLines: 3,
-                ),
-                style: const TextStyle(fontSize: 35),
-                textAlign: TextAlign.center,
+      inputBuilder: (context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text('€', style: TextStyle(fontSize: 35)),
+          ),
+          Expanded(
+            child: TextField(
+              controller: epcDataNotifier.amount,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                errorText: amountErrorMessage,
+                errorMaxLines: 3,
               ),
+              style: const TextStyle(fontSize: 35),
+              textAlign: TextAlign.center,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
