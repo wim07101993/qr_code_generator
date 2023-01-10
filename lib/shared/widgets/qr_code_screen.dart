@@ -35,25 +35,29 @@ class QrCodeScreen extends StatelessWidget {
           ),
         );
 
-        if (constraints.maxWidth > constraints.maxHeight) {
+        const double inputWidth = 250;
+        final input = Padding(
+          padding: const EdgeInsets.all(24),
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(
+              minWidth: inputWidth,
+              maxWidth: inputWidth,
+            ),
+            child: inputBuilder(context),
+          ),
+        );
+
+        if ((constraints.maxWidth - inputWidth) > constraints.maxHeight) {
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: inputBuilder(context)),
-              const SizedBox(height: 8),
+              Expanded(child: input),
               qrCode,
             ],
           );
         } else {
-          return ListView(
-            children: [
-              Center(
-                child: qrCode,
-              ),
-              const SizedBox(height: 8),
-              inputBuilder(context),
-              const SizedBox(height: 8),
-            ],
+          return SingleChildScrollView(
+            child: Column(children: [qrCode, input]),
           );
         }
       },

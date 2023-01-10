@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
-import 'package:qr_code_generator/features/style/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/json_extensions.dart';
+import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoadStyleSettings extends BehaviourWithoutInput<void> {
@@ -21,7 +21,8 @@ class LoadStyleSettings extends BehaviourWithoutInput<void> {
 
   @override
   Future<void> action(BehaviourTrack? track) {
-    final jsonData = sharedPreferences.get(qrCodeStyleSettingsKey) as String?;
+    final jsonData = sharedPreferences
+        .get(sharedPreferences.qrCodeStyleSettingsKey) as String?;
     if (jsonData == null) {
       return Future.value();
     }

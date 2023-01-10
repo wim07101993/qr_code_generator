@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
-import 'package:qr_code_generator/features/style/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SaveStyleSettings extends BehaviourWithoutInput<void> {
@@ -22,7 +22,7 @@ class SaveStyleSettings extends BehaviourWithoutInput<void> {
   Future<void> action(BehaviourTrack? track) async {
     final map = styleSettingsNotifier.value.toJson();
     await sharedPreferences.setString(
-      qrCodeStyleSettingsKey,
+      sharedPreferences.qrCodeStyleSettingsKey,
       jsonEncode(map),
     );
   }

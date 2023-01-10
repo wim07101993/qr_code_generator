@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
-import 'package:qr_code_generator/features/epc/data/shared_preferences_extensions.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SaveEpcData extends BehaviourWithoutInput<void> {

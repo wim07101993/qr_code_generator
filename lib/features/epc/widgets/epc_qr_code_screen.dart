@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,6 +31,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
 
   @override
   void initState() {
+    getIt<CurrentQrCodeTypeNotifier>().value = QrCodeType.epc;
     lastValidEpcData = epcDataNotifier.value;
     epcDataNotifier.amount.addListener(amountChanged);
     super.initState();
@@ -46,29 +48,26 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   Widget build(BuildContext context) {
     return QrCodeScreen(
       qrData: qrDataNotifier,
-      inputBuilder: (context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 8),
-              child: Text('€', style: TextStyle(fontSize: 35)),
-            ),
-            Expanded(
-              child: TextField(
-                controller: epcDataNotifier.amount,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                  errorText: amountErrorMessage,
-                  errorMaxLines: 3,
-                ),
-                style: const TextStyle(fontSize: 35),
-                textAlign: TextAlign.center,
+      inputBuilder: (context) => Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 8),
+            child: Text('€', style: TextStyle(fontSize: 35)),
+          ),
+          Expanded(
+            child: TextField(
+              controller: epcDataNotifier.amount,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                errorText: amountErrorMessage,
+                errorMaxLines: 3,
               ),
+              style: const TextStyle(fontSize: 35),
+              textAlign: TextAlign.center,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
