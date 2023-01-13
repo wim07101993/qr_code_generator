@@ -87,7 +87,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
       gapless: styleSettings.gapless,
       embeddedImageStyle: styleSettings.embeddedImageStyle,
       embeddedImage: await loadImage(styleSettings.embeddedImageFilePath),
-    ).toImageData(1024);
+    ).toImageData(2160);
     if (image == null || !mounted) {
       return;
     }
