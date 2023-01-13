@@ -33,7 +33,18 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   lint:
+  msix: ^3.7.0
 
 flutter:
   uses-material-design: true
   generate: true
+
+msix_config:
+  display_name: QR-generator
+  publisher_display_name: wim07101993
+  publisher: CN=C359B0E3-0A9C-4C4C-9037-E1B393CA187E
+  identity_name: 38383wim07101993.QR-generator
+  msix_version: 0.3.2.0
+  languages: nl-be, en-gb
+  store: true
+  logo_path: logo-without-background.png
