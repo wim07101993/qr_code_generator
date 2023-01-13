@@ -1,4 +1,4 @@
-name: Deploy to Google Play internal
+name: Build Android
 
 on:
   push:
