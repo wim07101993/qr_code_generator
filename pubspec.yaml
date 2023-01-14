@@ -47,4 +47,4 @@ msix_config:
   msix_version: 0.3.2.0
   languages: nl-be, en-gb
   store: true
-  logo_path: logo-without-background.png
+  logo_path: logo_without_background.png

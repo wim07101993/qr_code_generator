@@ -36,6 +36,20 @@ class QrCodeStyleInstaller extends Installer {
         .getAsync<LoadStyleSettings>()
         .then((loadStyleSettings) => loadStyleSettings());
     getIt<StyleSettingsNotifier>().addListener(onEpcDataChanged);
+    // Uncomment to default style to app logo style
+    // final styleSettings = getIt<StyleSettingsNotifier>();
+    // styleSettings.value = StyleSettings(
+    //   eyeStyle: const QrEyeStyle(
+    //     color: Color(0xfff13de7),
+    //     eyeShape: QrEyeShape.square,
+    //   ),
+    //   dataModuleStyle: const QrDataModuleStyle(
+    //     color: Color(0xff4d0e8d),
+    //     dataModuleShape: QrDataModuleShape.square,
+    //   ),
+    //   embeddedImageFilePath:
+    //       '$HOME/source/repos/qr_code_generator/logo_with_background.png',
+    // );
   }
 
   @override
