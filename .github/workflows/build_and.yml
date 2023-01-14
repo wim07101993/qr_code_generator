@@ -1,0 +1,203 @@
+name: Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+  get-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        
+      - name: Create version file
+        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version.txt
+        
+      - name: remove new-line from file
+        run: tr -d '\n' < version.txt > version.txt
+        
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: version.txt
+          path: ./version.txt
+          if-no-files-found: error
+  
+  build-android-aab:
+    runs-on: ubuntu-latest
+    needs: get-version
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Download version artifact
+        uses: aochmann/actions-download-artifact@1.0.4
+        with:
+          name: version.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: version.txt
+  
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+
+      - name: Configure Keystore
+        run: |
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "file=upload-keystore.jks" >> key.properties
+          echo "password=$KEYSTORE_PASSWORD" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+        working-directory: android
+        
+      - name: Build app
+        run: flutter build appbundle --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: appbundle.aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+  
+  build-android-apk:
+    runs-on: ubuntu-latest
+    needs: get-version
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Download version artifact
+        uses: aochmann/actions-download-artifact@1.0.4
+        with:
+          name: version.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: version.txt
+  
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+
+      - name: Configure Keystore
+        run: |
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "file=upload-keystore.jks" >> key.properties
+          echo "password=$KEYSTORE_PASSWORD" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+        working-directory: android
+        
+      - name: Build app
+        run: flutter build apk --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: appbundle.apk
+          path: build/app/outputs/bundle/release/app-release.apk
+          if-no-files-found: error
+          
+  build-linux:
+    runs-on: ubuntu-latest
+    needs: get-version
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Download version artifact
+        uses: aochmann/actions-download-artifact@1.0.4
+        with:
+          name: version.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: version.txt
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+          
+  build-windows:
+    runs-on: windows-latest
+    needs: get-version
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Download version artifact
+        uses: aochmann/actions-download-artifact@1.0.4
+        with:
+          name: version.txt
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: version.txt
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter build windows --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        
+#  release-to-google-play:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Download artifact
+#        uses: aochmann/actions-download-artifact@1.0.4
+#        with:
+#          name: appbundle.aab
+#    
+#      - name: Create service_account.json
+#        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
+#        
+#      - name: Upload to Google Play
+#        uses: r0adkll/upload-google-play@v1.0.19
+#        with:
+#          serviceAccountJson: service_account.json
+#          packageName: com.wimvanlaer.qr_code_generator
+#          releaseFiles: appbundle.aab
+#          status: completed
+#          track: internal
