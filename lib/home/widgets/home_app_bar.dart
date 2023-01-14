@@ -1,23 +1,26 @@
 import 'dart:async';
-import 'dart:io';
-import 'dart:ui' as ui;
 
-import 'package:auto_route/auto_route.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/features/epc/widgets/settings_sheet.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
+import 'package:qr_code_generator/home/behaviours/share_qr_code.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/l10n/behaviour_extensions.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
-import 'package:qr_code_generator/shared/router/app_router.dart';
-import 'package:qr_code_generator/shared/widgets/listenable_builder.dart';
-import 'package:share_plus/share_plus.dart';
 
 class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const HomeAppBar({super.key});
+  const HomeAppBar({
+    super.key,
+    required this.canShareQrCode,
+    required this.canSaveQrCode,
+    required this.settingsAction,
+  });
+
+  final bool canShareQrCode;
+  final bool canSaveQrCode;
+  final VoidCallback? settingsAction;
 
   @override
   Size get preferredSize => const Size(double.infinity, kToolbarHeight);
@@ -27,109 +30,56 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  @override
-  Widget build(BuildContext context) {
-    final router = AutoRouter.of(context);
-    return ListenableBuilder(
-      valueListenable: router,
-      builder: (context) => AppBar(
-        elevation: 0,
-        actions: [
-          _shareButton(context, router),
-          _settingsButton(context, router),
-        ].whereType<Widget>().toList(),
+  Future<void> shareQrData(BuildContext context) {
+    return getIt<ShareQrCode>()(
+      ShareQrCodeParams(
+        qrData: getIt<EpcDataNotifier>().value.qrData,
+        translations: AppLocalizations.of(context)!,
+        styleSettings: getIt<StyleSettingsNotifier>().value,
       ),
-    );
+    ).handleException(context, isMounted: () => mounted);
   }
 
-  Widget? _settingsButton(BuildContext context, StackRouter router) {
-    final path = router.childControllers.first.current.path;
-    VoidCallback? action;
-    if (path == const EpcQrCodeRoute().path) {
-      action = () => showModalBottomSheet(
-            context: context,
-            builder: (context) => const SettingsSheet(),
-          );
-    }
-    if (action == null) {
-      return null;
-    }
-    return IconButton(
-      onPressed: action,
-      icon: const Icon(Icons.settings),
+  Future<void> saveQrCode(BuildContext context) async {
+    final s = AppLocalizations.of(context)!;
+    final outputPath = await FilePicker.platform.saveFile(
+      dialogTitle: s.saveQrDialogTitle,
+      fileName: 'qr-code.png',
     );
-  }
-
-  Widget? _shareButton(BuildContext context, StackRouter router) {
-    final path = router.childControllers.first.current.path;
-    VoidCallback? action;
-    if (path == const EpcQrCodeRoute().path) {
-      action =
-          () => shareQrData(context, getIt<EpcDataNotifier>().value.qrData);
-    }
-
-    if (action == null) {
-      return null;
-    }
-    return IconButton(
-      onPressed: action,
-      icon: Platform.isLinux ? const Icon(Icons.save) : const Icon(Icons.share),
-    );
-  }
-
-  Future<void> shareQrData(BuildContext context, String qrData) async {
-    final styleSettings = getIt<StyleSettingsNotifier>().value;
-    final image = await QrPainter(
-      version: QrVersions.auto,
-      data: qrData,
-      dataModuleStyle: styleSettings.dataModuleStyle,
-      eyeStyle: styleSettings.eyeStyle,
-      gapless: styleSettings.gapless,
-      embeddedImageStyle: styleSettings.embeddedImageStyle,
-      embeddedImage: await loadImage(styleSettings.embeddedImageFilePath),
-    ).toImageData(1024);
-    if (image == null || !mounted) {
+    if (outputPath == null || !mounted) {
       return;
     }
-
-    final s = AppLocalizations.of(context)!;
-    if (Platform.isLinux) {
-      final result = await FilePicker.platform.saveFile(
-        dialogTitle: s.saveQrDialogTitle,
-        fileName: 'qr-code.png',
-      );
-      if (result != null) {
-        await File(result).writeAsBytes(image.buffer.asUint8List());
-      }
-    } else {
-      final file = await getTemporaryDirectory()
-          .then((directory) => join(directory.path, 'qr-code.png'))
-          .then((path) => File(path))
-          .then((file) => file.writeAsBytes(image.buffer.asInt8List()));
-      await Share.shareXFiles([XFile(file.path)], text: s.qrCode);
-    }
+    return getIt<SaveQrCode>()(
+      SaveQrCodeParams(
+        qrData: getIt<EpcDataNotifier>().value.qrData,
+        translations: s,
+        styleSettings: getIt<StyleSettingsNotifier>().value,
+        outputPath: outputPath,
+      ),
+    ).handleException(context, isMounted: () => mounted);
   }
 
-  Future<ui.Image?> loadImage(String? path) async {
-    try {
-      if (path == null) {
-        return null;
-      }
-      final file = File(path);
-      if (!await file.exists()) {
-        return null;
-      }
-
-      final bytes = await file.readAsBytes();
-
-      final imageCompleter = Completer<ui.Image?>();
-      ui.decodeImageFromList(
-        bytes,
-        (result) => imageCompleter.complete(result),
-      );
-      return imageCompleter.future;
-    } catch (e) {
-      return null;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      elevation: 0,
+      actions: [
+        if (widget.canShareQrCode)
+          IconButton(
+            onPressed: () => shareQrData(context),
+            icon: const Icon(Icons.share),
+          ),
+        if (widget.canSaveQrCode)
+          IconButton(
+            onPressed: () => shareQrData(context),
+            icon: const Icon(Icons.save),
+          ),
+        if (widget.settingsAction != null)
+          IconButton(
+            onPressed: widget.settingsAction,
+            icon: const Icon(Icons.settings),
+          ),
+      ].whereType<Widget>().toList(),
+    );
   }
 }

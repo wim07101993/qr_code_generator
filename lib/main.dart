@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:qr_code_generator/features/epc/installer.dart';
 import 'package:qr_code_generator/features/style/installer.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/home/installer.dart';
 import 'package:qr_code_generator/shared/get_it/get_it_extensions.dart';
 import 'package:qr_code_generator/shared/get_it/installer.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
@@ -21,6 +22,7 @@ Future<void> main() async {
     RouterInstaller(),
     EpcInstaller(),
     QrCodeStyleInstaller(),
+    HomeInstaller(),
   ]);
   getIt.registerDependenciesOfInstallers();
   await getIt.installInstallers();
