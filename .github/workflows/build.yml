@@ -27,15 +27,15 @@ jobs:
         run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version.txt
         
       - name: remove new-line from file
-        run: tr -d '\n' < version.txt > version.txt
+        run: tr -d '\n' < version.txt > version_without_new_line.txt
         
       - run: cat version.txt
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: version.txt
-          path: version.txt
+          name: version
+          path: version_without_new_line.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -48,7 +48,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -95,7 +95,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -142,7 +142,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -168,7 +168,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
