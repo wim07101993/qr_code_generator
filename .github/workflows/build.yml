@@ -136,6 +136,7 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -175,6 +176,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
