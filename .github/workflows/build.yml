@@ -24,10 +24,10 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.7
         
       - name: Create version file
-        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version.txt
+        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version_with_new_line.txt
         
       - name: remove new-line from file
-        run: tr -d '\n' < version.txt > version_without_new_line.txt
+        run: tr -d '\n' < version_with_new_line.txt > version.txt
         
       - run: cat version.txt
         
@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: version
-          path: version_without_new_line.txt
+          path: version.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -49,6 +49,7 @@ jobs:
         uses: aochmann/actions-download-artifact@1.0.4
         with:
           name: version
+      - run: cat version.txt
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
