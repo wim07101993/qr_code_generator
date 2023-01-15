@@ -24,16 +24,18 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.7
         
       - name: Create version file
-        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version.txt
+        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version_with_new_line.txt
         
       - name: remove new-line from file
-        run: tr -d '\n' < version.txt > version.txt
+        run: tr -d '\n' < version_with_new_line.txt > version.txt
+        
+      - run: cat version.txt
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: version.txt
-          path: ./version.txt
+          name: version
+          path: version.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -46,7 +48,8 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
+      - run: cat version.txt
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -93,7 +96,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -127,12 +130,13 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: appbundle.apk
-          path: build/app/outputs/bundle/release/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           
   build-linux:
     runs-on: ubuntu-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -140,12 +144,15 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
           path: version.txt
+          
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -155,10 +162,21 @@ jobs:
       
       - name: Build app
         run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        
+      - name: bundle app
+        run: tar -czvf qr_code_generator.tar.gz build/linux/x64/release/bundle
+        
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: linux
+          path: qr_code_generator.tar.gz
+          if-no-files-found: error
           
   build-windows:
     runs-on: windows-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -166,7 +184,7 @@ jobs:
       - name: Download version artifact
         uses: aochmann/actions-download-artifact@1.0.4
         with:
-          name: version.txt
+          name: version
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
@@ -180,8 +198,8 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build windows --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
-        
+        run: flutter pub run msix:create --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+          
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
 #    steps:
