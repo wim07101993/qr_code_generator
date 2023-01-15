@@ -6,53 +6,6 @@ on:
 
 
 jobs:
-  job_1:
-    name: Add 3 and 7
-    runs-on: ubuntu-latest
-    steps:
-      - shell: bash
-        run: |
-          expr 3 + 7 > math-homework.txt
-      - name: Upload math result for job 1
-        uses: actions/upload-artifact@v3
-        with:
-          name: homework
-          path: math-homework.txt
-
-  job_2:
-    name: Multiply by 9
-    needs: job_1
-    runs-on: windows-latest
-    steps:
-      - name: Download math result for job 1
-        uses: actions/download-artifact@v3
-        with:
-          name: homework
-      - shell: bash
-        run: |
-          value=`cat math-homework.txt`
-          expr $value \* 9 > math-homework.txt
-      - name: Upload math result for job 2
-        uses: actions/upload-artifact@v3
-        with:
-          name: homework
-          path: math-homework.txt
-
-  job_3:
-    name: Display results
-    needs: job_2
-    runs-on: macOS-latest
-    steps:
-      - name: Download math result for job 2
-        uses: actions/download-artifact@v3
-        with:
-          name: homework
-      - name: Print the final result
-        shell: bash
-        run: |
-          value=`cat math-homework.txt`
-          echo The result is $value
-
   get-version:
     runs-on: ubuntu-latest
     steps:
@@ -177,7 +130,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: appbundle.apk
-          path: build/app/outputs/bundle/release/app-release.apk
+          path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           
   build-linux:
@@ -196,6 +149,9 @@ jobs:
         uses: juliangruber/read-file-action@v1.1.6
         with:
           path: version.txt
+          
+      - name: Setup Ninja
+        uses: ashutoshvarma/setup-ninja@v1.1
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
