@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+    #branches: [ "main" ]
 
 
 jobs:
@@ -29,11 +29,13 @@ jobs:
       - name: remove new-line from file
         run: tr -d '\n' < version.txt > version.txt
         
+      - run: cat versin.txt
+        
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: version.txt
-          path: ./version.txt
+          path: version.txt
           if-no-files-found: error
   
   build-android-aab:
