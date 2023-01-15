@@ -161,6 +161,16 @@ jobs:
       
       - name: Build app
         run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        
+      - name: bundle app
+        run: tar -czvf qr_code_generator.tar.gz build/linux/x64/release/bundle
+        
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: linux
+          path: qr_code_generator.tar.gz
+          if-no-files-found: error
           
   build-windows:
     runs-on: windows-latest
@@ -186,8 +196,8 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build windows --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
-        
+        run: flutter pub run msix:create --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+          
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
 #    steps:
