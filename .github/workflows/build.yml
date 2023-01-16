@@ -136,7 +136,6 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -151,8 +150,8 @@ jobs:
         with:
           path: version.txt
           
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@v1.1
+      - name: Install ninja-build tool
+        uses: seanmiddleditch/gha-setup-ninja@v3
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
