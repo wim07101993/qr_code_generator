@@ -150,8 +150,9 @@ jobs:
         with:
           path: version.txt
           
-      - name: Install ninja-build tool
-        uses: seanmiddleditch/gha-setup-ninja@v3
+      - run: apt install libgtk-3-dev
+      - run: apt install clang
+      - run: apt install ninja-build
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
