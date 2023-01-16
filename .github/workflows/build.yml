@@ -91,6 +91,7 @@ jobs:
   build-android-apk:
     runs-on: ubuntu-latest
     needs: get-version
+    if: ${{false}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
