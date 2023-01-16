@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+     branches: [ "main" ]
 
 
 jobs:
@@ -136,7 +136,6 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -151,8 +150,10 @@ jobs:
         with:
           path: version.txt
           
-      - name: Setup Ninja
-        uses: ashutoshvarma/setup-ninja@v1.1
+      - name: "install build dependencies"
+        run: | 
+          sudo apt-get update -y
+          sudo apt-get install -y ninja-build libgtk-3-dev
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
