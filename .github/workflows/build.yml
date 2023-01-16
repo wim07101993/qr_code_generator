@@ -201,7 +201,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
