@@ -45,8 +45,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
   
-      - name: Download version artifact
-        uses: aochmann/actions-download-artifact@1.0.4
+      - name: Get version
+        uses: actions/download-artifact@v3.0.2
         with:
           name: version
       - run: cat version.txt
@@ -93,8 +93,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
   
-      - name: Download version artifact
-        uses: aochmann/actions-download-artifact@1.0.4
+      - name: Get version
+        uses: actions/download-artifact@v3.0.2
         with:
           name: version
       - name: Read version
@@ -141,8 +141,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
   
-      - name: Download version artifact
-        uses: aochmann/actions-download-artifact@1.0.4
+      - name: Get version
+        uses: actions/download-artifact@v3.0.2
         with:
           name: version
       - name: Read version
@@ -181,8 +181,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
   
-      - name: Download version artifact
-        uses: aochmann/actions-download-artifact@1.0.4
+      - name: Get version
+        uses: actions/download-artifact@v3.0.2
         with:
           name: version
       - name: Read version
@@ -203,10 +203,10 @@ jobs:
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
 #    steps:
-#      - name: Download artifact
-#        uses: aochmann/actions-download-artifact@1.0.4
+#      - name: Download a Build Artifact
+#        uses: actions/download-artifact@v3.0.2
 #        with:
-#          name: appbundle.aab
+#          name: version
 #    
 #      - name: Create service_account.json
 #        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
