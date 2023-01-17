@@ -23,19 +23,27 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
         
-      - name: Create version file
-        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version_with_new_line.txt
-        
+      - name: Create semantic version file
+        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./full_sem_ver_with_new_line.txt
       - name: remove new-line from file
-        run: tr -d '\n' < version_with_new_line.txt > version.txt
+        run: tr -d '\n' < full_sem_ver_with_new_line.txt > full_sem_ver.txt
         
-      - run: cat version.txt
+      - name: Create semantic version file
+        run: echo ${{ steps.gitversion.outputs.assemblySemVer }} >> ./assembly_sem_ver_with_new_line.txt
+      - name: remove new-line from file
+        run: tr -d '\n' < assembly_sem_ver_with_new_line.txt > assembly_sem_ver.txt
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: version
-          path: version.txt
+          name: full_sem_ver
+          path: full_sem_ver.txt
+          if-no-files-found: error
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: assembly_sem_ver
+          path: assembly_sem_ver.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -49,13 +57,7 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
-      - run: cat version.txt
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: version.txt
+          name: full_sem_ver
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -78,7 +80,7 @@ jobs:
         working-directory: android
         
       - name: Build app
-        run: flutter build appbundle --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build appbundle --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -98,12 +100,7 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: version.txt
+          name: full_sem_ver
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -126,7 +123,7 @@ jobs:
         working-directory: android
         
       - name: Build app
-        run: flutter build apk --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build apk --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -146,12 +143,7 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: version.txt
+          name: full_sem_ver
           
       - name: "install build dependencies"
         run: | 
@@ -165,7 +157,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build linux --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
         
       - name: bundle app
         run: tar -czvf qr_code_generator.tar.gz build/linux/x64/release/bundle
@@ -187,12 +179,7 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: version.txt
+          name: assembly_sem_ver_with_new_line
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -201,7 +188,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ steps.assembly_sem_ver_with_new_line.outputs.content }}.${{ github.run_number }}
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
