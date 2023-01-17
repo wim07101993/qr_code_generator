@@ -136,7 +136,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: appbundle.apk
+          name: app.apk
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           
