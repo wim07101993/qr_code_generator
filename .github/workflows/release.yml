@@ -13,7 +13,7 @@ jobs:
         id: download-aab
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: workflow_name.yml
+          workflow: build.yml
           workflow_conclusion: success
           branch: main
           name: qr_code_generator.aab
@@ -22,7 +22,7 @@ jobs:
         id: download-apk
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: workflow_name.yml
+          workflow: build.yml
           workflow_conclusion: success
           branch: main
           name: qr_code_generator.apk
@@ -31,7 +31,7 @@ jobs:
         id: download-linux
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: workflow_name.yml
+          workflow: build.yml
           workflow_conclusion: success
           branch: main
           name: qr_code_generator.tar.gz
@@ -40,7 +40,7 @@ jobs:
         id: download-windows
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: workflow_name.yml
+          workflow: build.yml
           workflow_conclusion: success
           branch: main
           name: qr_code_generator.tar.gz
