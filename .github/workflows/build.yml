@@ -58,6 +58,11 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: full_sem_ver
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: full_sem_ver.txt
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -80,7 +85,7 @@ jobs:
         working-directory: android
         
       - name: Build app
-        run: flutter build appbundle --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build appbundle --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -101,6 +106,11 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: full_sem_ver
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: full_sem_ver.txt
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -123,7 +133,7 @@ jobs:
         working-directory: android
         
       - name: Build app
-        run: flutter build apk --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build apk --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -144,6 +154,11 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: full_sem_ver
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: full_sem_ver.txt
           
       - name: "install build dependencies"
         run: | 
@@ -157,7 +172,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build linux --build-name ${{ steps.full_sem_ver.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
         
       - name: bundle app
         run: tar -czvf qr_code_generator.tar.gz build/linux/x64/release/bundle
@@ -180,6 +195,11 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: assembly_sem_ver
+      - name: Read version
+        id: version
+        uses: juliangruber/read-file-action@v1.1.6
+        with:
+          path: assembly_sem_ver.txt
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -188,7 +208,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ steps.assembly_sem_ver.outputs.content }}.${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
