@@ -49,7 +49,6 @@ jobs:
   build-android-aab:
     runs-on: ubuntu-latest
     needs: get-version
-#     if: ${{false}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -97,7 +96,6 @@ jobs:
   build-android-apk:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{false}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -145,7 +143,6 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{false}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
