@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-      branches: [ "main" ]
+    branches: [ "main" ]
 
 
 jobs:
@@ -28,7 +28,7 @@ jobs:
       - name: remove new-line from file
         run: tr -d '\n' < full_sem_ver_with_new_line.txt > full_sem_ver.txt
         
-      - name: Create semantic version file
+      - name: Create major minor patch version file
         run: echo ${{ steps.gitversion.outputs.majorMinorPatch }} >> ./major_minor_patch_with_new_line.txt
       - name: remove new-line from file
         run: tr -d '\n' < major_minor_patch_with_new_line.txt > major_minor_patch.txt
