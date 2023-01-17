@@ -39,7 +39,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator.tar.gz
+          name: qr_code_generator.msix
 
       - name: create release
         uses: ncipollo/release-action@v1
