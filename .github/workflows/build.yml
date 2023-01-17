@@ -177,7 +177,7 @@ jobs:
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: linux
+          name: qr_code_generator.tar.gz
           path: qr_code_generator.tar.gz
           if-no-files-found: error
           
