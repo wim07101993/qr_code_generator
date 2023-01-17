@@ -49,7 +49,7 @@ jobs:
   build-android-aab:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{false}}
+#     if: ${{false}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -179,7 +179,7 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: assembly_sem_ver_with_new_line
+          name: assembly_sem_ver
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -188,7 +188,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ steps.assembly_sem_ver_with_new_line.outputs.content }}.${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ steps.assembly_sem_ver.outputs.content }}.${{ github.run_number }}
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
