@@ -2,8 +2,8 @@ name: Release
 
 on:
   push:
-    #tags:
-     # - 'v*'
+    tags:
+      - 'v*'
       
 jobs:
   github-release:
@@ -45,4 +45,3 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.tar.gz,qr_code_generator.msix"
-          tag: "v0.0.0"
