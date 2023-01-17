@@ -1,0 +1,47 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+      
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download aab
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator.aab
+          
+      - name: Download apk
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator.apk
+          
+      - name: Download linux
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator.tar.gz
+          
+      - name: Download windows
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator.msix
+
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.tar.gz,qr_code_generator.msix"
