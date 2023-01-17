@@ -89,7 +89,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: appbundle.aab
+          name: qr_code_generator.aab
           path: build/app/outputs/bundle/release/app-release.aab
           if-no-files-found: error
   
@@ -136,7 +136,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: app.apk
+          name: qr_code_generator.apk
           path: build/app/outputs/flutter-apk/app-release.apk
           if-no-files-found: error
           
@@ -206,6 +206,13 @@ jobs:
       
       - name: Build app
         run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
+               
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: qr_code_generator.msix
+          path: build/windows/runner/Release/qr_code_generator.msix
+          if-no-files-found: error
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
