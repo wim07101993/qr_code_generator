@@ -23,19 +23,27 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
         
-      - name: Create version file
-        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./version_with_new_line.txt
-        
+      - name: Create semantic version file
+        run: echo ${{ steps.gitversion.outputs.fullSemVer }} >> ./full_sem_ver_with_new_line.txt
       - name: remove new-line from file
-        run: tr -d '\n' < version_with_new_line.txt > version.txt
+        run: tr -d '\n' < full_sem_ver_with_new_line.txt > full_sem_ver.txt
         
-      - run: cat version.txt
+      - name: Create major minor patch version file
+        run: echo ${{ steps.gitversion.outputs.majorMinorPatch }} >> ./major_minor_patch_with_new_line.txt
+      - name: remove new-line from file
+        run: tr -d '\n' < major_minor_patch_with_new_line.txt > major_minor_patch.txt
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: version
-          path: version.txt
+          name: full_sem_ver
+          path: full_sem_ver.txt
+          if-no-files-found: error
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: major_minor_patch
+          path: major_minor_patch.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -48,13 +56,12 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
-      - run: cat version.txt
+          name: full_sem_ver
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: version.txt
+          path: full_sem_ver.txt
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -96,12 +103,12 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
+          name: full_sem_ver
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: version.txt
+          path: full_sem_ver.txt
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -143,12 +150,12 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
+          name: full_sem_ver
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: version.txt
+          path: full_sem_ver.txt
           
       - name: "install build dependencies"
         run: | 
@@ -177,7 +184,6 @@ jobs:
   build-windows:
     runs-on: windows-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -185,12 +191,12 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: version
+          name: major_minor_patch
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: version.txt
+          path: major_minor_patch.txt
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -199,7 +205,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
           
 #  release-to-google-play:
 #    runs-on: ubuntu-latest
