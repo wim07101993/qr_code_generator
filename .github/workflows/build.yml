@@ -29,9 +29,9 @@ jobs:
         run: tr -d '\n' < full_sem_ver_with_new_line.txt > full_sem_ver.txt
         
       - name: Create semantic version file
-        run: echo ${{ steps.gitversion.outputs.assemblySemVer }} >> ./assembly_sem_ver_with_new_line.txt
+        run: echo ${{ steps.gitversion.outputs.majorMinorPatch }} >> ./major_minor_patch_with_new_line.txt
       - name: remove new-line from file
-        run: tr -d '\n' < assembly_sem_ver_with_new_line.txt > assembly_sem_ver.txt
+        run: tr -d '\n' < major_minor_patch_with_new_line.txt > major_minor_patch.txt
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
@@ -42,8 +42,8 @@ jobs:
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: assembly_sem_ver
-          path: assembly_sem_ver.txt
+          name: major_minor_patch
+          path: major_minor_patch.txt
           if-no-files-found: error
   
   build-android-aab:
@@ -194,12 +194,12 @@ jobs:
       - name: Get version
         uses: actions/download-artifact@v3.0.2
         with:
-          name: assembly_sem_ver
+          name: major_minor_patch
       - name: Read version
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: assembly_sem_ver.txt
+          path: major_minor_patch.txt
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
