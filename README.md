@@ -1,6 +1,6 @@
 # QR-code generator
 
-[logo](https://github.com/wim07101993/qr_code_generator/raw/main/logo_without_background.png)
+![logo](https://github.com/wim07101993/qr_code_generator/raw/main/logo_without_background.png)
 
 The QR-code generator is an application which can generate different types of QR-codes. Currently
 the application supports the following codes:
