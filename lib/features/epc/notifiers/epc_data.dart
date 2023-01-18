@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
+import 'package:qr_code_generator/shared/function_tree_extensions.dart';
 
 export 'package:qr_code_generator/features/epc/notifiers/epc_character_set.dart';
 export 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
@@ -15,7 +16,7 @@ class EpcDataNotifier extends ChangeNotifier
   }
 
   final TextEditingController amount =
-      TextEditingController(text: EpcData.defaultAmount);
+      TextEditingController(text: EpcData.defaultAmount.toString());
   final TextEditingController iban =
       TextEditingController(text: EpcData.defaultIban);
   final TextEditingController beneficiaryName =
@@ -51,7 +52,8 @@ class EpcDataNotifier extends ChangeNotifier
 
   @override
   EpcData get value {
-    final isValid = EpcData.validateAmount(amount.text) == null &&
+    final amount = this.amount.text.tryInterpret();
+    final isValid = EpcData.validateAmount(amount) == null &&
         EpcData.validateIban(iban.text) == null &&
         EpcData.validateBeneficiaryName(beneficiaryName.text) == null &&
         EpcData.validateOriginatorInfo(originatorInfo.text) == null &&
@@ -64,7 +66,7 @@ class EpcDataNotifier extends ChangeNotifier
         EpcData.validateBic(bic.text, version.value) == null;
     if (isValid) {
       _lastValidValue = EpcData(
-        amount: amount.text,
+        amount: amount!,
         iban: iban.text,
         beneficiaryName: beneficiaryName.text,
         originatorInfo: originatorInfo.text,
@@ -80,7 +82,7 @@ class EpcDataNotifier extends ChangeNotifier
   }
 
   set value(EpcData? epcData) {
-    amount.text = epcData?.amount ?? EpcData.defaultAmount;
+    amount.text = (epcData?.amount ?? EpcData.defaultAmount).toString();
     iban.text = epcData?.iban ?? EpcData.defaultIban;
     beneficiaryName.text =
         epcData?.beneficiaryName ?? EpcData.defaultBeneficiaryName;
@@ -105,7 +107,7 @@ class EpcDataNotifier extends ChangeNotifier
 }
 
 class EpcData {
-  static const String defaultAmount = '3.14';
+  static const num defaultAmount = 3.14;
   static const String defaultIban = 'BE10779597575204';
   static const String defaultBeneficiaryName = 'Wim Van Laer';
   static const EpcVersion defaultVersion = EpcVersion.version2;
@@ -163,7 +165,7 @@ class EpcData {
   final String beneficiaryName;
   final String? bic;
   final String iban;
-  final String amount;
+  final num amount;
   final String? purpose;
   final String? remittanceInfo;
   final bool useStructuredRemittanceInfo;
@@ -183,21 +185,6 @@ class EpcData {
       remittanceInfo,
       originatorInfo
     ].map((s) => s ?? '').join('\n').trim();
-  }
-
-  EpcData copyWithAmount(String amount) {
-    return EpcData(
-      version: version,
-      characterSet: characterSet,
-      beneficiaryName: beneficiaryName,
-      bic: bic,
-      iban: iban,
-      amount: amount,
-      purpose: purpose,
-      remittanceInfo: remittanceInfo,
-      useStructuredRemittanceInfo: useStructuredRemittanceInfo,
-      originatorInfo: originatorInfo,
-    );
   }
 
   static String? validateVersion(EpcVersion? value, String? bic) {
@@ -248,15 +235,12 @@ class EpcData {
     return null;
   }
 
-  static String? validateAmount(String? value) {
-    if (value == null || value.isEmpty) {
+  static String? validateAmount(num? value) {
+    if (value == null) {
       return 'Please enter an amount';
     }
-    if (value.length > 12 || (!value.contains('.')) && value.length > 9) {
+    if (value >= 1000000000) {
       return 'The amount must be less than 999999999.99';
-    }
-    if (!amountRegex.hasMatch(value)) {
-      return 'Please enter a valid amount (use a dot as decimal separator and only maximum 2 decimal numbers are allowed)';
     }
     return null;
   }

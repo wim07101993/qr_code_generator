@@ -294,6 +294,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.2.0"
+  function_tree:
+    dependency: "direct main"
+    description:
+      name: function_tree
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.8.13"
   get_it:
     dependency: "direct main"
     description:

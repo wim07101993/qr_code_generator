@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/shared/function_tree_extensions.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
@@ -25,7 +26,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   late EpcData lastValidEpcData;
 
   String? get amountErrorMessage =>
-      EpcData.validateAmount(epcDataNotifier.amount.text);
+      EpcData.validateAmount(epcDataNotifier.amount.text.tryInterpret());
 
   void amountChanged() => setState(() {});
 

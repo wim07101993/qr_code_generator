@@ -35,7 +35,7 @@ class LoadEpcData extends BehaviourWithoutInput<void> {
 extension JsonExtensions on Map<String, dynamic> {
   EpcData toEpcData() {
     return EpcData(
-      amount: getString('amount') ?? EpcData.defaultAmount,
+      amount: getDouble('amount') ?? EpcData.defaultAmount,
       beneficiaryName:
           getString('beneficiaryName') ?? EpcData.defaultBeneficiaryName,
       iban: getString('iban') ?? EpcData.defaultIban,
