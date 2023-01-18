@@ -214,22 +214,23 @@ jobs:
           path: build/windows/runner/Release/qr_code_generator.msix
           if-no-files-found: error
           
-#  release-to-google-play:
-#    runs-on: ubuntu-latest
-#    steps:
-#      - name: Download a Build Artifact
-#        uses: actions/download-artifact@v3.0.2
-#        with:
-#          name: version
-#    
-#      - name: Create service_account.json
-#        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
-#        
-#      - name: Upload to Google Play
-#        uses: r0adkll/upload-google-play@v1.0.19
-#        with:
-#          serviceAccountJson: service_account.json
-#          packageName: com.wimvanlaer.qr_code_generator
-#          releaseFiles: appbundle.aab
-#          status: completed
-#          track: internal
+          
+  release-to-google-play:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download a Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: qr_code_generator.aab
+   
+      - name: Create service_account.json
+        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
+        
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1.0.19
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.wimvanlaer.qr_code_generator
+          releaseFiles: qr_code_generator.aab
+          status: completed
+          track: internal
