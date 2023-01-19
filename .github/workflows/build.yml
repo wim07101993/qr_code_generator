@@ -223,6 +223,7 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: qr_code_generator.aab
+          path: qr_code_generator.aab
    
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
