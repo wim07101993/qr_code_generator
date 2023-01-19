@@ -233,6 +233,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: qr_code_generator.aab
+          releaseFiles: /home/runner/work/qr_code_generator/qr_code_generator/qr_code_generator.aab
           status: completed
           track: internal
