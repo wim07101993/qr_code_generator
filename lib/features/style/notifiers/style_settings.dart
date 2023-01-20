@@ -119,11 +119,14 @@ class StyleSettings {
   ThemeData toThemeData() {
     final isDark = isDarkColor(backgroundColor);
     final textColor = isDark ? Colors.white : Colors.black;
+    final primaryColor = dataModuleStyle.color ?? Colors.black;
     return ThemeData(
+      appBarTheme: AppBarTheme(
+        color: Colors.transparent,
+        foregroundColor: primaryColor,
+      ),
       colorScheme: ColorScheme.fromSwatch(
-        primarySwatch: createMaterialColor(
-          dataModuleStyle.color ?? Colors.black,
-        ),
+        primarySwatch: createMaterialColor(primaryColor),
         accentColor: createMaterialColor(eyeStyle.color ?? Colors.black),
         backgroundColor: backgroundColor,
         cardColor: backgroundColor,
