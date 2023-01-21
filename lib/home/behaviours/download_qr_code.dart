@@ -1,11 +1,10 @@
 import 'package:behaviour/behaviour.dart';
+import 'package:download/download.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/home/behaviours/get_local_image.dart';
-import 'package:qr_code_generator/shared/l10n/localization.dart';
-import 'package:share_plus/share_plus.dart';
 
-class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
-  ShareQrCode({
+class DownloadQrCode extends Behaviour<DownloadQrCodeParams, void> {
+  DownloadQrCode({
     super.monitor,
     required this.getLocalImage,
   });
@@ -13,10 +12,10 @@ class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
   final GetLocalImage getLocalImage;
 
   @override
-  String get description => 'sharing qr-code';
+  String get description => 'downloading qr-code';
 
   @override
-  Future<void> action(ShareQrCodeParams input, BehaviourTrack? track) async {
+  Future<void> action(DownloadQrCodeParams input, BehaviourTrack? track) async {
     final embeddedImageFilePath = input.styleSettings.embeddedImageFilePath;
     final embeddedImage = embeddedImageFilePath == null
         ? null
@@ -38,27 +37,17 @@ class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
       return;
     }
 
-    await Share.shareXFiles(
-      [
-        XFile.fromData(
-          qrImage.buffer.asUint8List(),
-          name: 'QR-code.png',
-          mimeType: 'image/png',
-        )
-      ],
-      text: input.translations.qrCode,
-    );
+    final stream = Stream.fromIterable(qrImage.buffer.asUint8List());
+    download(stream, 'QR-code.png');
   }
 }
 
-class ShareQrCodeParams {
-  const ShareQrCodeParams({
+class DownloadQrCodeParams {
+  const DownloadQrCodeParams({
     required this.qrData,
-    required this.translations,
     required this.styleSettings,
   });
 
   final String qrData;
-  final AppLocalizations translations;
   final StyleSettings styleSettings;
 }

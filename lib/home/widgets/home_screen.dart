@@ -25,12 +25,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _canShareQrCode(bool isUpdatingStyle) {
     return !isUpdatingStyle &&
+        !kIsWeb &&
         (Platform.isAndroid || Platform.isIOS || Platform.isWindows);
   }
 
   bool _canSaveQrCode(bool isUpdatingStyle) {
     return !isUpdatingStyle &&
-        (Platform.isLinux || Platform.isWindows || kIsWeb);
+        (kIsWeb || Platform.isLinux || Platform.isWindows);
   }
 
   VoidCallback? _settingsAction(

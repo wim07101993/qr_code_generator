@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/home/behaviours/get_local_image.dart';
+import 'package:qr_code_generator/shared/l10n/localization.dart';
 
 void showException(BuildContext context, Exception exception) {
   ScaffoldMessenger.of(context).showSnackBar(
@@ -9,12 +10,13 @@ void showException(BuildContext context, Exception exception) {
 
 extension ExceptionLocalizationExtensions on Exception {
   String getTranslatedErrorMessage(BuildContext context) {
+    final s = AppLocalizations.of(context)!;
     switch (runtimeType) {
       case FileDoesNotExistsException:
-        return 'TODO ';
+        return s.fileDoesNotExistsErrorMessage;
       case CouldNotLoadImageException:
-        return 'TODO';
+        return s.couldNotLoadImageErrorMessage;
     }
-    return 'TODO';
+    return s.generalErrorMessage;
   }
 }
