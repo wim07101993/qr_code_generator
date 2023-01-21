@@ -72,7 +72,7 @@ jobs:
           name: app
           
       - name: Unzip artifact
-        run: unzip qr_code_generator-web.zip
+        run: unzip qr_code_generator-web.zip -d qr_code_generator-web
           
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
