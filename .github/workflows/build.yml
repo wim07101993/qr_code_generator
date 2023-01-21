@@ -200,7 +200,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.TARBAL_ARTIFACT_FILE }} 
+          path: build/linux/x64/release/bundle/${{ env.TARBAL_ARTIFACT_FILE }} 
           if-no-files-found: error
           
   build-windows:
@@ -265,7 +265,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.WEB_ARTIFACT_FILE }}
+          path: build/web/${{ env.WEB_ARTIFACT_FILE }}
           if-no-files-found: error
           
           
