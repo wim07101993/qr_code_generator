@@ -2,18 +2,19 @@ name: Build
 
 on:
   push:
-    branches: [ "main" ]
+     branches: [ "main" ]
 
 
 env:
   VERSION_ARTIFACT: version
-  SEMVER_FILE: full_sem_ver.txt
-  MAJOR_MINOR_PATCH_FILE: major_minor_patch.txt
+  SEMVER_ARTIFACT_FILE: full_sem_ver.txt
+  MAJOR_MINOR_PATCH_ARTIFACT_FILE: major_minor_patch.txt
   APP_ARTIFACT: app
-  AAB_FILE: qr_code_generator.aab
-  APK_FILE: qr_code_generator.apk
-  TARBAL_FILE: qr_code_generator.tar.gz
-  MSIX_FILE: qr_code_generator.msix
+  AAB_ARTIFACT_FILE: qr_code_generator-android.aab
+  APK_ARTIFACT_FILE: qr_code_generator-android.apk
+  TARBAL_ARTIFACT_FILE: qr_code_generator-linux.tar.gz
+  MSIX_ARTIFACT_FILE: qr_code_generator-windows.msix
+  WEB_ARTIFACT_FILE: qr_code_generator-web.zip
 
 
 jobs:
@@ -37,24 +38,24 @@ jobs:
       - name: Create semantic version file
         run: echo ${{ steps.gitversion.outputs.fullSemVer }} > ./version.txt
       - name: remove new-line from file
-        run: tr -d '\n' < version.txt > ${{ env.SEMVER_FILE }}
+        run: tr -d '\n' < version.txt > ${{ env.SEMVER_ARTIFACT_FILE }}
         
       - name: Create major minor patch version file
         run: echo ${{ steps.gitversion.outputs.majorMinorPatch }} > ./version.txt
       - name: remove new-line from file
-        run: tr -d '\n' < version.txt > ${{ env.MAJOR_MINOR_PATCH_FILE }}
+        run: tr -d '\n' < version.txt > ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.VERSION_ARTIFACT }}
-          path: ${{ env.SEMVER_FILE }}
+          path: ${{ env.SEMVER_ARTIFACT_FILE }}
           if-no-files-found: error
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.VERSION_ARTIFACT }}
-          path: ${{ env.MAJOR_MINOR_PATCH_FILE }}
+          path: ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
           if-no-files-found: error
   
   build-android-aab:
@@ -72,7 +73,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: ${{ env.SEMVER_FILE }}
+          path: ${{ env.SEMVER_ARTIFACT_FILE }}
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -98,13 +99,13 @@ jobs:
         run: flutter build appbundle --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Rename artifact file
-        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.AAB_FILE }}
+        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.AAB_ARTIFACT_FILE }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.AAB_FILE }}
+          path: ${{ env.AAB_ARTIFACT_FILE }}
           if-no-files-found: error
   
   build-android-apk:
@@ -122,7 +123,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: ${{ env.SEMVER_FILE }}
+          path: ${{ env.SEMVER_ARTIFACT_FILE }}
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -148,13 +149,13 @@ jobs:
         run: flutter build apk --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
       
       - name: Rename artifact file
-        run: mv build/app/outputs/flutter-apk/app-release.apk ${{ env.APK_FILE }}
+        run: mv build/app/outputs/flutter-apk/app-release.apk ${{ env.APK_ARTIFACT_FILE }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.APK_FILE }}
+          path: ${{ env.APK_ARTIFACT_FILE }}
           if-no-files-found: error
           
   build-linux:
@@ -172,7 +173,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: ${{ env.SEMVER_FILE }}
+          path: ${{ env.SEMVER_ARTIFACT_FILE }}
           
       - name: "install build dependencies"
         run: | 
@@ -189,13 +190,17 @@ jobs:
         run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
         
       - name: Creat tarball
-        run: tar -czvf ${{ env.TARBAL_FILE }} build/linux/x64/release/bundle
+        uses: thedoctor0/zip-release@0.7.0
+        with:
+          type: 'tar'
+          path: build/linux/x64/release/bundle
+          filename: ${{ env.TARBAL_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.TARBAL_FILE }} 
+          path: ${{ env.TARBAL_ARTIFACT_FILE }} 
           if-no-files-found: error
           
   build-windows:
@@ -213,7 +218,7 @@ jobs:
         id: version
         uses: juliangruber/read-file-action@v1.1.6
         with:
-          path: ${{ env.MAJOR_MINOR_PATCH_FILE }}
+          path: ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -225,13 +230,42 @@ jobs:
         run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
             
       - name: Rename artifact file
-        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.MSIX_FILE }}
+        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.MSIX_ARTIFACT_FILE }}
          
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.MSIX_FILE }}
+          path: ${{ env.MSIX_ARTIFACT_FILE }}
+          if-no-files-found: error
+           
+  build-web:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter build web
+        
+      - name: Zip output
+        uses: thedoctor0/zip-release@0.7.0
+        with:
+          type: 'zip'
+          path: build/web
+          filename: ${{ env.WEB_ARTIFACT_FILE }}
+        
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.APP_ARTIFACT }}
+          path: ${{ env.WEB_ARTIFACT_FILE }}
           if-no-files-found: error
           
           
@@ -252,6 +286,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: ${{ env.AAB_FILE }}
+          releaseFiles: ${{ env.AAB_ARTIFACT_FILE }}
           status: completed
           track: internal
