@@ -7,10 +7,10 @@ on:
       
 jobs:
   github-release:
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Download aab 🤖
-        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
@@ -19,7 +19,6 @@ jobs:
           name: qr_code_generator-android.aab
           
       - name: Download apk 🤖
-        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
@@ -28,7 +27,6 @@ jobs:
           name: qr_code_generator-android.apk
           
       - name: Download linux 🐧
-        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
@@ -37,7 +35,6 @@ jobs:
           name: qr_code_generator-linux.tar.gz
           
       - name: Download windows 🪟
-        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
@@ -46,7 +43,6 @@ jobs:
           name: qr_code_generator-windows.msix
 
       - name: Download web 🌐
-        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
@@ -55,13 +51,19 @@ jobs:
           name: qr_code_generator-web.zip
           
       - name: create release
-        if: ${{ false }}
         uses: ncipollo/release-action@v1
         with:
           artifacts: "qr_code_generator-android.apk,qr_code_generator-android.aab,qr_code_generator-linux.tar.gz,qr_code_generator-windows.msix,qr_code_generator-web.msix"
           
   publish-to-github-pages:
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
@@ -73,9 +75,7 @@ jobs:
           
       - name: Unzip artifact
         run: unzip qr_code_generator-web.zip -d qr_code_generator-web
-          
-      - name: Deploy 🚀
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          #github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./qr_code_generator-web
+      
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
