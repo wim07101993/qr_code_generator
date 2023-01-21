@@ -75,6 +75,7 @@ jobs:
         run: unzip qr_code_generator-web.zip -d qr_code_generator-web
           
       - name: Deploy 🚀
-        uses: JamesIves/github-pages-deploy-action@v4
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: qr_code_generator-web
+          #github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./qr_code_generator-web
