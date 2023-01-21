@@ -203,7 +203,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: build/linux/x64/release/bundle/${{ env.TARBAL_ARTIFACT_FILE }} 
+          path: build/linux/x64/release/${{ env.TARBAL_ARTIFACT_FILE }} 
           if-no-files-found: error
           
   build-windows:
