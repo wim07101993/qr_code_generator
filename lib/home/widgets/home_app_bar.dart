@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
+import 'package:qr_code_generator/home/behaviours/download_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/share_qr_code.dart';
 import 'package:qr_code_generator/main.dart';
@@ -59,6 +61,15 @@ class _HomeAppBarState extends State<HomeAppBar> {
     ).handleException(context, isMounted: () => mounted);
   }
 
+  Future<void> downloadQrCode() {
+    return getIt<DownloadQrCode>()(
+      DownloadQrCodeParams(
+        qrData: getIt<EpcDataNotifier>().value.qrData,
+        styleSettings: getIt<StyleSettingsNotifier>().value,
+      ),
+    ).handleException(context, isMounted: () => mounted);
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -71,7 +82,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
           ),
         if (widget.canSaveQrCode)
           IconButton(
-            onPressed: () => shareQrData(context),
+            onPressed: () => kIsWeb ? downloadQrCode() : saveQrCode(context),
             icon: const Icon(Icons.save),
           ),
         if (widget.settingsAction != null)

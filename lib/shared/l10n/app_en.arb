@@ -56,5 +56,8 @@
   "textInputHelperText": "Text to encode in the QR-code",
   "@textInputHelperText": {
     "decoration": "Helper text for the input field on the text qr-code screen"
-  }
+  },
+  "generalErrorMessage": "An error occurred",
+  "fileDoesNotExistsErrorMessage": "The file does not exist",
+  "couldNotLoadImageErrorMessage": "Could not load image"
 }
