@@ -61,6 +61,7 @@ jobs:
   build-android-aab:
     runs-on: ubuntu-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -111,6 +112,7 @@ jobs:
   build-android-apk:
     runs-on: ubuntu-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -193,7 +195,8 @@ jobs:
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'tar'
-          directory: build/linux/x64/release/bundle
+          directory: build/linux/x64/release
+          path: bundle
           filename: ${{ env.TARBAL_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
@@ -206,6 +209,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     needs: get-version
+    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -272,6 +276,7 @@ jobs:
   release-to-google-play:
     runs-on: ubuntu-latest
     needs: build-android-aab
+    if: ${{ false }}
     steps:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
