@@ -61,7 +61,6 @@ jobs:
   build-android-aab:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -112,7 +111,6 @@ jobs:
   build-android-apk:
     runs-on: ubuntu-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -209,7 +207,6 @@ jobs:
   build-windows:
     runs-on: windows-latest
     needs: get-version
-    if: ${{ false }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -276,7 +273,6 @@ jobs:
   release-to-google-play:
     runs-on: ubuntu-latest
     needs: build-android-aab
-    if: ${{ false }}
     steps:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
