@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-     branches: [ "main" ]
+   #  branches: [ "main" ]
 
 
 env:
@@ -193,7 +193,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'tar'
-          path: build/linux/x64/release/bundle
+          directory: build/linux/x64/release/bundle
           filename: ${{ env.TARBAL_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
@@ -258,7 +258,7 @@ jobs:
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'zip'
-          path: build/web
+          directory: build/web
           filename: ${{ env.WEB_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
