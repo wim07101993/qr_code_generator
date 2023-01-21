@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-     branches: [ "main" ]
+    branches: [ "main" ]
 
 
 env:
@@ -193,14 +193,15 @@ jobs:
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'tar'
-          path: build/linux/x64/release/bundle
+          directory: build/linux/x64/release
+          path: bundle
           filename: ${{ env.TARBAL_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.TARBAL_ARTIFACT_FILE }} 
+          path: build/linux/x64/release/${{ env.TARBAL_ARTIFACT_FILE }} 
           if-no-files-found: error
           
   build-windows:
@@ -258,14 +259,14 @@ jobs:
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'zip'
-          path: build/web
+          directory: build/web
           filename: ${{ env.WEB_ARTIFACT_FILE }}
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.WEB_ARTIFACT_FILE }}
+          path: build/web/${{ env.WEB_ARTIFACT_FILE }}
           if-no-files-found: error
           
           
