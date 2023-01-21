@@ -9,39 +9,72 @@ jobs:
   github-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Download aab
+      - name: Download aab 🤖
+        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator.aab
+          name: qr_code_generator-android.aab
           
-      - name: Download apk
+      - name: Download apk 🤖
+        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator.apk
+          name: qr_code_generator-android.apk
           
-      - name: Download linux
+      - name: Download linux 🐧
+        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator.tar.gz
+          name: qr_code_generator-linux.tar.gz
           
-      - name: Download windows
+      - name: Download windows 🪟
+        if: ${{ false }}
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator.msix
+          name: qr_code_generator-windows.msix
 
+      - name: Download web 🌐
+        if: ${{ false }}
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator-web.zip
+          
       - name: create release
+        if: ${{ false }}
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.tar.gz,qr_code_generator.msix"
+          artifacts: "qr_code_generator-android.apk,qr_code_generator-android.aab,qr_code_generator-linux.tar.gz,qr_code_generator-windows.msix,qr_code_generator-web.msix"
+          
+  publish-to-github-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: qr_code_generator-web.zip
+          
+      - name: Unzip artifact
+        run: unzip qr_code_generator-web.zip
+          
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: qr_code_generator-web
