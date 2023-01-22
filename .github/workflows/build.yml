@@ -237,7 +237,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "qr_code_generator"
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "/qr_code_generator/"
         
       - name: Stage artifact file
         run: mv build/web/ ${{ env.ARTIFACT_PATH }}
