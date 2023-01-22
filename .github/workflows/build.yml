@@ -6,12 +6,10 @@ on:
 
 
 env:
-  APP_ARTIFACT: app
   ANDROID_ARTIFACT: android
   LINUX_ARTIFACT: linux
   WINDOWS_ARTIFACT: windows
   WEB_ARTIFACT: web
-
 
 jobs:
   getVersion:
@@ -35,10 +33,12 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
         
-  buildAndroid:
-    name: build Android 🤖
+  buildAndroidAppBundle:
+    name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
     needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.aab
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -66,20 +66,65 @@ jobs:
       - name: Build appbundle
         run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
+      - name: Stage artifact file
+        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_FILE }}
+        
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.ANDROID_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
+  
+  buildAndroidApk:
+    name: build Android apk 🤖
+    runs-on: ubuntu-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.apk
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+
+      - name: Configure Keystore
+        run: |
+          echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
+          echo "file=upload-keystore.jks" >> key.properties
+          echo "password=$KEYSTORE_PASSWORD" >> key.properties
+          echo "keyAlias=$KEYSTORE_KEY_ALIAS" >> key.properties
+          echo "keyPassword=$KEYSTORE_KEY_PASSWORD" >> key.properties
+        env:
+          PLAY_STORE_UPLOAD_KEY: ${{ secrets.PLAY_STORE_UPLOAD_KEY }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEYSTORE_KEY_ALIAS: ${{ secrets.KEYSTORE_KEY_ALIAS }}
+          KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
+        working-directory: android
+        
       - name: Build apk
         run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+      
+      - name: Stage artifact file
+        run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_FILE }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.ANDROID_ATIFACT }}
-          path: build/app/outputs/
+          name: ${{ env.ANDROID_ARTIFACT }}
+          path:  ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
   
   buildLinux:
     name: build Linux 🐧
     runs-on: ubuntu-latest
     needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.tar.gz
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -98,17 +143,30 @@ jobs:
       - name: Build linux
         run: flutter build linux --version ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
+      - name: Creat tarball
+        uses: thedoctor0/zip-release@0.7.0
+        with:
+          type: 'tar'
+          directory: build/linux/x64/release
+          path: bundle
+          filename: bundle.tar.gz
+      
+      - name: Stage artifact file
+        run: mv build/linux/x64/release/bundle.tar.gz ${{ env.ARTIFACT_FILE }}
+      
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.LINUX_ARTIFACT }}
-          path: build/linux/x64/release/bundle/
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
           
   buildWindows:
     name: build Windows 🪟
     runs-on: windows-latest
     needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.msix
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -120,19 +178,24 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
             
+      - name: Stage artifact file
+        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.ARTIFACT_PATH }}
+         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.WINDOWS_ARTIFACT }}
-          path: build/windows/runner/Release/
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
            
   buildWeb:
     name: build web 🌐
     runs-on: ubuntu-latest
     needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator/
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -146,18 +209,21 @@ jobs:
       - name: Build app
         run: flutter build web --version ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
 
+      - name: Stage artifact file
+        run: mv build/web/ ${{ env.ARTIFACT_PATH }}
+         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.WEB_ARTIFACT }}
-          path: build/web/
+          path: ${{ ARTIFACT_PATH }}
           if-no-files-found: error
           
           
   uploadToGooglePlay:
     name: upload to GooglePlay
     runs-on: ubuntu-latest
-    needs: buildAndroid
+    needs: buildAndroidAppBundle
     steps:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
