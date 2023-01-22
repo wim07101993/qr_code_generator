@@ -7,7 +7,6 @@ on:
       
 jobs:
   github-release:
-    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Download 🤖
@@ -43,10 +42,17 @@ jobs:
           name: web
           path: web
           
+      - name: Zip web
+        uses: thedoctor0/zip-release@0.7.0
+        with:
+          type: 'zip'
+          path: web
+          filename: qr_code_generator-web.zip
+          
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "qr_code_generator-android.apk,qr_code_generator-android.aab,qr_code_generator-linux.tar.gz,qr_code_generator-windows.msix,qr_code_generator-web.msix"
+          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
           
   publish-to-github-pages:
     runs-on: ubuntu-latest
