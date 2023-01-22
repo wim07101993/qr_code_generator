@@ -142,12 +142,7 @@ jobs:
       
       - name: Build linux
         run: flutter build linux --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
-      
-      - run: pwd
-      - run: ls
-      - run: ls build
-      - run: ls build/linux
-        
+
       - name: Creat tarball
         uses: thedoctor0/zip-release@0.7.0
         with:
@@ -155,9 +150,6 @@ jobs:
           directory: build/linux/x64/release
           path: bundle
           filename: bundle.tar.gz
-      
-      - name: Creat tarball
-        run: tar -czvf ${{ env.TARBAL_FILE }} build/linux/x64/release/bundle
         
       - name: Stage artifact file
         run: mv build/linux/x64/release/bundle.tar.gz ${{ env.ARTIFACT_PATH }}
@@ -216,11 +208,6 @@ jobs:
       
       - name: Build app
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
-
-      - run: pwd
-      - run: ls
-      - run: ls build
-      - run: ls build/linux
         
       - name: Stage artifact file
         run: mv build/web/ ${{ env.ARTIFACT_PATH }}
