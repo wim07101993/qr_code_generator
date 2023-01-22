@@ -6,20 +6,18 @@ on:
 
 
 env:
-  VERSION_ARTIFACT: version
-  SEMVER_ARTIFACT_FILE: full_sem_ver.txt
-  MAJOR_MINOR_PATCH_ARTIFACT_FILE: major_minor_patch.txt
-  APP_ARTIFACT: app
-  AAB_ARTIFACT_FILE: qr_code_generator-android.aab
-  APK_ARTIFACT_FILE: qr_code_generator-android.apk
-  TARBAL_ARTIFACT_FILE: qr_code_generator-linux.tar.gz
-  MSIX_ARTIFACT_FILE: qr_code_generator-windows.msix
-  WEB_ARTIFACT_FILE: qr_code_generator-web.zip
-
+  ANDROID_ARTIFACT: android
+  LINUX_ARTIFACT: linux
+  WINDOWS_ARTIFACT: windows
+  WEB_ARTIFACT: web
 
 jobs:
-  get-version:
+  getVersion:
+    name: get version
     runs-on: ubuntu-latest
+    outputs:
+      fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
+      majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -35,45 +33,15 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
         
-      - name: Create semantic version file
-        run: echo ${{ steps.gitversion.outputs.fullSemVer }} > ./version.txt
-      - name: remove new-line from file
-        run: tr -d '\n' < version.txt > ${{ env.SEMVER_ARTIFACT_FILE }}
-        
-      - name: Create major minor patch version file
-        run: echo ${{ steps.gitversion.outputs.majorMinorPatch }} > ./version.txt
-      - name: remove new-line from file
-        run: tr -d '\n' < version.txt > ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
-        
-      - name: Upload version file as artifact
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: ${{ env.VERSION_ARTIFACT }}
-          path: ${{ env.SEMVER_ARTIFACT_FILE }}
-          if-no-files-found: error
-      - name: Upload version file as artifact
-        uses: actions/upload-artifact@v3.1.2
-        with:
-          name: ${{ env.VERSION_ARTIFACT }}
-          path: ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
-          if-no-files-found: error
-  
-  build-android-aab:
+  buildAndroidAppBundle:
+    name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
-    needs: get-version
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.aab
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      - name: Get version
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name:  ${{ env.VERSION_ARTIFACT }}
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: ${{ env.SEMVER_ARTIFACT_FILE }}
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -95,35 +63,28 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         working-directory: android
         
-      - name: Build app
-        run: flutter build appbundle --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
-      
-      - name: Rename artifact file
-        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.AAB_ARTIFACT_FILE }}
-      
+      - name: Build appbundle
+        run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+        
+      - name: Stage artifact file
+        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_PATH }}
+        
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.AAB_ARTIFACT_FILE }}
+          name: ${{ env.ANDROID_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
   
-  build-android-apk:
+  buildAndroidApk:
+    name: build Android apk 🤖
     runs-on: ubuntu-latest
-    needs: get-version
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.apk
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      - name: Get version
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name:  ${{ env.VERSION_ARTIFACT }}
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: ${{ env.SEMVER_ARTIFACT_FILE }}
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -145,35 +106,28 @@ jobs:
           KEYSTORE_KEY_PASSWORD: ${{ secrets.KEYSTORE_KEY_PASSWORD }}
         working-directory: android
         
-      - name: Build app
-        run: flutter build apk --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
+      - name: Build apk
+        run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
       
-      - name: Rename artifact file
-        run: mv build/app/outputs/flutter-apk/app-release.apk ${{ env.APK_ARTIFACT_FILE }}
+      - name: Stage artifact file
+        run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.APK_ARTIFACT_FILE }}
+          name: ${{ env.ANDROID_ARTIFACT }}
+          path:  ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
-          
-  build-linux:
+  
+  buildLinux:
+    name: build Linux 🐧
     runs-on: ubuntu-latest
-    needs: get-version
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.tar.gz
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      - name: Get version
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name: ${{ env.VERSION_ARTIFACT }}
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: ${{ env.SEMVER_ARTIFACT_FILE }}
           
       - name: "install build dependencies"
         run: | 
@@ -186,40 +140,36 @@ jobs:
       - run: flutter doctor -v
       - run: flutter pub get
       
-      - name: Build app
-        run: flutter build linux --build-name ${{ steps.version.outputs.content }} --build-number ${{ github.run_number }}
-        
+      - name: Build linux
+        run: flutter build linux --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+
       - name: Creat tarball
         uses: thedoctor0/zip-release@0.7.0
         with:
           type: 'tar'
           directory: build/linux/x64/release
           path: bundle
-          filename: ${{ env.TARBAL_ARTIFACT_FILE }}
+          filename: bundle.tar.gz
         
+      - name: Stage artifact file
+        run: mv build/linux/x64/release/bundle.tar.gz ${{ env.ARTIFACT_PATH }}
+      
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.APP_ARTIFACT }}
-          path: build/linux/x64/release/${{ env.TARBAL_ARTIFACT_FILE }} 
+          name: ${{ env.LINUX_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
           
-  build-windows:
+  buildWindows:
+    name: build Windows 🪟
     runs-on: windows-latest
-    needs: get-version
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator.msix
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-  
-      - name: Get version
-        uses: actions/download-artifact@v3.0.2
-        with:
-          name:  ${{ env.VERSION_ARTIFACT }}
-      - name: Read version
-        id: version
-        uses: juliangruber/read-file-action@v1.1.6
-        with:
-          path: ${{ env.MAJOR_MINOR_PATCH_ARTIFACT_FILE }}
           
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
@@ -228,20 +178,24 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ steps.version.outputs.content }}.${{ github.run_number }}
+        run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
             
-      - name: Rename artifact file
-        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.MSIX_ARTIFACT_FILE }}
+      - name: Stage artifact file
+        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.ARTIFACT_PATH }}
          
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.APP_ARTIFACT }}
-          path: ${{ env.MSIX_ARTIFACT_FILE }}
+          name: ${{ env.WINDOWS_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
            
-  build-web:
+  buildWeb:
+    name: build web 🌐
     runs-on: ubuntu-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator/
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -253,32 +207,29 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build web
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
         
-      - name: Zip output
-        uses: thedoctor0/zip-release@0.7.0
-        with:
-          type: 'zip'
-          directory: build/web
-          filename: ${{ env.WEB_ARTIFACT_FILE }}
-        
+      - name: Stage artifact file
+        run: mv build/web/ ${{ env.ARTIFACT_PATH }}
+         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.APP_ARTIFACT }}
-          path: build/web/${{ env.WEB_ARTIFACT_FILE }}
+          name: ${{ env.WEB_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
           
           
-  release-to-google-play:
+  uploadToGooglePlay:
+    name: upload to GooglePlay
     runs-on: ubuntu-latest
-    needs: build-android-aab
+    needs: buildAndroidAppBundle
     steps:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          name: app
-   
+          name: ${{ env.ANDROID_ARTIFACT }}
+
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
         
@@ -287,6 +238,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: ${{ env.AAB_ARTIFACT_FILE }}
+          releaseFiles: qr_code_generator.aab
           status: completed
           track: internal
