@@ -141,7 +141,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build linux
-        run: flutter build linux --version ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+        run: flutter build linux --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
       
       - run: pwd
       - run: ls
@@ -215,7 +215,7 @@ jobs:
       - run: flutter pub get
       
       - name: Build app
-        run: flutter build web --version ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
 
       - run: pwd
       - run: ls
@@ -242,7 +242,7 @@ jobs:
         uses: actions/download-artifact@v3.0.2
         with:
           name: ${{ env.ANDROID_ARTIFACT }}
-   
+
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
         
@@ -251,6 +251,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: bundle/release/app_release.aab
+          releaseFiles: qr_code_generator.aab
           status: completed
           track: internal
