@@ -67,7 +67,7 @@ jobs:
         run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
       - name: Stage artifact file
-        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_FILE }}
+        run: mv build/app/outputs/bundle/release/app-release.aab ${{ env.ARTIFACT_PATH }}
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -110,7 +110,7 @@ jobs:
         run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
       
       - name: Stage artifact file
-        run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_FILE }}
+        run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ env.ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
@@ -152,7 +152,7 @@ jobs:
           filename: bundle.tar.gz
       
       - name: Stage artifact file
-        run: mv build/linux/x64/release/bundle.tar.gz ${{ env.ARTIFACT_FILE }}
+        run: mv build/linux/x64/release/bundle.tar.gz ${{ env.ARTIFACT_PATH }}
       
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
