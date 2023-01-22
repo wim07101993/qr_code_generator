@@ -10,21 +10,13 @@ jobs:
     if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
-      - name: Download aab 🤖
+      - name: Download 🤖
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator-android.aab
-          
-      - name: Download apk 🤖
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: qr_code_generator-android.apk
+          name: android
           
       - name: Download linux 🐧
         uses: dawidd6/action-download-artifact@v2
@@ -32,7 +24,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator-linux.tar.gz
+          name: linux
           
       - name: Download windows 🪟
         uses: dawidd6/action-download-artifact@v2
@@ -40,7 +32,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator-windows.msix
+          name: windows
 
       - name: Download web 🌐
         uses: dawidd6/action-download-artifact@v2
@@ -48,7 +40,8 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: qr_code_generator-web.zip
+          name: web
+          path: web
           
       - name: create release
         uses: ncipollo/release-action@v1
@@ -71,11 +64,12 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: app
-          
-      - name: Unzip artifact
-        run: unzip qr_code_generator-web.zip -d qr_code_generator-web
+          name: web
+          path: _site
       
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1.0.7
+        
       - name: Deploy to GitHub Pages
-        id: deployment
         uses: actions/deploy-pages@v1
+
