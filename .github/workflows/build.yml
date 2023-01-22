@@ -10,6 +10,7 @@ env:
   LINUX_ARTIFACT: linux
   WINDOWS_ARTIFACT: windows
   WEB_ARTIFACT: web
+  GITHUB_PAGES_ARTIFACT: githubPages
 
 jobs:
   getVersion:
@@ -216,6 +217,35 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.WEB_ARTIFACT }}
+          path: ${{ env.ARTIFACT_PATH }}
+          if-no-files-found: error
+          
+  buildGithubPages:
+    name: build github pages 🐙
+    runs-on: ubuntu-latest
+    needs: getVersion
+    env:
+      ARTIFACT_PATH: qr_code_generator/
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.8.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }} --base-href "qr_code_generator"
+        
+      - name: Stage artifact file
+        run: mv build/web/ ${{ env.ARTIFACT_PATH }}
+         
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ env.GITHUB_PAGES_ARTIFACT }}
           path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
           
