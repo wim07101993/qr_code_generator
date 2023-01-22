@@ -64,7 +64,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: web
+          name: githubPages
           path: _site
       
       - name: Upload GitHub Pages artifact
