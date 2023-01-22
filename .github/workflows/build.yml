@@ -73,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.ANDROID_ATIFACT }}
-          path: build/app/outputs
+          path: build/app/outputs/
           if-no-files-found: error
   
   buildLinux:
@@ -96,13 +96,13 @@ jobs:
       - run: flutter pub get
       
       - name: Build linux
-        run: flutter build linux ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+        run: flutter build linux --version ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
         
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.LINUX_ARTIFACT }}
-          path: build/linux/x64/release/bundle
+          path: build/linux/x64/release/bundle/
           if-no-files-found: error
           
   buildWindows:
@@ -126,7 +126,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.WINDOWS_ARTIFACT }}
-          path: build/windows/runner/Release
+          path: build/windows/runner/Release/
           if-no-files-found: error
            
   buildWeb:
@@ -150,7 +150,7 @@ jobs:
         uses: actions/upload-artifact@v3.1.2
         with:
           name: ${{ env.WEB_ARTIFACT }}
-          path: build/web
+          path: build/web/
           if-no-files-found: error
           
           
