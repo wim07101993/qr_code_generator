@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/epc/widgets/value_text_field.dart';
 import 'package:qr_code_generator/main.dart';
-import 'package:qr_code_generator/shared/function_tree_extensions.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
@@ -25,8 +25,11 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
 
   late EpcData lastValidEpcData;
 
-  String? get amountErrorMessage =>
-      EpcData.validateAmount(epcDataNotifier.amount.text.tryInterpret());
+  String? get amountErrorMessage {
+    return EpcData.validateAmountInCents(
+      epcDataNotifier.amount.text.tryConvertToAmountInCents(),
+    );
+  }
 
   void amountChanged() => setState(() {});
 
@@ -49,21 +52,11 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   Widget build(BuildContext context) {
     return QrCodeScreen(
       qrData: qrDataNotifier,
-      inputBuilder: (context) {
-        final amountText = epcDataNotifier.amount.text.trim();
-        final amountValue = epcDataNotifier.value.amount.toString();
-        return TextField(
-          controller: epcDataNotifier.amount,
-          keyboardType: TextInputType.number,
-          decoration: InputDecoration(
-            errorText: amountErrorMessage,
-            errorMaxLines: 3,
-            prefixIcon: const Icon(Icons.euro),
-            suffix: amountText != amountValue ? Text(amountValue) : null,
-          ),
-          style: const TextStyle(fontSize: 35),
-        );
-      },
+      inputBuilder: (context) => ValueTextField(
+        controller: epcDataNotifier.amount,
+        amountValueInCents: epcDataNotifier.value.amountInCents,
+        errorMessage: amountErrorMessage,
+      ),
     );
   }
 }

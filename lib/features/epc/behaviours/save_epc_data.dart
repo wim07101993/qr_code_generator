@@ -31,7 +31,7 @@ class SaveEpcData extends BehaviourWithoutInput<void> {
 extension _EpcDataExtensions on EpcData {
   Map<String, dynamic> toJson() {
     return {
-      'amount': amount,
+      'amountInCents': amountInCents,
       'iban': iban,
       'beneficiaryName': beneficiaryName,
       'purpose': purpose,
