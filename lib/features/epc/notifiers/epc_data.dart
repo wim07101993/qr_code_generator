@@ -16,7 +16,7 @@ class EpcDataNotifier extends ChangeNotifier
   }
 
   final TextEditingController amount =
-      TextEditingController(text: EpcData.defaultAmount.toString());
+      TextEditingController(text: EpcData.defaultAmountInCents.toString());
   final TextEditingController iban =
       TextEditingController(text: EpcData.defaultIban);
   final TextEditingController beneficiaryName =
@@ -32,7 +32,7 @@ class EpcDataNotifier extends ChangeNotifier
   final ValueNotifier<bool> useStructuredRemittanceInfo = ValueNotifier(false);
 
   EpcData _lastValidValue = EpcData(
-    amount: EpcData.defaultAmount,
+    amountInCents: EpcData.defaultAmountInCents,
     iban: EpcData.defaultIban,
     beneficiaryName: EpcData.defaultBeneficiaryName,
   );
@@ -52,8 +52,8 @@ class EpcDataNotifier extends ChangeNotifier
 
   @override
   EpcData get value {
-    final amount = this.amount.text.tryInterpret();
-    final isValid = EpcData.validateAmount(amount) == null &&
+    final amountInCents = amount.text.tryConvertToAmountInCents();
+    final isValid = EpcData.validateAmountInCents(amountInCents) == null &&
         EpcData.validateIban(iban.text) == null &&
         EpcData.validateBeneficiaryName(beneficiaryName.text) == null &&
         EpcData.validateOriginatorInfo(originatorInfo.text) == null &&
@@ -66,7 +66,7 @@ class EpcDataNotifier extends ChangeNotifier
         EpcData.validateBic(bic.text, version.value) == null;
     if (isValid) {
       _lastValidValue = EpcData(
-        amount: amount!,
+        amountInCents: amountInCents!,
         iban: iban.text,
         beneficiaryName: beneficiaryName.text,
         originatorInfo: originatorInfo.text,
@@ -82,7 +82,8 @@ class EpcDataNotifier extends ChangeNotifier
   }
 
   set value(EpcData? epcData) {
-    amount.text = (epcData?.amount ?? EpcData.defaultAmount).toString();
+    amount.text =
+        (epcData?.amountInCents ?? EpcData.defaultAmountInCents).toString();
     iban.text = epcData?.iban ?? EpcData.defaultIban;
     beneficiaryName.text =
         epcData?.beneficiaryName ?? EpcData.defaultBeneficiaryName;
@@ -107,14 +108,14 @@ class EpcDataNotifier extends ChangeNotifier
 }
 
 class EpcData {
-  static const num defaultAmount = 3.14;
+  static const int defaultAmountInCents = 314;
   static const String defaultIban = 'BE10779597575204';
   static const String defaultBeneficiaryName = 'Wim Van Laer';
   static const EpcVersion defaultVersion = EpcVersion.version2;
   static const EpcCharacterSet defaultCharacterSet = EpcCharacterSet.utf8;
 
   EpcData({
-    required this.amount,
+    required this.amountInCents,
     required this.iban,
     required this.beneficiaryName,
     this.version = defaultVersion,
@@ -125,7 +126,10 @@ class EpcData {
     this.useStructuredRemittanceInfo = false,
     this.originatorInfo,
   })  : assert(EpcData.validateVersion(version, bic)?.throwException() == null),
-        assert(EpcData.validateAmount(amount)?.throwException() == null),
+        assert(
+          EpcData.validateAmountInCents(amountInCents)?.throwException() ==
+              null,
+        ),
         assert(EpcData.validateIban(iban)?.throwException() == null),
         assert(
           EpcData.validateBeneficiaryName(beneficiaryName)?.throwException() ==
@@ -146,7 +150,7 @@ class EpcData {
       : this(
           beneficiaryName: defaultBeneficiaryName,
           iban: defaultIban,
-          amount: defaultAmount,
+          amountInCents: defaultAmountInCents,
         );
 
   static const String serviceTag = 'BCD';
@@ -165,7 +169,7 @@ class EpcData {
   final String beneficiaryName;
   final String? bic;
   final String iban;
-  final num amount;
+  final int amountInCents;
   final String? purpose;
   final String? remittanceInfo;
   final bool useStructuredRemittanceInfo;
@@ -180,7 +184,7 @@ class EpcData {
       bic,
       beneficiaryName,
       iban,
-      'EUR$amount',
+      'EUR$amountInCents',
       purpose,
       remittanceInfo,
       originatorInfo
@@ -235,12 +239,12 @@ class EpcData {
     return null;
   }
 
-  static String? validateAmount(num? value) {
+  static String? validateAmountInCents(int? value) {
     if (value == null) {
       return 'Please enter an amount';
     }
-    if (value >= 1000000000) {
-      return 'The amount must be less than 999999999.99';
+    if (value >= 100000000000) {
+      return 'The amount must be less than 99999999999';
     }
     return null;
   }
@@ -295,8 +299,16 @@ class EpcData {
   }
 }
 
-extension _ErrorExtensions on String {
+extension StringExtensions on String {
   String? throwException() {
     throw Exception(this);
+  }
+
+  int? tryConvertToAmountInCents() {
+    final amount = tryInterpret();
+    if (amount == null) {
+      return null;
+    }
+    return (amount * 100).round();
   }
 }
