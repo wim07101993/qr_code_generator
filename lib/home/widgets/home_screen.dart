@@ -13,6 +13,7 @@ import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/router/notifier/is_updating_style_notifier.dart';
 
+@RoutePage()
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
     super.key,
