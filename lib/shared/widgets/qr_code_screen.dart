@@ -23,7 +23,7 @@ class QrCodeScreen extends StatelessWidget {
           valueListenable: getIt<StyleSettingsNotifier>(),
           builder: (context, style, _) => ValueListenableBuilder<String>(
             valueListenable: qrData,
-            builder: (context, qrData, _) => QrImage(
+            builder: (context, qrData, _) => QrImageView(
               size: min(constraints.maxWidth, constraints.maxHeight),
               data: qrData,
               dataModuleStyle: style.dataModuleStyle,

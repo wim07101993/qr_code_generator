@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.wimvanlaer.qr_code_generator"
-        minSdkVersion flutter.minSdkVersion
+        minSdkVersion 19
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

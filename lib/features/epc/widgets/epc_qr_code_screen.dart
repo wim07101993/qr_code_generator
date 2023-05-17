@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/features/epc/widgets/value_text_field.dart';
@@ -7,6 +8,7 @@ import 'package:qr_code_generator/shared/state_management/forwarding_notifier.da
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@RoutePage()
 class EpcQrCodeScreen extends StatefulWidget {
   const EpcQrCodeScreen({super.key});
 

@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:qr_code_generator/features/epc/installer.dart';
@@ -45,9 +46,7 @@ Future<void> main() async {
           Locale('nl'),
         ],
         routerDelegate: router.delegate(
-          initialRoutes: [
-            const HomeRoute(),
-          ],
+          deepLinkBuilder: (deeplink) => const DeepLink([HomeRoute()]),
         ),
         routeInformationParser: router.defaultRouteParser(),
         debugShowCheckedModeBanner: false,
