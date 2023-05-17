@@ -16,11 +16,14 @@ class AppRouter extends _$AppRouter {
 
   @override
   final List<AutoRoute> routes = [
-    AutoRoute(page: HomeRoute.page, children: [
-      // RedirectRoute(path: '/', redirectTo: 'text'),
-      AutoRoute(page: TextQrCodeRoute.page, path: 'text', initial: true),
-      AutoRoute(page: EpcQrCodeRoute.page, path: 'epc'),
-      AutoRoute(page: StyleRoute.page, path: 'style'),
-    ]),
+    AutoRoute(
+      page: HomeRoute.page,
+      children: [
+        // RedirectRoute(path: '/', redirectTo: 'text'),
+        AutoRoute(page: TextQrCodeRoute.page, path: 'text', initial: true),
+        AutoRoute(page: EpcQrCodeRoute.page, path: 'epc'),
+        AutoRoute(page: StyleRoute.page, path: 'style'),
+      ],
+    ),
   ];
 }
