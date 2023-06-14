@@ -6,5 +6,10 @@ if (keystorePropertiesFile.exists()) {
 
 ext.keystoreKeyAlias = keystoreProperties['keyAlias']
 ext.keystoreKeyPassword = keystoreProperties['keyPassword']
-ext.keystoreFile = file(keystoreProperties['file'])
+def keystoreFilePath = keystoreProperties['file']
+if (keystoreFilePath != null) {
+    ext.keystoreFile = file(keystoreProperties['file'])
+} else {
+    ext.keystoreFile = null
+}
 ext.keystorePassword = keystoreProperties['password']

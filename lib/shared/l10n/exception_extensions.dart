@@ -12,9 +12,9 @@ extension ExceptionLocalizationExtensions on Exception {
   String getTranslatedErrorMessage(BuildContext context) {
     final s = AppLocalizations.of(context)!;
     switch (runtimeType) {
-      case FileDoesNotExistsException:
+      case FileDoesNotExistsException _:
         return s.fileDoesNotExistsErrorMessage;
-      case CouldNotLoadImageException:
+      case CouldNotLoadImageException _:
         return s.couldNotLoadImageErrorMessage;
     }
     return s.generalErrorMessage;
