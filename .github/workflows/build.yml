@@ -47,9 +47,14 @@ jobs:
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
       
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.4
+        with:
+          java-version: 17
+
       - run: flutter doctor -v
       - run: flutter pub get
-
+      
       - name: Configure Keystore
         run: |
           echo "$PLAY_STORE_UPLOAD_KEY" | base64 --decode > app/upload-keystore.jks
@@ -89,6 +94,11 @@ jobs:
   
       - name: Install flutter
         uses: subosito/flutter-action@v2.8.0
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v1.4.4
+        with:
+          java-version: 17
       
       - run: flutter doctor -v
       - run: flutter pub get
