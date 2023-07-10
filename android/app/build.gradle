@@ -5,6 +5,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+    namespace "com.wimvanlaer.qr_code_generator"
     compileSdk 33
     ndkVersion flutter.ndkVersion
 
