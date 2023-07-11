@@ -157,9 +157,13 @@ jobs:
           APPSTORE_CERT: ${{ secrets.APPSTORE_CERT }}
           P12_PASSWORD: ${{ secrets.APPSTORE_CERT_PASSWORD }}
         run: |
+          echo set keychain path
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          echo set certificate path
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          echo decode certificate
           echo -n "$APPSTORE_CERT" | base64 --decode --output $CERTIFICATE_PATH
+          echo import certificate
           security import $CERTIFICATE_PATH -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
   
       - name: Install apple provisioning profile
