@@ -162,6 +162,7 @@ jobs:
           security import $CERTIFICATE_PATH -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
   
       - name: Install apple provisioning profile
+        env:
           APPLE_PROVISIONING_PROFILE: ${{ secrets.APPLE_PROVISIONING_PROFILE }}
           PP_PATH: ${{ RUNNER_TEMP/build_pp.mobileprovision }}
         run: |
