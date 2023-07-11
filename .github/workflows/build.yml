@@ -132,8 +132,9 @@ jobs:
           if-no-files-found: error
   
   buildIos:
-    name: build iOS 🍎🍏
+    name: build iOS 🍏
     runs-on: macos-latest
+    needs: getVersion
     env:
       ARTIFACT_PATH: qr_code_generator.ipa
     steps:
