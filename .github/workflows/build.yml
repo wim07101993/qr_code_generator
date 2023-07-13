@@ -18,7 +18,6 @@ jobs:
   getVersion:
     name: get version
     runs-on: ubuntu-latest
-    if: false
     outputs:
       fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
       majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
