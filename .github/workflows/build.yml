@@ -159,11 +159,9 @@ jobs:
         run: |
           echo set keychain path
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
-          echo set certificate path
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
-          echo decode certificate
           echo -n "$APPSTORE_CERT" | base64 --decode --output $CERTIFICATE_PATH
-          echo import certificate
           security import $CERTIFICATE_PATH -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
   
       - name: Install apple provisioning profile
@@ -172,6 +170,7 @@ jobs:
         run: |
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" $KEYCHAIN_PATH
           echo -n "$APPLE_PROVISIONING_PROFILE" | base64 --decode --output $PP_PATH
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
