@@ -337,7 +337,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: buildAndroidAppBundle
     steps:
-      - name: Download a Build Artifact
+      - name: Download Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
           name: ${{ env.ANDROID_ARTIFACT }}
@@ -353,3 +353,23 @@ jobs:
           releaseFiles: qr_code_generator.aab
           status: completed
           track: internal
+
+  uploadToTestFlight:
+    name: upload to TestFlight
+    runs-on: ubuntu-latest
+    needs: buildIos
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: ${{ env.IOS_ARTIFACT }}
+          
+      - name: Upload to TestFlight
+        uses: Apple-Actions/upload-testflight-build@v1
+        with:
+          app-path: qr_code_generator.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+    
+    
