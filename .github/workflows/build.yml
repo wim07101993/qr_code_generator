@@ -356,7 +356,7 @@ jobs:
 
   uploadToTestFlight:
     name: upload to TestFlight
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     needs: buildIos
     steps:
       - name: Download Build Artifact
