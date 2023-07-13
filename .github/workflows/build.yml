@@ -40,7 +40,6 @@ jobs:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.aab
     steps:
@@ -89,7 +88,6 @@ jobs:
     name: build Android apk 🤖
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.apk
     steps:
@@ -145,6 +143,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
   
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
       - name: Import certificate and provisioning profile
         env:
           BUILD_CERTIFICATE_BASE64: ${{ secrets.APPSTORE_CERT }}
@@ -199,7 +200,6 @@ jobs:
     name: build Linux 🐧
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.tar.gz
     steps:
@@ -242,7 +242,6 @@ jobs:
     name: build Windows 🪟
     runs-on: windows-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.msix
     steps:
@@ -272,7 +271,6 @@ jobs:
     name: build web 🌐
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator/
     steps:
@@ -302,7 +300,6 @@ jobs:
     name: build github pages 🐙
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator/
     steps:
@@ -333,7 +330,6 @@ jobs:
     name: upload to GooglePlay
     runs-on: ubuntu-latest
     needs: buildAndroidAppBundle
-    if: false
     steps:
       - name: Download a Build Artifact
         uses: actions/download-artifact@v3.0.2
