@@ -40,7 +40,6 @@ jobs:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.aab
     steps:
@@ -89,7 +88,6 @@ jobs:
     name: build Android apk 🤖
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.apk
     steps:
@@ -202,7 +200,6 @@ jobs:
     name: build Linux 🐧
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.tar.gz
     steps:
@@ -245,7 +242,6 @@ jobs:
     name: build Windows 🪟
     runs-on: windows-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.msix
     steps:
@@ -275,7 +271,6 @@ jobs:
     name: build web 🌐
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator/
     steps:
@@ -305,7 +300,6 @@ jobs:
     name: build github pages 🐙
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     env:
       ARTIFACT_PATH: qr_code_generator/
     steps:

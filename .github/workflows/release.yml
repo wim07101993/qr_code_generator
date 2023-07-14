@@ -9,13 +9,21 @@ jobs:
   github-release:
     runs-on: ubuntu-latest
     steps:
-      - name: Download 🤖
+      - name: Download Android 🤖
         uses: dawidd6/action-download-artifact@v2
         with:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
           name: android
+          
+      - name: Download iOS 🍏
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: iphone
           
       - name: Download linux 🐧
         uses: dawidd6/action-download-artifact@v2
@@ -52,7 +60,7 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
+          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.ipa,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
           
   publish-to-github-pages:
     runs-on: ubuntu-latest
