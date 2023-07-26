@@ -1,9 +1,9 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/qr_data_controller.dart';
 
 class QrCodeScreen extends StatelessWidget {
   const QrCodeScreen({
@@ -13,7 +13,7 @@ class QrCodeScreen extends StatelessWidget {
   });
 
   final WidgetBuilder inputBuilder;
-  final ValueListenable<String> qrData;
+  final QrDataController qrData;
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,11 @@ class QrCodeScreen extends StatelessWidget {
       builder: (context, constraints) {
         final qrCode = ValueListenableBuilder<StyleSettings>(
           valueListenable: getIt<StyleSettingsNotifier>(),
-          builder: (context, style, _) => ValueListenableBuilder<String>(
-            valueListenable: qrData,
-            builder: (context, qrData, _) => QrImageView(
+          builder: (context, style, _) => ListenableBuilder(
+            listenable: qrData,
+            builder: (context, _) => QrImageView(
               size: min(constraints.maxWidth, constraints.maxHeight),
-              data: qrData,
+              data: qrData.value,
               dataModuleStyle: style.dataModuleStyle,
               embeddedImage: style.embeddedImage,
               embeddedImageStyle: style.embeddedImageStyle,

@@ -1,9 +1,9 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/main.dart';
+import 'package:qr_code_generator/qr_data_controller.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
-import 'package:qr_code_generator/shared/state_management/forwarding_notifier.dart';
 import 'package:qr_code_generator/shared/widgets/qr_code_screen.dart';
 
 @RoutePage()
@@ -16,7 +16,7 @@ class TextQrCodeScreen extends StatefulWidget {
 
 class _TextQrCodeScreenState extends State<TextQrCodeScreen> {
   final controller = TextEditingController();
-  late final qrDataNotifier = ForwardingNotifier<String>(
+  late final qrDataNotifier = QrDataController(
     listenable: controller,
     valueGetter: () => controller.text,
   );
@@ -34,6 +34,7 @@ class _TextQrCodeScreenState extends State<TextQrCodeScreen> {
       inputBuilder: (context) => TextField(
         controller: controller,
         maxLines: null,
+        maxLength: QrDataController.maxLength,
         keyboardType: TextInputType.multiline,
         decoration: InputDecoration(
           helperText: s.textInputHelperText,
