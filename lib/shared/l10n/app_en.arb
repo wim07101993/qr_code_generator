@@ -55,9 +55,15 @@
   "selectImageFileButtonLabel": "Select file",
   "textInputHelperText": "Text to encode in the QR-code",
   "@textInputHelperText": {
-    "decoration": "Helper text for the input field on the text qr-code screen"
+    "description": "Helper text for the input field on the text qr-code screen"
   },
   "generalErrorMessage": "An error occurred",
   "fileDoesNotExistsErrorMessage": "The file does not exist",
-  "couldNotLoadImageErrorMessage": "Could not load image"
+  "couldNotLoadImageErrorMessage": "Could not load image",
+  "changeColor": "Change color",
+  "selectColor": "Select color",
+  "@selectColor": {
+    "description": "Text on the button to select the color in the color dialog"
+  },
+  "cancel": "Cancel"
 }

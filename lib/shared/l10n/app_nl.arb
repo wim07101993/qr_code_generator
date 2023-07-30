@@ -31,5 +31,8 @@
   "none": "geen",
   "removeImageButtonLabel": "Verwijderen",
   "selectImageFileButtonLabel": "Bestand kiezen",
-  "textInputHelperText": "Tekst om te coderen in de QR-code"
+  "textInputHelperText": "Tekst om te coderen in de QR-code",
+  "changeColor": "Verander kleur",
+  "selectColor": "Kleur selecteren",
+  "cancel": "Annuleren"
 }

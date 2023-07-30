@@ -1,9 +1,6 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
-import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/qr_data_controller.dart';
+import 'package:qr_code_generator/shared/widgets/styled_qr_code.dart';
 
 class QrCodeScreen extends StatelessWidget {
   const QrCodeScreen({
@@ -19,20 +16,9 @@ class QrCodeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final qrCode = ValueListenableBuilder<StyleSettings>(
-          valueListenable: getIt<StyleSettingsNotifier>(),
-          builder: (context, style, _) => ListenableBuilder(
-            listenable: qrData,
-            builder: (context, _) => QrImageView(
-              size: min(constraints.maxWidth, constraints.maxHeight),
-              data: qrData.value,
-              dataModuleStyle: style.dataModuleStyle,
-              embeddedImage: style.embeddedImage,
-              embeddedImageStyle: style.embeddedImageStyle,
-              eyeStyle: style.eyeStyle,
-              gapless: style.gapless,
-            ),
-          ),
+        final qrCode = ListenableBuilder(
+          listenable: qrData,
+          builder: (context, data) => StyledQrCode(data: qrData.value),
         );
 
         const double inputWidth = 250;

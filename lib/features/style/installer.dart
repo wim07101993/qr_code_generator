@@ -1,4 +1,9 @@
+import 'package:file_picker/file_picker.dart';
+import 'package:qr_code_generator/features/style/behaviours/get_embedded_image.dart';
 import 'package:qr_code_generator/features/style/behaviours/load_style_settings.dart';
+import 'package:qr_code_generator/features/style/behaviours/pick_file.dart';
+import 'package:qr_code_generator/features/style/behaviours/remove_embedded_image.dart';
+import 'package:qr_code_generator/features/style/behaviours/save_embedded_image_file.dart';
 import 'package:qr_code_generator/features/style/behaviours/save_style_settings.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/get_it/installer.dart';
@@ -13,12 +18,14 @@ class QrCodeStyleInstaller extends Installer {
       () => StyleSettingsNotifier(),
       dispose: (notifier) => notifier.dispose(),
     );
+    getIt.registerLazySingleton(() => FilePicker.platform);
 
     getIt.registerFactoryAsync(
       () async => LoadStyleSettings(
         monitor: getIt(),
         sharedPreferences: await getIt.getAsync(),
         styleSettingsNotifier: getIt(),
+        getEmbeddedImage: getIt(),
       ),
     );
     getIt.registerFactory(
@@ -26,6 +33,30 @@ class QrCodeStyleInstaller extends Installer {
         monitor: getIt(),
         sharedPreferences: getIt(),
         styleSettingsNotifier: getIt(),
+      ),
+    );
+    getIt.registerFactory(
+      () => GetEmbeddedImage(
+        monitor: getIt(),
+        sharedPreferences: getIt(),
+      ),
+    );
+    getIt.registerFactory(
+      () => SaveEmbeddedImageFile(
+        monitor: getIt(),
+        sharedPreferences: getIt(),
+      ),
+    );
+    getIt.registerFactory(
+      () => RemoveEmbeddedImage(
+        monitor: getIt(),
+        sharedPreferences: getIt(),
+      ),
+    );
+    getIt.registerFactory(
+      () => PickFile(
+        monitor: getIt(),
+        filePicker: getIt(),
       ),
     );
   }

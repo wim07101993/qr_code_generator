@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:behaviour/behaviour.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/home/behaviours/download_qr_code.dart';
+import 'package:qr_code_generator/home/behaviours/get_qr_image.dart';
 import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/share_qr_code.dart';
 import 'package:qr_code_generator/main.dart';
@@ -32,14 +34,33 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  Future<void> shareQrData(BuildContext context) {
-    return getIt<ShareQrCode>()(
-      ShareQrCodeParams(
+  Future<void> getQrCode(
+    BuildContext context,
+    Future<ExceptionOr<dynamic>> Function(QrPainter qrCode) sendToUser,
+  ) {
+    return getIt<GetQrImage>()(
+      GetQrImageParams(
         qrData: getIt<EpcDataNotifier>().value.qrData,
-        translations: AppLocalizations.of(context)!,
         styleSettings: getIt<StyleSettingsNotifier>().value,
       ),
-    ).handleException(context, isMounted: () => mounted);
+    ).thenStartNextWhenSuccess((qrCode) {
+      if (qrCode == null || !mounted) {
+        return Future.value(const Success(null));
+      }
+      return sendToUser(qrCode);
+    }).handleException(context, isMounted: () => mounted);
+  }
+
+  Future<void> shareQrData(BuildContext context) {
+    return getQrCode(
+      context,
+      (qrCode) => getIt<ShareQrCode>()(
+        ShareQrCodeParams(
+          qrCode: qrCode,
+          translations: AppLocalizations.of(context)!,
+        ),
+      ),
+    );
   }
 
   Future<void> saveQrCode(BuildContext context) async {
@@ -51,23 +72,20 @@ class _HomeAppBarState extends State<HomeAppBar> {
     if (outputPath == null || !mounted) {
       return;
     }
-    return getIt<SaveQrCode>()(
-      SaveQrCodeParams(
-        qrData: getIt<EpcDataNotifier>().value.qrData,
-        translations: s,
-        styleSettings: getIt<StyleSettingsNotifier>().value,
-        outputPath: outputPath,
+    return getQrCode(
+      context,
+      (qrCode) => getIt<SaveQrCode>()(
+        SaveQrCodeParams(
+          translations: s,
+          outputPath: outputPath,
+          qrCode: qrCode,
+        ),
       ),
-    ).handleException(context, isMounted: () => mounted);
+    );
   }
 
   Future<void> downloadQrCode() {
-    return getIt<DownloadQrCode>()(
-      DownloadQrCodeParams(
-        qrData: getIt<EpcDataNotifier>().value.qrData,
-        styleSettings: getIt<StyleSettingsNotifier>().value,
-      ),
-    ).handleException(context, isMounted: () => mounted);
+    return getQrCode(context, (qrCode) => getIt<DownloadQrCode>()(qrCode));
   }
 
   @override

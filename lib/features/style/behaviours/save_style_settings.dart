@@ -33,7 +33,6 @@ extension _StyleSettingsExtensions on StyleSettings {
     return {
       'backgroundColor': backgroundColor.value,
       'dataModuleStyle': dataModuleStyle.toJsonMap(),
-      'embeddedImageFilePath': embeddedImageFilePath,
       'embeddedImageStyle': embeddedImageStyle?.toJsonMap(),
       'eyeStyle': eyeStyle.toJson(),
       'gapless': gapless,

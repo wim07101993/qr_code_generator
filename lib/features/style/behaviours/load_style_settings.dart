@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:qr_code_generator/features/style/behaviours/get_embedded_image.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/json_extensions.dart';
 import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
@@ -11,35 +13,48 @@ class LoadStyleSettings extends BehaviourWithoutInput<void> {
     super.monitor,
     required this.sharedPreferences,
     required this.styleSettingsNotifier,
+    required this.getEmbeddedImage,
   });
 
   final SharedPreferences sharedPreferences;
   final StyleSettingsNotifier styleSettingsNotifier;
+  final GetEmbeddedImage getEmbeddedImage;
 
   @override
   String get description => 'loading style settings';
 
   @override
-  Future<void> action(BehaviourTrack? track) {
+  Future<void> action(BehaviourTrack? track) async {
     final jsonData = sharedPreferences
         .get(sharedPreferences.qrCodeStyleSettingsKey) as String?;
-    if (jsonData == null) {
-      return Future.value();
+    final embeddedImage =
+        await getEmbeddedImage().thenWhen((_) => null, (image) => image);
+
+    if (jsonData == null && embeddedImage == null) {
+      return;
     }
+
+    if (jsonData == null) {
+      styleSettingsNotifier.value = StyleSettings(embeddedImage: embeddedImage);
+      return;
+    }
+
     final map = jsonDecode(jsonData) as Map<String, dynamic>;
-    styleSettingsNotifier.value = map.toStyleSettings();
+    styleSettingsNotifier.value = map.toStyleSettings(
+      embeddedImage: embeddedImage,
+    );
     return Future.value();
   }
 }
 
 extension _JsonExtensions on Map<String, dynamic> {
-  StyleSettings toStyleSettings() {
+  StyleSettings toStyleSettings({ImageProvider? embeddedImage}) {
     return StyleSettings(
       backgroundColor:
           getColor('backgroundColor') ?? StyleSettings.defaultBackgroundColor,
       dataModuleStyle: getObject('dataModuleStyle')?.toQrDataModuleStyle() ??
           StyleSettings.defaultDataModuleStyle,
-      embeddedImageFilePath: getString('embeddedImageFilePath'),
+      embeddedImage: embeddedImage,
       embeddedImageStyle:
           getObject('embeddedImageStyle')?.toQrEmbeddedImageStyle(),
       eyeStyle: getObject('eyeStyle')?.toQrEyeStyle() ??
