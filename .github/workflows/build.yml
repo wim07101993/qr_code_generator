@@ -136,6 +136,7 @@ jobs:
     name: build iOS 🍏
     runs-on: macos-latest
     needs: getVersion
+    if: false
     env:
       ARTIFACT_PATH: qr_code_generator.ipa
       
