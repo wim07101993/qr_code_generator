@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -26,7 +25,7 @@ class StyleSettings {
   StyleSettings({
     this.backgroundColor = defaultBackgroundColor,
     this.dataModuleStyle = defaultDataModuleStyle,
-    this.embeddedImageFilePath,
+    this.embeddedImage,
     this.embeddedImageStyle,
     this.eyeStyle = defaultEyeStyle,
     this.gapless = defaultGapless,
@@ -34,21 +33,16 @@ class StyleSettings {
 
   final Color backgroundColor;
   final QrDataModuleStyle dataModuleStyle;
-  final String? embeddedImageFilePath;
+  final ImageProvider? embeddedImage;
   final QrEmbeddedImageStyle? embeddedImageStyle;
   final QrEyeStyle eyeStyle;
   final bool gapless;
-
-  ImageProvider? get embeddedImage {
-    final path = embeddedImageFilePath;
-    return path == null ? null : FileImage(File(path));
-  }
 
   StyleSettings copyWithBackgroundColor(Color backgroundColor) {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
@@ -61,20 +55,18 @@ class StyleSettings {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
     );
   }
 
-  StyleSettings copyWithEmbeddedImageFilePath(
-    String? embeddedImageFilePath,
-  ) {
+  StyleSettings copyWithEmbeddedImage(ImageProvider? embeddedImage) {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
@@ -87,7 +79,7 @@ class StyleSettings {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
@@ -98,7 +90,7 @@ class StyleSettings {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
@@ -109,7 +101,7 @@ class StyleSettings {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
-      embeddedImageFilePath: embeddedImageFilePath,
+      embeddedImage: embeddedImage,
       embeddedImageStyle: embeddedImageStyle,
       eyeStyle: eyeStyle,
       gapless: gapless,
