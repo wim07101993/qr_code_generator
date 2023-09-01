@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  workflow_call:
+  workflow_dispatch:
+     
+env:
+  ANDROID_ARTIFACT: android
+  LINUX_ARTIFACT: linux
+  IOS_ARTIFACT: iphone
+  WINDOWS_ARTIFACT: windows
+  WEB_ARTIFACT: web
+  
+jobs:
+  github-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Android 🤖
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ ANDROID_ARTIFACT }}
+          
+      - name: Download iOS 🍏
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ IOS_ARTIFACT }}
+          
+      - name: Download linux 🐧
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ LINUX_ARTIFACT }}
+          
+      - name: Download windows 🪟
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ WINDOWS_ARTIFACT }}
+
+      - name: Download web 🌐
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ WEB_ARTIFACT }}
+          path: web
+          
+      - name: Zip web
+        uses: thedoctor0/zip-release@0.7.0
+        with:
+          type: 'zip'
+          path: web
+          filename: qr_code_generator-web.zip
+          
+      - name: create release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.ipa,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
