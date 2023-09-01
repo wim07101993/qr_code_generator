@@ -18,7 +18,7 @@ jobs:
           workflow: build/android.yml
           workflow_conclusion: success
           branch: main
-          name: android
+          name: ${{ ARTIFACT }}
 
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
