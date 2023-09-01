@@ -69,9 +69,10 @@ class _HomeAppBarState extends State<HomeAppBar> {
       dialogTitle: s.saveQrDialogTitle,
       fileName: 'qr-code.png',
     );
-    if (outputPath == null || !mounted) {
-      return;
-    }
+
+    if (!mounted) return;
+    if (outputPath == null) return;
+
     return getQrCode(
       context,
       (qrCode) => getIt<SaveQrCode>()(
