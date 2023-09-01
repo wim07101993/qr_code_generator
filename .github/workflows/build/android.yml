@@ -73,7 +73,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.ANDROID_ARTIFACT }}
+          name: ${{ env.ARTIFACT }}
           path: ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
   
@@ -121,6 +121,6 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.ANDROID_ARTIFACT }}
+          name: ${{ env.ARTIFACT }}
           path:  ${{ env.ARTIFACT_PATH }}
           if-no-files-found: error
