@@ -3,7 +3,10 @@ name: Publish to github pages
 on:
   workflow_call:
   workflow_dispatch:
-      
+
+env:
+  ARTIFACT: github-pages
+  
 jobs:
   publish-to-github-pages:
     runs-on: ubuntu-latest
@@ -21,7 +24,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: githubPages
+          name: ${{ ARTIFACT }}
           path: _site
       
       - name: Upload GitHub Pages artifact
