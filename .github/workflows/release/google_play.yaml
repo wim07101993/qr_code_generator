@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+env:
+  ARTIFACT: android
+
+jobs:
+  uploadToGooglePlay:
+    name: upload to GooglePlay
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Android 🤖
+        uses: dawidd6/action-download-artifact@v2.27.0
+        with:
+          workflow: build/android.yml
+          workflow_conclusion: success
+          branch: main
+          name: android
+
+      - name: Create service_account.json
+        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
+        
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1.1.1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.wimvanlaer.qr_code_generator
+          releaseFiles: qr_code_generator.aab
+          status: completed
+          track: internal
