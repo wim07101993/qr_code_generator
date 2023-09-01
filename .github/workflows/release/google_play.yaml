@@ -1,4 +1,4 @@
-name: Build
+name: Upload to goole play
 
 on:
   workflow_call:
