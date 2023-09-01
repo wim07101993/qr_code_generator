@@ -1,9 +1,8 @@
-name: Build
+name: Build linux
 
 on:
   workflow_call:
   workflow_dispatch:
-
 
 env:
   ARTIFACT: linux
