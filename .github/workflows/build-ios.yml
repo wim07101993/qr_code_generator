@@ -30,7 +30,6 @@ jobs:
     name: build iOS 🍏
     runs-on: macos-latest
     needs: getVersion
-      
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
