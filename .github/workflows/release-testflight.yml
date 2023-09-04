@@ -4,21 +4,15 @@ on:
   workflow_call:
   workflow_dispatch:
 
-env:
-  ARTIFACT: iphone
-
 jobs:
   uploadToTestFlight:
     name: upload to TestFlight
     runs-on: macos-latest
     steps:
-      - name: Download Android 🤖
-        uses: dawidd6/action-download-artifact@v2.27.0
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.0.2
         with:
-          workflow: build/android.yml
-          workflow_conclusion: success
-          branch: main
-          name: ${{ ARTIFACT }}
+          name: ${{ vars.IOS_ARTIFACT }}
           
       - name: Upload to TestFlight
         uses: Apple-Actions/upload-testflight-build@v1
