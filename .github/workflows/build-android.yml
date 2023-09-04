@@ -30,8 +30,6 @@ jobs:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
     needs: getVersion
-    env:
-      ARTIFACT_PATH: qr_code_generator.aab
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
