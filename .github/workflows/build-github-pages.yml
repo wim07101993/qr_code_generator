@@ -4,9 +4,6 @@ on:
   workflow_call:
   workflow_dispatch:
 
-env:
-  ARTIFACT: github-pages
-
 jobs:
   getVersion:
     name: get version
@@ -33,8 +30,6 @@ jobs:
     name: build github pages 🐙
     runs-on: ubuntu-latest
     needs: getVersion
-    env:
-      ARTIFACT_PATH: qr_code_generator/
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -54,6 +49,6 @@ jobs:
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ env.ARTIFACT }}
-          path: ${{ env.ARTIFACT_PATH }}
+          name: ${{ vars.GH_PAGES_ARTIFACT }}
+          path: ${{ vars.WEB_ARTIFACT_PATH }}
           if-no-files-found: error
