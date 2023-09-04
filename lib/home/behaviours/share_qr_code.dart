@@ -23,7 +23,7 @@ class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
           data.buffer.asUint8List(),
           name: 'QR-code.png',
           mimeType: 'image/png',
-        )
+        ),
       ],
       text: input.translations.qrCode,
     );

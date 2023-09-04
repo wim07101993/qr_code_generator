@@ -30,7 +30,7 @@ class BackgroundStyleEditor extends StatelessWidget {
             color: color,
             onColorChanged: onColorChanged,
           ),
-        )
+        ),
       ],
     );
   }
