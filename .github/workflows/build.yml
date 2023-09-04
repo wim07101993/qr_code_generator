@@ -9,12 +9,6 @@ on:
 jobs:
   buid-android:
     uses: ./.github/workflows/build/android.yml
-  build-ios:
-    if: false
-    uses: ./.github/workflows/build/ios.yml
-  build-macos:
-    if: false
-    uses: ./.github/workflows/build/macos.yml
   build-windows:
     uses: ./.github/workflows/build/windows.yml
   build-linux:
