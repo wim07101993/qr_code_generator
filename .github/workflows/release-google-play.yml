@@ -4,9 +4,6 @@ on:
   workflow_call:
   workflow_dispatch:
 
-env:
-  ARTIFACT: android
-
 jobs:
   uploadToGooglePlay:
     name: upload to GooglePlay
@@ -18,7 +15,7 @@ jobs:
           workflow: build/android.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ ARTIFACT }}
+          name: ${{ vars.ANDROID_ARTIFACT }}
 
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
