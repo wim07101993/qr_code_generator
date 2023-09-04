@@ -3,13 +3,6 @@ name: Create github release
 on:
   workflow_call:
   workflow_dispatch:
-     
-env:
-  ANDROID_ARTIFACT: android
-  LINUX_ARTIFACT: linux
-  IOS_ARTIFACT: iphone
-  WINDOWS_ARTIFACT: windows
-  WEB_ARTIFACT: web
   
 jobs:
   github-release:
@@ -21,7 +14,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ ANDROID_ARTIFACT }}
+          name: ${{ vars.ANDROID_ARTIFACT }}
           
       - name: Download iOS 🍏
         uses: dawidd6/action-download-artifact@v2
@@ -29,7 +22,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ IOS_ARTIFACT }}
+          name: ${{ vars.IOS_ARTIFACT }}
           
       - name: Download linux 🐧
         uses: dawidd6/action-download-artifact@v2
@@ -37,7 +30,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ LINUX_ARTIFACT }}
+          name: ${{ vars.LINUX_ARTIFACT }}
           
       - name: Download windows 🪟
         uses: dawidd6/action-download-artifact@v2
@@ -45,7 +38,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ WINDOWS_ARTIFACT }}
+          name: ${{ vars.WINDOWS_ARTIFACT }}
 
       - name: Download web 🌐
         uses: dawidd6/action-download-artifact@v2
@@ -53,7 +46,7 @@ jobs:
           workflow: build.yml
           workflow_conclusion: success
           branch: main
-          name: ${{ WEB_ARTIFACT }}
+          name: ${{ vars.WEB_ARTIFACT }}
           path: web
           
       - name: Zip web
