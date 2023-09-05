@@ -5,25 +5,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Dump env context for check
-      env:
-        ENV_CONTEXT: ${{ toJson(env) }}
-      run: |
-        echo "$ENV_CONTEXT"
-    - name: Dump vars context for check
-      env:
-        VARS_CONTEXT: ${{ toJson(vars) }}
-        TEST_VAR: ${{ vars.WEB_ARTIFACT }}
-      run: |
-        echo "$TEST_VAR"
-        echo "${{ vars.WEB_ARTIFACT }}"
   getVersion:
     name: get version
     runs-on: ubuntu-latest
-    if: false
     outputs:
       fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
       majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
@@ -46,7 +30,6 @@ jobs:
     name: build web 🌐
     runs-on: ubuntu-latest
     needs: getVersion
-    if: false
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
