@@ -7,7 +7,7 @@ on:
 
 jobs:
   android:
-    uses: ./.github/workflows/build-android.yml
+    uses: ./.github/workflows/build/build-android.yml
   ios:
     if: false
     uses: ./.github/workflows/build-ios.yml
