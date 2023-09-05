@@ -6,84 +6,11 @@ on:
       - 'v*'
       
 jobs:
-  github-release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Android 🤖
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: android
-          
-      - name: Download iOS 🍏
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: iphone
-          
-      - name: Download linux 🐧
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: linux
-          
-      - name: Download windows 🪟
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: windows
-
-      - name: Download web 🌐
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: web
-          path: web
-          
-      - name: Zip web
-        uses: thedoctor0/zip-release@0.7.0
-        with:
-          type: 'zip'
-          path: web
-          filename: qr_code_generator-web.zip
-          
-      - name: create release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.ipa,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
-          
-  publish-to-github-pages:
-    runs-on: ubuntu-latest
-    permissions:
-      pages: write
-      id-token: write 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: build.yml
-          workflow_conclusion: success
-          branch: main
-          name: githubPages
-          path: _site
-      
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v1.0.7
-        
-      - name: Deploy to GitHub Pages
-        uses: actions/deploy-pages@v1
-
+  github-pages:
+    uses: ./.github/workflows/release-github-pages.yml
+  github:
+    uses: ./.github/workflows/release-github.yml
+  google-play:
+    uses: ./.github/workflows/release-google-play.yml
+  testflight:
+    uses: ./.github/workflows/release-testflight.yml

@@ -1,4 +1,4 @@
-name: Upload to testflight
+name: Release to testflight
 
 on:
   workflow_call:

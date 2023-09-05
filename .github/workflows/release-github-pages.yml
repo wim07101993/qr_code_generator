@@ -1,4 +1,4 @@
-name: Publish to github pages
+name: Release to github pages
 
 on:
   workflow_call:
