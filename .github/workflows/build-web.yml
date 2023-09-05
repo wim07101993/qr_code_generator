@@ -44,7 +44,7 @@ jobs:
         run: flutter build web --build-name ${{ needs.getVersion.outputs.fullSemVer }}.${{ github.run_number }}
         
       - name: Stage artifact file
-        run: mv build/web/ ${{ env.ARTIFACT_PATH }}
+        run: mv build/web/ ${{ env.WEB_ARTIFACT_PATH }}
          
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2
