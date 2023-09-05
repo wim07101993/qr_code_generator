@@ -42,7 +42,7 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             title: Text(s.aboutDrawerOption),
             onTap: () => showAboutDialog(context: context),
-          )
+          ),
         ],
       ),
     );

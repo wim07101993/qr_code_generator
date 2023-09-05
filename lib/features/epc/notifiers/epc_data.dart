@@ -187,7 +187,7 @@ class EpcData {
       'EUR$amountInCents',
       purpose,
       remittanceInfo,
-      originatorInfo
+      originatorInfo,
     ].map((s) => s ?? '').join('\n').trim();
   }
 
