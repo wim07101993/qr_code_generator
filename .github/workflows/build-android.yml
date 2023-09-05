@@ -4,6 +4,9 @@ on:
   workflow_call:
   workflow_dispatch:
 
+env:
+  JAVA_VERSION: 20
+  
 jobs:
   getVersion:
     name: get version
@@ -29,6 +32,7 @@ jobs:
   buildAndroidAppBundle:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
+    if: false
     needs: getVersion
     steps:
       - name: Checkout code
@@ -40,7 +44,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v1.4.4
         with:
-          java-version: 18
+          java-version: ${{ env.JAVA_VERSION}
 
       - run: flutter doctor -v
       - run: flutter pub get
@@ -86,7 +90,7 @@ jobs:
       - name: Setup Java JDK
         uses: actions/setup-java@v1.4.4
         with:
-          java-version: 18
+          java-version: ${{ JAVA_VERSION }}
       
       - run: flutter doctor -v
       - run: flutter pub get
@@ -106,7 +110,8 @@ jobs:
         working-directory: android
         
       - name: Build apk
-        run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+        # run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
+        run: flutter build apk
       
       - name: Stage artifact file
         run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ vars.ANDROID_APK_ARTIFACT_PATH }}
