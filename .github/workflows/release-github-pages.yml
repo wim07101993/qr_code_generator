@@ -1,0 +1,32 @@
+name: Publish to github pages
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+  
+jobs:
+  publish-to-github-pages:
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write 
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Download artifact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: build.yml
+          workflow_conclusion: success
+          branch: main
+          name: ${{ vars.GH_PAGES_ARTIFACT }}
+          path: _site
+      
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v1.0.7
+        
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v1

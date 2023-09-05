@@ -1,0 +1,54 @@
+name: Build windows
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  getVersion:
+    name: get version
+    runs-on: ubuntu-latest
+    outputs:
+      fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
+      majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        
+  buildWindows:
+    name: build Windows 🪟
+    runs-on: windows-latest
+    needs: getVersion
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+          
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build app
+        run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
+            
+      - name: Stage artifact file
+        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.ARTIFACT_PATH }}
+         
+      - name: Upload version file as artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ vars.WINDOWS_ARTIFACT }}
+          path: ${{ vars.WINDOWS_INSTALLER_ARTIFACT_PATH }}
+          if-no-files-found: error
