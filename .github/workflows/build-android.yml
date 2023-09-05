@@ -32,7 +32,6 @@ jobs:
   buildAndroidAppBundle:
     name: build Android app-bundle 🤖
     runs-on: ubuntu-latest
-    if: false
     needs: getVersion
     steps:
       - name: Checkout code
@@ -110,8 +109,7 @@ jobs:
         working-directory: android
         
       - name: Build apk
-        # run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
-        run: flutter build apk
+        run: flutter build apk --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
       
       - name: Stage artifact file
         run: mv build/app/outputs/flutter-apk/app-release.apk  ${{ vars.ANDROID_APK_ARTIFACT_PATH }}
