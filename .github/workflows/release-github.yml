@@ -1,5 +1,4 @@
-name: Create github release
-
+name: Release on github
 on:
   workflow_call:
   workflow_dispatch:
