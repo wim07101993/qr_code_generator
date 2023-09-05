@@ -44,7 +44,7 @@ jobs:
         run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
             
       - name: Stage artifact file
-        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ env.ARTIFACT_PATH }}
+        run: mv build/windows/runner/Release/qr_code_generator.msix ${{ vars.WINDOWS_INSTALLER_ARTIFACT_PATH }}
          
       - name: Upload version file as artifact
         uses: actions/upload-artifact@v3.1.2

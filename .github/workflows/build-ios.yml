@@ -72,7 +72,7 @@ jobs:
         run: flutter build ipa --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }} --export-options-plist=ios/Runner/ExportOptions.plist
 
       - name: Stage artifact file
-        run: mv build/ios/ipa/*.ipa  ${{ env.ARTIFACT_PATH }}
+        run: mv build/ios/ipa/*.ipa  ${{ vars.IOS_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
