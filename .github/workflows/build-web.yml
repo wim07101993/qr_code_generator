@@ -16,8 +16,10 @@ jobs:
     - name: Dump vars context for check
       env:
         VARS_CONTEXT: ${{ toJson(vars) }}
+        TEST_VAR: ${{ vars.WEB_ARTIFACT }}
       run: |
-        echo "$VARS_CONTEXT"
+        echo "$TEST_VAR"
+        echo "${{ vars.WEB_ARTIFACT }}"
   getVersion:
     name: get version
     runs-on: ubuntu-latest
