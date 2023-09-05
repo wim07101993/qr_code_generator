@@ -16,6 +16,6 @@ jobs:
   windows:
     uses: ./.github/workflows/build-windows.yml
   web:
-    uses: ./.github/workflows/build/web.yml
+    uses: ./.github/workflows/build-web.yml
   github-pages:
     uses: ./.github/workflows/build-github-pages.yml
