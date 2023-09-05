@@ -7,7 +7,7 @@ on:
 
 jobs:
   android:
-    uses: ./.github/workflows/build/build-android.yml
+    uses: ./.github/workflows/build-android.yml
   ios:
     if: false
     uses: ./.github/workflows/build-ios.yml
@@ -16,6 +16,6 @@ jobs:
   windows:
     uses: ./.github/workflows/build-windows.yml
   web:
-    uses: ./.github/workflows/build-web.yml
+    uses: ./.github/workflows/build/web.yml
   github-pages:
     uses: ./.github/workflows/build-github-pages.yml
