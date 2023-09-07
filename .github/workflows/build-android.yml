@@ -3,6 +3,8 @@ name: Build android
 on:
   workflow_call:
   workflow_dispatch:
+  push:
+    branches: [ "main" ]
 
 env:
   JAVA_VERSION: 20
