@@ -19,7 +19,7 @@ jobs:
       - name: Download artifact
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build.yml
+          workflow: build-github-pages.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.GH_PAGES_ARTIFACT }}
