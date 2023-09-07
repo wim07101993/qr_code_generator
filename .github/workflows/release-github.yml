@@ -10,15 +10,16 @@ jobs:
       - name: Download Android 🤖
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build.yml
+          workflow: build-android.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.ANDROID_ARTIFACT }}
           
       - name: Download iOS 🍏
         uses: dawidd6/action-download-artifact@v2
+        if: false
         with:
-          workflow: build.yml
+          workflow: build-ios.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.IOS_ARTIFACT }}
@@ -26,7 +27,7 @@ jobs:
       - name: Download linux 🐧
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build.yml
+          workflow: build-linux.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.LINUX_ARTIFACT }}
@@ -34,7 +35,7 @@ jobs:
       - name: Download windows 🪟
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build.yml
+          workflow: build-windows.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.WINDOWS_ARTIFACT }}
@@ -42,7 +43,7 @@ jobs:
       - name: Download web 🌐
         uses: dawidd6/action-download-artifact@v2
         with:
-          workflow: build.yml
+          workflow: build-web.yml
           workflow_conclusion: success
           branch: main
           name: ${{ vars.WEB_ARTIFACT }}
@@ -58,4 +59,4 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "qr_code_generator.apk,qr_code_generator.aab,qr_code_generator.ipa,qr_code_generator.tar.gz,qr_code_generator.msix,qr_code_generator-web.zip"
+          artifacts: "{{ $vars.ANDROID_APK_ARTIFACT_PATH }},{{ $vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }},{{ $vars.LINUX_TARBALL_ARTIFACT_PATH }},{{ $vars.WINDOWS_INSTALLER_ARTIFACT_PATH }},qr_code_generator-web.zip"

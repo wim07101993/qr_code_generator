@@ -3,7 +3,9 @@ name: Build windows
 on:
   workflow_call:
   workflow_dispatch:
-
+  push:
+    branches: [ "main" ]
+    
 jobs:
   getVersion:
     name: get version
