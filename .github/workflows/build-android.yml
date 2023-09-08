@@ -143,4 +143,4 @@ jobs:
           packageName: com.wimvanlaer.qr_code_generator
           releaseFiles: qr_code_generator.aab
           status: completed
-          track: internal
+          track: alpha
