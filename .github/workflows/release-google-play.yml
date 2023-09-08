@@ -5,26 +5,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  uploadToGooglePlay:
-    name: upload to GooglePlay
+  promoteRelease:
+    name: promote on GooglePlay
     runs-on: ubuntu-latest
     steps:
-      - name: Download Android 🤖
-        uses: dawidd6/action-download-artifact@v2.27.0
+      - name: Promote Google Play Release Track
+        uses: kevin-david/promote-play-release@v1.0.0
         with:
-          workflow: build/android.yml
-          workflow_conclusion: success
-          branch: main
-          name: ${{ vars.ANDROID_ARTIFACT }}
-
-      - name: Create service_account.json
-        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
-        
-      - name: Upload to Google Play
-        uses: r0adkll/upload-google-play@v1.1.1
-        with:
-          serviceAccountJson: service_account.json
-          packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: ${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }}
-          status: completed
-          track: internal
+          service-account-json-raw: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
+          package-name: com.wimvanlaer.qr_code_generator
