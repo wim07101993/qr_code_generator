@@ -122,3 +122,25 @@ jobs:
           name: ${{ vars.ANDROID_ARTIFACT }}
           path:  ${{ vars.ANDROID_APK_ARTIFACT_PATH }}
           if-no-files-found: error
+
+  uploadToGooglePlay:
+    name: upload to GooglePlay
+    runs-on: ubuntu-latest
+    needs: buildAndroidAppBundle
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: ${{ env.ANDROID_ARTIFACT }}
+
+      - name: Create service_account.json
+        run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
+
+      - name: Upload to Google Play
+        uses: r0adkll/upload-google-play@v1.1.1
+        with:
+          serviceAccountJson: service_account.json
+          packageName: com.wimvanlaer.qr_code_generator
+          releaseFiles: qr_code_generator.aab
+          status: completed
+          track: internal
