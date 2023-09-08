@@ -131,7 +131,7 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          name: ${{ env.ANDROID_ARTIFACT }}
+          name: ${{ vars.ANDROID_ARTIFACT }}
 
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
