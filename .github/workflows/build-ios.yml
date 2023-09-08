@@ -86,4 +86,22 @@ jobs:
         run: |
           security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
           rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+
        
+  uploadToTestFlight:
+    name: upload to TestFlight
+    runs-on: macos-latest
+    needs: buildIos
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: ${{ vars.IOS_ARTIFACT }}
+
+      - name: Upload to TestFlight
+        uses: Apple-Actions/upload-testflight-build@v1
+        with:
+          app-path: qr_code_generator.ipa
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
