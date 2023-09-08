@@ -2,6 +2,9 @@ name: Release on github
 on:
   workflow_call:
   workflow_dispatch:
+
+env:
+  WEB_ARTIFACT_ZIP: qr_code_generator-web.zip
   
 jobs:
   github-release:
@@ -54,9 +57,9 @@ jobs:
         with:
           type: 'zip'
           path: web
-          filename: qr_code_generator-web.zip
+          filename: ${{ env.WEB_ARTIFACT_ZIP }}
           
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "{{ $vars.ANDROID_APK_ARTIFACT_PATH }},{{ $vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }},{{ $vars.LINUX_TARBALL_ARTIFACT_PATH }},{{ $vars.WINDOWS_INSTALLER_ARTIFACT_PATH }},qr_code_generator-web.zip"
+          artifacts: "${{ vars.ANDROID_APK_ARTIFACT_PATH }},${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }},${{ vars.LINUX_TARBALL_ARTIFACT_PATH }},${{ vars.WINDOWS_INSTALLER_ARTIFACT_PATH }},${{ env.WEB_ARTIFACT_ZIP }}"
