@@ -62,4 +62,4 @@ jobs:
       - name: create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{ vars.ANDROID_APK_ARTIFACT_PATH }},${{ $vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }},${{ $vars.LINUX_TARBALL_ARTIFACT_PATH }},${{ $vars.WINDOWS_INSTALLER_ARTIFACT_PATH }},${{ env.WEB_ARTIFACT_ZIP }}"
+          artifacts: "${{ vars.ANDROID_APK_ARTIFACT_PATH }},${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }},${{ vars.LINUX_TARBALL_ARTIFACT_PATH }},${{ vars.WINDOWS_INSTALLER_ARTIFACT_PATH }},${{ env.WEB_ARTIFACT_ZIP }}"
