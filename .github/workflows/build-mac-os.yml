@@ -1,4 +1,4 @@
-name: Build ios
+name: Build mac-os
 
 on:
   workflow_call:
@@ -28,8 +28,8 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7
         
-  buildIos:
-    name: build iOS 🍏
+  buildMac:
+    name: build mac 🍏
     runs-on: macos-latest
     needs: getVersion
     steps:
@@ -48,7 +48,7 @@ jobs:
           
           echo import certificate and provisioning profile from secrets
           echo -n "${{ secrets.APPSTORE_CERT }}" | base64 --decode -o $CERTIFICATE_PATH
-          echo -n "${{ secrets.IOS_PROVISIONING_PROFILE }}" | base64 --decode -o $PP_PATH
+          echo -n "${{ secrets.MAC_PROVISIONING_PROFILE }}" | base64 --decode -o $PP_PATH
 
           echo create temporary keychain
           security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
@@ -67,16 +67,16 @@ jobs:
       - run: flutter pub get
       
       - name: Build ipa
-        run: flutter build ipa --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }} --export-options-plist=ios/Runner/ExportOptions.plist
+        run: flutter build macos --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }}
 
       - name: Stage artifact file
-        run: mv build/ios/ipa/*.ipa  ${{ vars.IOS_ARTIFACT_PATH }}
+        run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
         with:
-          name: ${{ vars.IOS_ARTIFACT }}
-          path:  ${{ vars.IOS_ARTIFACT_PATH }}
+          name: ${{ vars.MAC_ARTIFACT }}
+          path:  ${{ vars.MAC_ARTIFACT_PATH }}
           if-no-files-found: error
           
       - name: Clean up keychain and provisioning profile
@@ -89,17 +89,17 @@ jobs:
   uploadToTestFlight:
     name: upload to TestFlight
     runs-on: macos-latest
-    needs: buildIos
+    needs: buildMac
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v3.0.2
         with:
-          name: ${{ vars.IOS_ARTIFACT }}
+          name: ${{ vars.MAC_ARTIFACT }}
 
       - name: Upload to TestFlight
         uses: Apple-Actions/upload-testflight-build@v1
         with:
-          app-path: ${{ vars.IOS_ARTIFACT_PATH }}
+          app-path: ${{ vars.MAC_ARTIFACT_PATH }}
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
