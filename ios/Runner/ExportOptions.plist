@@ -11,7 +11,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>com.wimvanlaer.qr-code-generator</key>
-		<string>QR-code-generator-DIST-profile</string>
+		<string>QR_CODE_GENERATOR_APPSTORE_DIST</string>
 	</dict>
 	<key>signingCertificate</key>
 	<string>Apple Distribution</string>
