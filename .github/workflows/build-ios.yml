@@ -92,6 +92,7 @@ jobs:
     name: upload to TestFlight
     runs-on: macos-latest
     needs: buildIos
+    if: false
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v3.0.2
