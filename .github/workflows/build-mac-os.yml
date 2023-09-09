@@ -1,0 +1,105 @@
+name: Build mac-os
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  getVersion:
+    name: get version
+    runs-on: ubuntu-latest
+    outputs:
+      fullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}
+      majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+  
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.7
+        with:
+          versionSpec: '5.x'
+
+      - name: Determine Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.7
+        
+  buildMac:
+    name: build mac 🍏
+    runs-on: macos-latest
+    needs: getVersion
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Install flutter
+        uses: subosito/flutter-action@v2.10.0
+      
+      - name: Import certificate and provisioning profile
+        run: |
+          echo create variables
+          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
+          KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
+          
+          echo import certificate and provisioning profile from secrets
+          echo -n "${{ secrets.APPSTORE_CERT }}" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "${{ secrets.MAC_PROVISIONING_PROFILE }}" | base64 --decode -o $PP_PATH
+
+          echo create temporary keychain
+          security create-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+          security set-keychain-settings -lut 21600 $KEYCHAIN_PATH
+          security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
+
+          echo import certificate to keychain
+          security import $CERTIFICATE_PATH -P "${{ secrets.APPSTORE_CERT_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security list-keychain -d user -s $KEYCHAIN_PATH
+
+          echo apply provisioning profile
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp $PP_PATH ~/Library/MobileDevice/Provisioning\ Profiles
+          
+      - run: flutter doctor -v
+      - run: flutter pub get
+      
+      - name: Build ipa
+        run: flutter build macos --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }}
+
+      - name: Stage artifact file
+        run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }}
+      
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v3.1.2
+        with:
+          name: ${{ vars.MAC_ARTIFACT }}
+          path:  ${{ vars.MAC_ARTIFACT_PATH }}
+          if-no-files-found: error
+          
+      - name: Clean up keychain and provisioning profile
+        if: ${{ always() }}
+        run: |
+          security delete-keychain $RUNNER_TEMP/app-signing.keychain-db
+          rm ~/Library/MobileDevice/Provisioning\ Profiles/build_pp.mobileprovision
+
+       
+  uploadToTestFlight:
+    name: upload to TestFlight
+    runs-on: macos-latest
+    needs: buildMac
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3.0.2
+        with:
+          name: ${{ vars.MAC_ARTIFACT }}
+
+      - name: Upload to TestFlight
+        uses: Apple-Actions/upload-testflight-build@v1
+        with:
+          app-path: ${{ vars.MAC_ARTIFACT_PATH }}
+          issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
+          api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
