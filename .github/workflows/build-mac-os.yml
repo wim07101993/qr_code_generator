@@ -67,10 +67,10 @@ jobs:
       - run: flutter pub get
       
       - name: Build ipa
-        run: flutter build macos --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }}
+        run: flutter build macos --release --build-name ${{ needs.getVersion.outputs.majorMinorPatch }} --build-number ${{ github.run_number }} --export-options-plist=macos/Runner/ExportOptions.plist
 
       - name: Stage artifact file
-        run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }} --export-options-plist=macos/Runner/ExportOptions.plist
+        run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v3.1.2
