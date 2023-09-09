@@ -42,12 +42,14 @@ jobs:
       - name: Import certificate and provisioning profile
         run: |
           echo create variables
-          CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          BUILD_CERTIFICATE_PATH=$RUNNER_TEMP/build_certificate.p12
+          INSTALLER_CERTIFICATE_PATH=$RUNNER_TEMP/installer_certificate.p12
           PP_PATH=$RUNNER_TEMP/build_pp.mobileprovision
           KEYCHAIN_PATH=$RUNNER_TEMP/app-signing.keychain-db
           
           echo import certificate and provisioning profile from secrets
-          echo -n "${{ secrets.APPSTORE_CERT }}" | base64 --decode -o $CERTIFICATE_PATH
+          echo -n "${{ secrets.APPSTORE_CERT }}" | base64 --decode -o $BUILD_CERTIFICATE_PATH
+          echo -n "${{ secrets.MAC_INSTALLER_CERT }}" | base64 --decode -o $INSTALLER_CERTIFICATE_PATH
           echo -n "${{ secrets.MAC_PROVISIONING_PROFILE }}" | base64 --decode -o $PP_PATH
 
           echo create temporary keychain
@@ -56,7 +58,8 @@ jobs:
           security unlock-keychain -p "${{ secrets.KEYCHAIN_PASSWORD }}" $KEYCHAIN_PATH
 
           echo import certificate to keychain
-          security import $CERTIFICATE_PATH -P "${{ secrets.APPSTORE_CERT_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $BUILD_CERTIFICATE_PATH -P "${{ secrets.APPSTORE_CERT_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
+          security import $INSTALLER_CERTIFICATE_PATH -P "${{ secrets.MAC_INSTALLER_CERT_PASSWORD }}" -A -t cert -f pkcs12 -k $KEYCHAIN_PATH
           security list-keychain -d user -s $KEYCHAIN_PATH
 
           echo apply provisioning profile
