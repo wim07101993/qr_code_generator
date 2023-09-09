@@ -90,7 +90,6 @@ jobs:
     name: upload to TestFlight
     runs-on: macos-latest
     needs: buildIos
-    if: false
     steps:
       - name: Download Build Artifact
         uses: actions/download-artifact@v3.0.2
@@ -100,7 +99,7 @@ jobs:
       - name: Upload to TestFlight
         uses: Apple-Actions/upload-testflight-build@v1
         with:
-          app-path: qr_code_generator.ipa
+          app-path: ${{ vars.IOS_ARTIFACT_PATH }}
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
