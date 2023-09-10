@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 
 class SettingsSheet extends StatefulWidget {
@@ -23,8 +23,8 @@ class _SettingsSheetState extends State<SettingsSheet> {
         child: Form(
           key: _formKey,
           child: ValueListenableBuilder<EpcData?>(
-            valueListenable: getIt<EpcDataNotifier>(),
-            builder: (context, notifier, _) => _formFields(context, getIt()),
+            valueListenable: GetIt.I<EpcDataNotifier>(),
+            builder: (context, notifier, _) => _formFields(context, GetIt.I()),
           ),
         ),
       ),

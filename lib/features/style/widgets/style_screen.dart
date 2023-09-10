@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/features/style/widgets/background_style_editor.dart';
 import 'package:qr_code_generator/features/style/widgets/image_editor.dart';
 import 'package:qr_code_generator/features/style/widgets/qr_data_module_style_editor.dart';
 import 'package:qr_code_generator/features/style/widgets/qr_eye_style_editor.dart';
-import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/widgets/styled_qr_code.dart';
 
@@ -19,7 +19,7 @@ class StyleScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return LayoutBuilder(
       builder: (context, constraints) => ValueListenableBuilder<StyleSettings>(
-        valueListenable: getIt<StyleSettingsNotifier>(),
+        valueListenable: GetIt.I<StyleSettingsNotifier>(),
         builder: (context, notifier, _) => Column(
           children: [
             Text(
@@ -44,7 +44,7 @@ class StyleScreen extends StatelessWidget {
     ThemeData theme,
     StyleSettings settings,
   ) {
-    final notifier = getIt<StyleSettingsNotifier>();
+    final notifier = GetIt.I<StyleSettingsNotifier>();
     return ListView(
       padding: const EdgeInsets.all(16),
       children: [

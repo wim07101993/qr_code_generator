@@ -1,20 +1,15 @@
 import 'package:ansicolor/ansicolor.dart';
+import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:behaviour/behaviour.dart';
 import 'package:flutter_fox_logging/flutter_fox_logging.dart';
 import 'package:qr_code_generator/shared/get_it/get_it_extensions.dart';
-import 'package:qr_code_generator/shared/get_it/installer.dart';
 import 'package:qr_code_generator/shared/logging/logging_track.dart';
 
-class LoggingInstaller extends Installer {
-  LoggingInstaller() {
-    isLoggingEnabled = false;
-  }
+class LoggingFeature extends Feature {
+  const LoggingFeature();
 
   @override
-  int get priority => 1;
-
-  @override
-  void registerDependenciesInternal(GetIt getIt) {
+  void registerTypes() {
     getIt.registerLazySingleton<LogSink>(() {
       final prettyFormatter = PrettyFormatter();
       return PrintSink(
@@ -27,7 +22,7 @@ class LoggingInstaller extends Installer {
     });
 
     getIt.registerFactoryParam<Logger, String, dynamic>(
-      (loggerName, _) => _loggerFactory(getIt, loggerName),
+      (loggerName, _) => _loggerFactory(loggerName),
     );
 
     getIt.registerFactory<BehaviourMonitor>(
@@ -42,17 +37,15 @@ class LoggingInstaller extends Installer {
   }
 
   @override
-  Future<void> installInternal(GetIt getIt) {
+  Future<void> install() {
     hierarchicalLoggingEnabled = true;
     recordStackTraceAtLevel = Level.SEVERE;
     Logger.root.level = Level.ALL;
     ansiColorDisabled = false;
-
-    isLoggingEnabled = true;
     return Future.value();
   }
 
-  Logger _loggerFactory(GetIt getIt, String loggerName) {
+  Logger _loggerFactory(String loggerName) {
     final instanceName = '$loggerName-logger';
     if (getIt.isRegistered<Logger>(instanceName: instanceName)) {
       return getIt.get<Logger>(instanceName: instanceName);

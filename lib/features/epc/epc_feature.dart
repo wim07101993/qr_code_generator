@@ -1,14 +1,13 @@
+import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:qr_code_generator/features/epc/behaviours/load_epc_data.dart';
 import 'package:qr_code_generator/features/epc/behaviours/save_epc_data.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
-import 'package:qr_code_generator/shared/get_it/installer.dart';
 
-class EpcInstaller extends Installer {
-  late final GetIt getIt;
+class EpcFeature extends Feature {
+  const EpcFeature();
 
   @override
-  void registerDependenciesInternal(GetIt getIt) {
-    this.getIt = getIt;
+  void registerTypes() {
     getIt.registerLazySingleton(
       () => EpcDataNotifier(),
       dispose: (notifier) => notifier.dispose(),
@@ -31,7 +30,7 @@ class EpcInstaller extends Installer {
   }
 
   @override
-  Future<void> installInternal(GetIt getIt) async {
+  Future<void> install() async {
     await getIt.getAsync<LoadEpcData>().then((loadEpcData) => loadEpcData());
     getIt<EpcDataNotifier>().addListener(onEpcDataChanged);
   }

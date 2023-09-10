@@ -1,18 +1,22 @@
 import 'dart:async';
 
+import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:behaviour/behaviour.dart';
-import 'package:qr_code_generator/shared/get_it/installer.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/behaviours/get_last_used_qr_code.dart';
 import 'package:qr_code_generator/shared/router/behaviours/set_last_used_qr_code.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/router/notifier/is_updating_style_notifier.dart';
+import 'package:qr_code_generator/shared/shared_preferences/shared_preferences_feature.dart';
 
-class RouterInstaller extends Installer {
+class RoutingFeature extends Feature {
   StreamSubscription? qrCodeTypeChangeSubscription;
 
   @override
-  void registerDependenciesInternal(GetIt getIt) {
+  List<Type> get dependencies => [SharedPreferencesFeature];
+
+  @override
+  void registerTypes() {
     getIt.registerFactory(
       () => GetLastUsedQrCodeType(
         monitor: getIt(),
@@ -32,7 +36,7 @@ class RouterInstaller extends Installer {
   }
 
   @override
-  Future<void> installInternal(GetIt getIt) async {
+  Future<void> install() async {
     await getIt<GetLastUsedQrCodeType>()().thenWhen(
       (exception) {},
       (value) => getIt<CurrentQrCodeTypeNotifier>().value = value,

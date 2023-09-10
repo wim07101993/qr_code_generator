@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:qr_code_generator/main.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/qr_data_controller.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
@@ -23,7 +23,7 @@ class _TextQrCodeScreenState extends State<TextQrCodeScreen> {
 
   @override
   void initState() {
-    getIt<CurrentQrCodeTypeNotifier>().value = QrCodeType.text;
+    GetIt.I<CurrentQrCodeTypeNotifier>().value = QrCodeType.text;
     super.initState();
   }
 

@@ -1,3 +1,4 @@
+import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:qr_code_generator/features/style/behaviours/get_embedded_image.dart';
 import 'package:qr_code_generator/features/style/behaviours/load_style_settings.dart';
@@ -6,14 +7,12 @@ import 'package:qr_code_generator/features/style/behaviours/remove_embedded_imag
 import 'package:qr_code_generator/features/style/behaviours/save_embedded_image_file.dart';
 import 'package:qr_code_generator/features/style/behaviours/save_style_settings.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
-import 'package:qr_code_generator/shared/get_it/installer.dart';
 
-class QrCodeStyleInstaller extends Installer {
-  late final GetIt getIt;
+class QrCodeStyleFeature extends Feature {
+  const QrCodeStyleFeature();
 
   @override
-  void registerDependenciesInternal(GetIt getIt) {
-    this.getIt = getIt;
+  void registerTypes() {
     getIt.registerLazySingleton(
       () => StyleSettingsNotifier(),
       dispose: (notifier) => notifier.dispose(),
@@ -62,7 +61,7 @@ class QrCodeStyleInstaller extends Installer {
   }
 
   @override
-  Future<void> installInternal(GetIt getIt) async {
+  Future<void> install() async {
     await getIt
         .getAsync<LoadStyleSettings>()
         .then((loadStyleSettings) => loadStyleSettings());

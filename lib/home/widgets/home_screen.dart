@@ -3,12 +3,12 @@ import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/features/epc/widgets/settings_sheet.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/home/notifiers/navigation_notifier.dart';
 import 'package:qr_code_generator/home/widgets/home_app_bar.dart';
 import 'package:qr_code_generator/home/widgets/home_drawer.dart';
-import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/router/notifier/is_updating_style_notifier.dart';
@@ -60,11 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<StyleSettings>(
-      valueListenable: getIt<StyleSettingsNotifier>(),
+      valueListenable: GetIt.I<StyleSettingsNotifier>(),
       builder: (context, styleSettings, _) => ValueListenableBuilder(
-        valueListenable: getIt<IsUpdatingStyleNotifier>(),
+        valueListenable: GetIt.I<IsUpdatingStyleNotifier>(),
         builder: (context, isUpdatingStyle, _) => ValueListenableBuilder(
-          valueListenable: getIt<CurrentQrCodeTypeNotifier>(),
+          valueListenable: GetIt.I<CurrentQrCodeTypeNotifier>(),
           builder: (context, currentQrCodeType, _) => Scaffold(
             backgroundColor: styleSettings.backgroundColor.withAlpha(255),
             drawer: const HomeDrawer(),
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             body: AutoRouter.declarative(
-              onNavigate: getIt<NavigationNotifier>().onNavigate,
+              onNavigate: GetIt.I<NavigationNotifier>().onNavigate,
               routes: (_) => [
                 currentQrCodeType.route,
                 if (isUpdatingStyle) const StyleRoute(),

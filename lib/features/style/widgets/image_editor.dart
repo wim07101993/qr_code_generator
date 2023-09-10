@@ -1,10 +1,10 @@
 import 'package:behaviour/behaviour.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/features/style/behaviours/get_embedded_image.dart';
 import 'package:qr_code_generator/features/style/behaviours/pick_file.dart';
 import 'package:qr_code_generator/features/style/behaviours/remove_embedded_image.dart';
 import 'package:qr_code_generator/features/style/behaviours/save_embedded_image_file.dart';
-import 'package:qr_code_generator/main.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 
 class ImageEditor extends StatefulWidget {
@@ -23,22 +23,22 @@ class ImageEditor extends StatefulWidget {
 
 class _ImageEditorState extends State<ImageEditor> {
   Future<void> _selectFile() async {
-    final bytes = await getIt<PickFile>()().thenWhen(
+    final bytes = await GetIt.I<PickFile>()().thenWhen(
       (_) => null,
       (value) => value,
     );
     if (bytes == null) {
       return;
     }
-    await getIt<SaveEmbeddedImageFile>()(bytes);
-    final newImage = await getIt<GetEmbeddedImage>()()
+    await GetIt.I<SaveEmbeddedImageFile>()(bytes);
+    final newImage = await GetIt.I<GetEmbeddedImage>()()
         .thenWhen((_) => null, (image) => image);
 
     widget.onImageChanged(newImage);
   }
 
   Future<void> removeImageFile() async {
-    getIt<RemoveEmbeddedImage>()();
+    GetIt.I<RemoveEmbeddedImage>()();
     widget.onImageChanged(null);
   }
 

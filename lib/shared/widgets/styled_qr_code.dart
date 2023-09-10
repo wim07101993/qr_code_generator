@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
-import 'package:qr_code_generator/main.dart';
 
 class StyledQrCode extends StatelessWidget {
   const StyledQrCode({
@@ -13,7 +13,7 @@ class StyledQrCode extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<StyleSettings>(
-      valueListenable: getIt<StyleSettingsNotifier>(),
+      valueListenable: GetIt.I<StyleSettingsNotifier>(),
       builder: (context, style, _) => QrImageView(
         data: data,
         dataModuleStyle: style.dataModuleStyle,

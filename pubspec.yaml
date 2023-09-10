@@ -9,6 +9,9 @@ environment:
 dependencies:
   ansicolor: ">=2.0.0 <3.0.0"
   auto_route: ">=7.0.0 <8.0.0"
+  beaver_dependency_management:
+#    git: https://github.com/wim07101993/beaver_dependency_management
+    path: ../beaver_dependency_management
   behaviour: ">=2.0.0 <3.0.0"
   collection: ">=1.0.0 <2.0.0"
   download: ">=1.0.0 <2.0.0"
