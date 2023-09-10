@@ -3,8 +3,6 @@ name: Build mac-os
 on:
   workflow_call:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
 
 jobs:
   getVersion:
