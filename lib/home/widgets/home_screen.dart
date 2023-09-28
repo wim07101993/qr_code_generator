@@ -42,12 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
     if (isUpdatingStyle) {
       return null;
     }
-    switch (currentQrCodeType) {
-      case QrCodeType.text:
-        return null;
-      case QrCodeType.epc:
-        return showEpcSettings;
-    }
+    return switch (currentQrCodeType) {
+      TextQrCodeType() => null,
+      EpcQrCodeType() => showEpcSettings,
+    };
   }
 
   void showEpcSettings() {

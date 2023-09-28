@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_app_base/flutter_app_base.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/router/notifier/is_updating_style_notifier.dart';
 
-class HomeDrawer extends StatelessWidget {
+class HomeDrawer extends StatefulWidget {
   const HomeDrawer({super.key});
 
+  @override
+  State<HomeDrawer> createState() => _HomeDrawerState();
+}
+
+class _HomeDrawerState extends State<HomeDrawer> {
   @override
   Widget build(BuildContext context) {
     final s = AppLocalizations.of(context)!;
@@ -16,20 +21,12 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.text_fields),
             title: Text(s.textQrDrawerOption),
-            onTap: () {
-              GetIt.I<CurrentQrCodeTypeNotifier>().value = QrCodeType.text;
-              GetIt.I<IsUpdatingStyleNotifier>().value = false;
-              Navigator.pop(context);
-            },
+            onTap: () => loadQrCodeFeature(context, const TextQrCodeType()),
           ),
           ListTile(
             leading: const Icon(Icons.payment),
             title: Text(s.epcPaymentDrawerOption),
-            onTap: () {
-              GetIt.I<CurrentQrCodeTypeNotifier>().value = QrCodeType.epc;
-              GetIt.I<IsUpdatingStyleNotifier>().value = false;
-              Navigator.pop(context);
-            },
+            onTap: () => loadQrCodeFeature(context, const EpcQrCodeType()),
           ),
           ListTile(
             leading: const Icon(Icons.color_lens),
@@ -47,4 +44,19 @@ class HomeDrawer extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> loadQrCodeFeature(
+    BuildContext context,
+    QrCodeType qrCodeType,
+  ) async {
+    await qrCodeType.feature?.ensureInstalled();
+    GetIt.I<CurrentQrCodeTypeNotifier>().value = qrCodeType;
+    GetIt.I<IsUpdatingStyleNotifier>().value = false;
+    if (!mounted) {
+      return;
+    }
+    Navigator.pop(context);
+  }
+
+  void loadStyle(BuildContext context) {}
 }

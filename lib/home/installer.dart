@@ -1,4 +1,4 @@
-import 'package:beaver_dependency_management/beaver_dependency_management.dart';
+import 'package:flutter_app_base/flutter_app_base.dart';
 import 'package:qr_code_generator/home/behaviours/download_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/get_qr_image.dart';
 import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
@@ -10,16 +10,16 @@ class HomeFeature extends Feature {
   const HomeFeature();
 
   @override
-  List<Type> get dependencies => [SharedPreferencesFeature];
+  Iterable<Feature> get dependencies => [GetIt.I<SharedPreferencesFeature>()];
 
   @override
   void registerTypes() {
-    getIt.registerFactory(
-      () => GetQrImage(monitor: getIt(), sharedPreferences: getIt()),
+    GetIt.I.registerFactory(
+      () => GetQrImage(monitor: GetIt.I(), sharedPreferences: GetIt.I()),
     );
-    getIt.registerFactory(() => DownloadQrCode(monitor: getIt()));
-    getIt.registerFactory(() => SaveQrCode(monitor: getIt()));
-    getIt.registerFactory(() => ShareQrCode(monitor: getIt()));
-    getIt.registerLazySingleton(() => NavigationNotifier());
+    GetIt.I.registerFactory(() => DownloadQrCode(monitor: GetIt.I()));
+    GetIt.I.registerFactory(() => SaveQrCode(monitor: GetIt.I()));
+    GetIt.I.registerFactory(() => ShareQrCode(monitor: GetIt.I()));
+    GetIt.I.registerLazySingleton(() => NavigationNotifier());
   }
 }

@@ -1,45 +1,49 @@
-import 'package:beaver_dependency_management/beaver_dependency_management.dart';
+import 'package:flutter_app_base/flutter_app_base.dart';
 import 'package:qr_code_generator/features/epc/behaviours/load_epc_data.dart';
 import 'package:qr_code_generator/features/epc/behaviours/save_epc_data.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
+import 'package:qr_code_generator/features/style/qr_code_style_feature.dart';
 
 class EpcFeature extends Feature {
   const EpcFeature();
 
   @override
+  Iterable<Feature> get dependencies => [GetIt.I<QrCodeStyleFeature>()];
+
+  @override
   void registerTypes() {
-    getIt.registerLazySingleton(
+    GetIt.I.registerLazySingleton(
       () => EpcDataNotifier(),
       dispose: (notifier) => notifier.dispose(),
     );
 
-    getIt.registerFactoryAsync(
+    GetIt.I.registerFactoryAsync(
       () async => LoadEpcData(
-        monitor: getIt(),
-        sharedPreferences: await getIt.getAsync(),
-        epcDataNotifier: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: await GetIt.I.getAsync(),
+        epcDataNotifier: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => SaveEpcData(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
-        epcDataNotifier: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
+        epcDataNotifier: GetIt.I(),
       ),
     );
   }
 
   @override
   Future<void> install() async {
-    await getIt.getAsync<LoadEpcData>().then((loadEpcData) => loadEpcData());
-    getIt<EpcDataNotifier>().addListener(onEpcDataChanged);
+    await GetIt.I.getAsync<LoadEpcData>().then((loadEpcData) => loadEpcData());
+    GetIt.I<EpcDataNotifier>().addListener(onEpcDataChanged);
   }
 
   @override
   void dispose() {
-    getIt<EpcDataNotifier>().removeListener(onEpcDataChanged);
+    GetIt.I<EpcDataNotifier>().removeListener(onEpcDataChanged);
     super.dispose();
   }
 
-  void onEpcDataChanged() => getIt<SaveEpcData>()();
+  void onEpcDataChanged() => GetIt.I<SaveEpcData>()();
 }

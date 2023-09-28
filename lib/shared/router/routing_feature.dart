@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:behaviour/behaviour.dart';
+import 'package:flutter_app_base/flutter_app_base.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/behaviours/get_last_used_qr_code.dart';
 import 'package:qr_code_generator/shared/router/behaviours/set_last_used_qr_code.dart';
@@ -13,42 +13,49 @@ class RoutingFeature extends Feature {
   StreamSubscription? qrCodeTypeChangeSubscription;
 
   @override
-  List<Type> get dependencies => [SharedPreferencesFeature];
+  Iterable<Feature> get dependencies => [GetIt.I<SharedPreferencesFeature>()];
 
   @override
   void registerTypes() {
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => GetLastUsedQrCodeType(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => SetLastUsedQrCodeType(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
       ),
     );
 
-    getIt.registerLazySingleton(() => AppRouter());
-    getIt.registerLazySingleton(() => CurrentQrCodeTypeNotifier());
-    getIt.registerLazySingleton(() => IsUpdatingStyleNotifier());
+    GetIt.I.registerLazySingleton(() => AppRouter());
+    GetIt.I.registerLazySingleton(() => CurrentQrCodeTypeNotifier());
+    GetIt.I.registerLazySingleton(() => IsUpdatingStyleNotifier());
   }
 
   @override
   Future<void> install() async {
-    await getIt<GetLastUsedQrCodeType>()().thenWhen(
-      (exception) {},
-      (value) => getIt<CurrentQrCodeTypeNotifier>().value = value,
-    );
-    qrCodeTypeChangeSubscription = getIt<CurrentQrCodeTypeNotifier>()
+    await loadLastUsedQrCode();
+    qrCodeTypeChangeSubscription = GetIt.I<CurrentQrCodeTypeNotifier>()
         .changes
-        .listen((value) => getIt<SetLastUsedQrCodeType>()(value));
+        .listen((value) => GetIt.I<SetLastUsedQrCodeType>()(value));
   }
 
   @override
   void dispose() {
     qrCodeTypeChangeSubscription?.cancel();
     super.dispose();
+  }
+
+  Future<void> loadLastUsedQrCode() async {
+    return GetIt.I<GetLastUsedQrCodeType>()().thenWhen(
+      (exception) {},
+      (value) async {
+        await value.feature?.ensureInstalled();
+        GetIt.I<CurrentQrCodeTypeNotifier>().value = value;
+      },
+    );
   }
 }

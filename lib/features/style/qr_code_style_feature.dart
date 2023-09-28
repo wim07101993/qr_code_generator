@@ -1,5 +1,5 @@
-import 'package:beaver_dependency_management/beaver_dependency_management.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_app_base/flutter_app_base.dart';
 import 'package:qr_code_generator/features/style/behaviours/get_embedded_image.dart';
 import 'package:qr_code_generator/features/style/behaviours/load_style_settings.dart';
 import 'package:qr_code_generator/features/style/behaviours/pick_file.dart';
@@ -13,82 +13,68 @@ class QrCodeStyleFeature extends Feature {
 
   @override
   void registerTypes() {
-    getIt.registerLazySingleton(
+    GetIt.I.registerLazySingleton(
       () => StyleSettingsNotifier(),
       dispose: (notifier) => notifier.dispose(),
     );
-    getIt.registerLazySingleton(() => FilePicker.platform);
+    GetIt.I.registerLazySingleton(() => FilePicker.platform);
 
-    getIt.registerFactoryAsync(
+    GetIt.I.registerFactoryAsync(
       () async => LoadStyleSettings(
-        monitor: getIt(),
-        sharedPreferences: await getIt.getAsync(),
-        styleSettingsNotifier: getIt(),
-        getEmbeddedImage: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: await GetIt.I.getAsync(),
+        styleSettingsNotifier: GetIt.I(),
+        getEmbeddedImage: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => SaveStyleSettings(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
-        styleSettingsNotifier: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
+        styleSettingsNotifier: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => GetEmbeddedImage(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => SaveEmbeddedImageFile(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => RemoveEmbeddedImage(
-        monitor: getIt(),
-        sharedPreferences: getIt(),
+        monitor: GetIt.I(),
+        sharedPreferences: GetIt.I(),
       ),
     );
-    getIt.registerFactory(
+    GetIt.I.registerFactory(
       () => PickFile(
-        monitor: getIt(),
-        filePicker: getIt(),
+        monitor: GetIt.I(),
+        filePicker: GetIt.I(),
       ),
     );
   }
 
   @override
   Future<void> install() async {
-    await getIt
+    await GetIt.I
         .getAsync<LoadStyleSettings>()
         .then((loadStyleSettings) => loadStyleSettings());
-    getIt<StyleSettingsNotifier>().addListener(onEpcDataChanged);
-    // Uncomment to default style to app logo style
-    // final styleSettings = getIt<StyleSettingsNotifier>();
-    // styleSettings.value = StyleSettings(
-    //   eyeStyle: const QrEyeStyle(
-    //     color: Color(0xfff13de7),
-    //     eyeShape: QrEyeShape.square,
-    //   ),
-    //   dataModuleStyle: const QrDataModuleStyle(
-    //     color: Color(0xff4d0e8d),
-    //     dataModuleShape: QrDataModuleShape.square,
-    //   ),
-    //   embeddedImageFilePath:
-    //       '$HOME/source/repos/qr_code_generator/logo_with_background.png',
-    // );
+    GetIt.I<StyleSettingsNotifier>().addListener(onEpcDataChanged);
   }
 
   @override
   void dispose() {
-    getIt<StyleSettingsNotifier>().removeListener(onEpcDataChanged);
+    GetIt.I<StyleSettingsNotifier>().removeListener(onEpcDataChanged);
     super.dispose();
   }
 
   void onEpcDataChanged() {
-    getIt<SaveStyleSettings>()();
+    GetIt.I<SaveStyleSettings>()();
   }
 }

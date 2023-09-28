@@ -18,7 +18,10 @@ class SetLastUsedQrCodeType extends Behaviour<QrCodeType, void> {
   Future<void> action(QrCodeType input, BehaviourTrack? track) {
     return sharedPreferences.setString(
       sharedPreferences.lastUsedQrCode,
-      input.name,
+      switch (input) {
+        TextQrCodeType() => TextQrCodeType.name,
+        EpcQrCodeType() => EpcQrCodeType.name,
+      },
     );
   }
 }
