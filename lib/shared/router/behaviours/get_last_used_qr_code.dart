@@ -16,18 +16,9 @@ class GetLastUsedQrCodeType extends BehaviourWithoutInput<QrCodeType> {
 
   @override
   Future<QrCodeType> action(BehaviourTrack? track) {
-    return Future.value(
-      sharedPreferences
-              .getString(sharedPreferences.lastUsedQrCode)
-              ?.toQrCodeType() ??
-          QrCodeType.text,
-    );
-  }
-}
-
-extension _StringExtensions on String {
-  QrCodeType toQrCodeType() {
-    return QrCodeType.values
-        .firstWhere((qrCodeType) => qrCodeType.name == this);
+    final name = sharedPreferences.getString(sharedPreferences.lastUsedQrCode);
+    return name == null
+        ? Future.value(QrCodeType.defaultQrCodeType)
+        : Future.value(QrCodeType.fromName(name));
   }
 }

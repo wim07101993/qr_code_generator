@@ -15,8 +15,9 @@ class EpcDataNotifier extends ChangeNotifier
     }
   }
 
-  final TextEditingController amount =
-      TextEditingController(text: EpcData.defaultAmountInCents.toString());
+  final TextEditingController amount = TextEditingController(
+    text: (EpcData.defaultAmountInCents / 100).toString(),
+  );
   final TextEditingController iban =
       TextEditingController(text: EpcData.defaultIban);
   final TextEditingController beneficiaryName =
@@ -82,8 +83,9 @@ class EpcDataNotifier extends ChangeNotifier
   }
 
   set value(EpcData? epcData) {
-    amount.text =
-        (epcData?.amountInCents ?? EpcData.defaultAmountInCents).toString();
+    final amountInCents =
+        epcData?.amountInCents ?? EpcData.defaultAmountInCents;
+    amount.text = (amountInCents / 100).toString();
     iban.text = epcData?.iban ?? EpcData.defaultIban;
     beneficiaryName.text =
         epcData?.beneficiaryName ?? EpcData.defaultBeneficiaryName;
