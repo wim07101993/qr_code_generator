@@ -66,7 +66,7 @@ jobs:
         working-directory: android
         
       - name: Build appbundle
-        run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number + $env.BUILD_NUMBER_OFFSET }}
+        run: flutter build appbundle --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number $(${{ github.run_number }} + ${{ env.BUILD_NUMBER_OFFSET }})
         
       - name: Stage artifact file
         run: mv build/app/outputs/bundle/release/app-release.aab ${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }}
