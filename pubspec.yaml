@@ -13,13 +13,13 @@ dependencies:
   collection: ">=1.0.0 <2.0.0"
   download: ">=1.0.0 <2.0.0"
   file_picker: ">=8.0.0 <9.0.0"
+  flex_color_picker: ">=3.0.0 <4.0.0"
   flutter:
     sdk: flutter
   flutter_app_base:
     git:
       url: https://github.com/wim07101993/flutter_app_base.git
       ref: 921445b60c8acab050ae9f365078a4208c6c1f13
-  flutter_colorpicker: ">=1.0.0 <2.0.0"
   flutter_fox_logging: ">=2.0.0 <3.0.0"
   flutter_localizations:
     sdk: flutter

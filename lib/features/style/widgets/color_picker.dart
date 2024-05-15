@@ -1,6 +1,5 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class AppColorPicker extends StatefulWidget {
   const AppColorPicker({
@@ -26,30 +25,15 @@ class _AppColorPickerState extends State<AppColorPicker> {
       child: Column(
         children: [
           ColorPicker(
-            pickerColor: widget.color,
+            color: widget.color,
             onColorChanged: widget.onColorChanged,
-            pickerAreaHeightPercent: 0.7,
-            enableAlpha: false, // hexInputController will respect it too.
-            displayThumbColor: true,
-            labelTypes: const [],
-            pickerAreaBorderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(2),
-              topRight: Radius.circular(2),
-            ),
-            hexInputController: textController, // <- here
-            portraitOnly: true,
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-            child: TextField(
-              controller: textController,
-              autofocus: true,
-              maxLength: 9,
-              inputFormatters: [
-                UpperCaseTextFormatter(),
-                FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
-              ],
-            ),
+            wheelDiameter: 250,
+            wheelWidth: 25,
+            pickersEnabled: const {
+              ColorPickerType.primary: false,
+              ColorPickerType.accent: false,
+              ColorPickerType.wheel: true,
+            },
           ),
         ],
       ),

@@ -1,6 +1,5 @@
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 
@@ -71,33 +70,16 @@ class _ColorPickerDialogState extends State<ColorPickerDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             ColorPicker(
-              pickerColor: selectedColor,
+              color: selectedColor,
               onColorChanged: (color) {
                 setState(() => selectedColor = color);
                 widget.onColorChanged(color);
               },
-              pickerAreaHeightPercent: 0.7,
-              enableAlpha: false,
-              displayThumbColor: true,
-              labelTypes: const [],
-              pickerAreaBorderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(2),
-                topRight: Radius.circular(2),
-              ),
-              hexInputController: textController,
-              portraitOnly: true,
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: TextField(
-                controller: textController,
-                autofocus: true,
-                maxLength: 9,
-                inputFormatters: [
-                  UpperCaseTextFormatter(),
-                  FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
-                ],
-              ),
+              pickersEnabled: const {
+                ColorPickerType.primary: false,
+                ColorPickerType.accent: false,
+                ColorPickerType.wheel: true,
+              },
             ),
           ],
         ),
