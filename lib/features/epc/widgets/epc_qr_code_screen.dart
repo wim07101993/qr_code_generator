@@ -21,7 +21,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   final EpcDataNotifier epcDataNotifier = GetIt.I();
   late final qrDataNotifier = QrDataController(
     listenable: epcDataNotifier,
-    valueGetter: () => (epcDataNotifier.value).qrData,
+    valueGetter: () => epcDataNotifier.value.qrData,
   );
 
   late EpcData lastValidEpcData;
