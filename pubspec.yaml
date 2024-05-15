@@ -1,26 +1,26 @@
 name: qr_code_generator
 description: Generates different kinds of QR-codes, like a link or a payment request.
 publish_to: 'none'
-version: 0.3.2+3
+version: 0.4.0
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   ansicolor: ">=2.0.0 <3.0.0"
-  auto_route: ">=7.0.0 <8.0.0"
-  behaviour: ">=2.0.0 <3.0.0"
+  auto_route: ">=8.0.0 <9.0.0"
+  behaviour: ">=3.0.0 <4.0.0"
   collection: ">=1.0.0 <2.0.0"
   download: ">=1.0.0 <2.0.0"
-  file_picker: ">=5.0.0 <6.0.0"
+  file_picker: ">=8.0.0 <9.0.0"
   flutter:
     sdk: flutter
   flutter_app_base:
     git:
       url: https://github.com/wim07101993/flutter_app_base.git
-      ref: f24e3c2599605f72b81041aab1e961a86ceabfea
+      ref: 921445b60c8acab050ae9f365078a4208c6c1f13
   flutter_colorpicker: ">=1.0.0 <2.0.0"
-  flutter_fox_logging: ">=1.0.0 <2.0.0"
+  flutter_fox_logging: ">=2.0.0 <3.0.0"
   flutter_localizations:
     sdk: flutter
   function_tree: ">=0.0.0 <1.0.0"
@@ -30,12 +30,12 @@ dependencies:
   path_provider: ">=2.0.0 <3.0.0"
   qr: ">=3.0.0 <4.0.0"
   qr_flutter: ">=4.0.0 <5.0.0"
-  share_plus: ">=7.0.0 <8.0.0"
+  share_plus: ">=8.0.0 <9.0.0"
   shared_preferences: ">=2.0.0 <3.0.0"
 
 
 dev_dependencies:
-  auto_route_generator: ">=7.0.0 <8.0.0"
+  auto_route_generator:
   build_runner:
   flutter_test:
     sdk: flutter
@@ -51,7 +51,7 @@ msix_config:
   publisher_display_name: wim07101993
   publisher: CN=C359B0E3-0A9C-4C4C-9037-E1B393CA187E
   identity_name: 38383wim07101993.QR-generator
-  msix_version: 0.3.2.0
+  msix_version: 0.4.0.0
   languages: nl-be, en-gb
   store: true
   logo_path: logo_without_background.png

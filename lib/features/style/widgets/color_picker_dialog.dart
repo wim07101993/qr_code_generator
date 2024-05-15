@@ -20,8 +20,8 @@ class ColorPickerDialogButton extends StatelessWidget {
     final foregroundColor = isDarkColor(color) ? Colors.white : Colors.black;
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStatePropertyAll(color),
-        foregroundColor: MaterialStatePropertyAll(foregroundColor),
+        backgroundColor: WidgetStatePropertyAll(color),
+        foregroundColor: WidgetStatePropertyAll(foregroundColor),
       ),
       onPressed: () => showDialog<Color?>(
         context: context,
