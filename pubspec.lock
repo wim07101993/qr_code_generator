@@ -53,26 +53,26 @@ packages:
     dependency: "direct main"
     description:
       name: auto_route
-      sha256: eb33554581a0a4aa7e6da0f13a44291a55bf71359012f1d9feb41634ff908ff8
+      sha256: "6cad3f408863ffff2b5757967c802b18415dac4acb1b40c5cdd45d0a26e5080f"
       url: "https://pub.dev"
     source: hosted
-    version: "7.9.2"
+    version: "8.1.3"
   auto_route_generator:
     dependency: "direct dev"
     description:
       name: auto_route_generator
-      sha256: "11067a3bcd643812518fe26c0c9ec073990286cabfd9d74b6da9ef9b913c4d22"
+      sha256: ba28133d3a3bf0a66772bcc98dade5843753cd9f1a8fb4802b842895515b67d3
       url: "https://pub.dev"
     source: hosted
-    version: "7.3.2"
+    version: "8.0.0"
   behaviour:
     dependency: "direct main"
     description:
       name: behaviour
-      sha256: "37433c3a855322ef131f0e1cd3f4fb4ecd5d6ece59db48c0a87ed99d77bf9e9d"
+      sha256: "5347c11860bf1ff8cde9783e5d8213f42bc7c411cde46fcd2a3403b5f7f2ae99"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "3.0.1"
   boolean_selector:
     dependency: transitive
     description:
@@ -277,10 +277,10 @@ packages:
     dependency: "direct main"
     description:
       name: file_picker
-      sha256: be325344c1f3070354a1d84a231a1ba75ea85d413774ec4bdf444c023342e030
+      sha256: "29c90806ac5f5fb896547720b73b17ee9aed9bba540dc5d91fe29f8c5745b10a"
       url: "https://pub.dev"
     source: hosted
-    version: "5.5.0"
+    version: "8.0.3"
   fixnum:
     dependency: transitive
     description:
@@ -298,8 +298,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: f24e3c2599605f72b81041aab1e961a86ceabfea
-      resolved-ref: f24e3c2599605f72b81041aab1e961a86ceabfea
+      ref: "921445b60c8acab050ae9f365078a4208c6c1f13"
+      resolved-ref: "921445b60c8acab050ae9f365078a4208c6c1f13"
       url: "https://github.com/wim07101993/flutter_app_base.git"
     source: git
     version: "1.0.0"
@@ -315,10 +315,10 @@ packages:
     dependency: "direct main"
     description:
       name: flutter_fox_logging
-      sha256: "0bf594223ad35b0128d6f0ca1e972fb62e0751865529bca5ffe2594162d4da0d"
+      sha256: "431ff806ec1df53c6d792febb526c6af11cd3d10d8166539310a2e933f293a03"
       url: "https://pub.dev"
     source: hosted
-    version: "1.3.0"
+    version: "2.0.0"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -346,10 +346,10 @@ packages:
     dependency: transitive
     description:
       name: fox_logging
-      sha256: cc0f8c7be8c2149f0b04ca03ecde95c15ac983299c5b05c9288405e2a4afa68e
+      sha256: ee065c5e6f2e94f12211998286d29a39cfe02c951d41f7a9cbb60c9e43db56cc
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.3"
+    version: "1.0.0"
   frontend_server_client:
     dependency: transitive
     description:
@@ -658,10 +658,10 @@ packages:
     dependency: "direct main"
     description:
       name: share_plus
-      sha256: "3ef39599b00059db0990ca2e30fca0a29d8b37aae924d60063f8e0184cf20900"
+      sha256: fb5319f3aab4c5dda5ebb92dca978179ba21f8c783ee4380910ef4c1c6824f51
       url: "https://pub.dev"
     source: hosted
-    version: "7.2.2"
+    version: "8.0.3"
   share_plus_platform_interface:
     dependency: transitive
     description:
