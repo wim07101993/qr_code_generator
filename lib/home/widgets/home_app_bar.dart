@@ -34,9 +34,8 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  Future<void> getQrCode(
-    BuildContext context,
-    Future<ExceptionOr<dynamic>> Function(QrPainter qrCode) sendToUser,
+  FutureOr<void> getQrCode(
+    FutureOr<ExceptionOr<dynamic>> Function(QrPainter qrCode) sendToUser,
   ) {
     return GetIt.I<GetQrImage>()(
       GetQrImageParams(
@@ -51,19 +50,18 @@ class _HomeAppBarState extends State<HomeAppBar> {
     }).handleException(context, isMounted: () => mounted);
   }
 
-  Future<void> shareQrData(BuildContext context) {
-    return getQrCode(
-      context,
-      (qrCode) => GetIt.I<ShareQrCode>()(
+  FutureOr<void> shareQrData() {
+    return getQrCode((qrCode) {
+      return GetIt.I<ShareQrCode>()(
         ShareQrCodeParams(
           qrCode: qrCode,
           translations: AppLocalizations.of(context)!,
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Future<void> saveQrCode(BuildContext context) async {
+  Future<void> saveQrCode() async {
     final s = AppLocalizations.of(context)!;
     final outputPath = await FilePicker.platform.saveFile(
       dialogTitle: s.saveQrDialogTitle,
@@ -73,20 +71,19 @@ class _HomeAppBarState extends State<HomeAppBar> {
     if (!mounted) return;
     if (outputPath == null) return;
 
-    return getQrCode(
-      context,
-      (qrCode) => GetIt.I<SaveQrCode>()(
+    return getQrCode((qrCode) {
+      return GetIt.I<SaveQrCode>()(
         SaveQrCodeParams(
           translations: s,
           outputPath: outputPath,
           qrCode: qrCode,
         ),
-      ),
-    );
+      );
+    });
   }
 
-  Future<void> downloadQrCode() {
-    return getQrCode(context, (qrCode) => GetIt.I<DownloadQrCode>()(qrCode));
+  FutureOr<void> downloadQrCode() {
+    return getQrCode((qrCode) => GetIt.I<DownloadQrCode>()(qrCode));
   }
 
   @override
@@ -96,12 +93,12 @@ class _HomeAppBarState extends State<HomeAppBar> {
       actions: [
         if (widget.canShareQrCode)
           IconButton(
-            onPressed: () => shareQrData(context),
+            onPressed: shareQrData,
             icon: const Icon(Icons.share),
           ),
         if (widget.canSaveQrCode)
           IconButton(
-            onPressed: () => kIsWeb ? downloadQrCode() : saveQrCode(context),
+            onPressed: kIsWeb ? downloadQrCode : saveQrCode,
             icon: const Icon(Icons.save),
           ),
         if (widget.settingsAction != null)

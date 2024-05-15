@@ -21,12 +21,12 @@ class _HomeDrawerState extends State<HomeDrawer> {
           ListTile(
             leading: const Icon(Icons.text_fields),
             title: Text(s.textQrDrawerOption),
-            onTap: () => loadQrCodeFeature(context, const TextQrCodeType()),
+            onTap: () => loadQrCodeFeature(const TextQrCodeType()),
           ),
           ListTile(
             leading: const Icon(Icons.payment),
             title: Text(s.epcPaymentDrawerOption),
-            onTap: () => loadQrCodeFeature(context, const EpcQrCodeType()),
+            onTap: () => loadQrCodeFeature(const EpcQrCodeType()),
           ),
           ListTile(
             leading: const Icon(Icons.color_lens),
@@ -45,10 +45,7 @@ class _HomeDrawerState extends State<HomeDrawer> {
     );
   }
 
-  Future<void> loadQrCodeFeature(
-    BuildContext context,
-    QrCodeType qrCodeType,
-  ) async {
+  Future<void> loadQrCodeFeature(QrCodeType qrCodeType) async {
     await qrCodeType.feature?.ensureInstalled();
     GetIt.I<CurrentQrCodeTypeNotifier>().value = qrCodeType;
     GetIt.I<IsUpdatingStyleNotifier>().value = false;
@@ -58,5 +55,5 @@ class _HomeDrawerState extends State<HomeDrawer> {
     Navigator.pop(context);
   }
 
-  void loadStyle(BuildContext context) {}
+  void loadStyle() {}
 }
