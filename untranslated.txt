@@ -1,0 +1,8 @@
+{
+  "nl": [
+    "saveQrDialogTitle",
+    "generalErrorMessage",
+    "fileDoesNotExistsErrorMessage",
+    "couldNotLoadImageErrorMessage"
+  ]
+}
