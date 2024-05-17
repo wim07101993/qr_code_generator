@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
@@ -19,7 +20,7 @@ class SaveStyleSettings extends BehaviourWithoutInput<void> {
   String get description => 'saving style settings';
 
   @override
-  Future<void> action(BehaviourTrack? track) async {
+  FutureOr<void> action(BehaviourTrack? track) async {
     final map = styleSettingsNotifier.value.toJson();
     await sharedPreferences.setString(
       sharedPreferences.qrCodeStyleSettingsKey,

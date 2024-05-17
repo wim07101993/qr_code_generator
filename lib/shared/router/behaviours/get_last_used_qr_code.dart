@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:behaviour/behaviour.dart';
 import 'package:qr_code_generator/shared/router/notifier/current_qr_code_type_notifier.dart';
 import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
@@ -15,10 +17,10 @@ class GetLastUsedQrCodeType extends BehaviourWithoutInput<QrCodeType> {
   String get description => 'getting last used qr-code';
 
   @override
-  Future<QrCodeType> action(BehaviourTrack? track) {
+  FutureOr<QrCodeType> action(BehaviourTrack? track) {
     final name = sharedPreferences.getString(sharedPreferences.lastUsedQrCode);
     return name == null
-        ? Future.value(QrCodeType.defaultQrCodeType)
-        : Future.value(QrCodeType.fromName(name));
+        ? QrCodeType.defaultQrCodeType
+        : QrCodeType.fromName(name);
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:behaviour/behaviour.dart';
@@ -16,8 +17,11 @@ class GetEmbeddedImage extends BehaviourWithoutInput<ImageProvider?> {
   final SharedPreferences sharedPreferences;
 
   @override
-  Future<ImageProvider?> action(BehaviourTrack? track) {
-    return kIsWeb ? Future.value(sharedPreferences.embeddedImage) : getFile();
+  FutureOr<ImageProvider?> action(BehaviourTrack? track) {
+    if (kIsWeb) {
+      return sharedPreferences.embeddedImage;
+    }
+    return getFile();
   }
 
   Future<ImageProvider?> getFile() async {

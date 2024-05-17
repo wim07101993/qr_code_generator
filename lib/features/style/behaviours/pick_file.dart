@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:behaviour/behaviour.dart';
@@ -13,7 +14,7 @@ class PickFile extends BehaviourWithoutInput<Uint8List?> {
   final FilePicker filePicker;
 
   @override
-  Future<Uint8List?> action(BehaviourTrack? track) async {
+  FutureOr<Uint8List?> action(BehaviourTrack? track) async {
     final fileResult = await filePicker.pickFiles();
     final file = fileResult?.files.singleOrNull;
     if (file == null) {
@@ -22,12 +23,12 @@ class PickFile extends BehaviourWithoutInput<Uint8List?> {
     return kIsWeb ? getFileBytesWeb(file) : getFileBytes(file);
   }
 
-  Future<Uint8List?> getFileBytes(PlatformFile file) async {
+  FutureOr<Uint8List?> getFileBytes(PlatformFile file) async {
     final path = file.path;
     return path == null ? null : File(path).readAsBytes();
   }
 
-  Future<Uint8List?> getFileBytesWeb(PlatformFile file) {
+  FutureOr<Uint8List?> getFileBytesWeb(PlatformFile file) {
     return Future.value(file.bytes);
   }
 }

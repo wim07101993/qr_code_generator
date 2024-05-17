@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
@@ -20,15 +21,14 @@ class LoadEpcData extends BehaviourWithoutInput<void> {
   String get description => 'loading epc data';
 
   @override
-  Future<void> action(BehaviourTrack? track) {
+  FutureOr<void> action(BehaviourTrack? track) {
     final jsonData =
         sharedPreferences.get(sharedPreferences.epcDataKey) as String?;
     if (jsonData == null) {
-      return Future.value();
+      return null;
     }
     final map = jsonDecode(jsonData) as Map<String, dynamic>;
     epcDataNotifier.value = map.toEpcData();
-    return Future.value();
   }
 }
 

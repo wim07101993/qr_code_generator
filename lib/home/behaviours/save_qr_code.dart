@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:behaviour/behaviour.dart';
@@ -13,7 +14,7 @@ class SaveQrCode extends Behaviour<SaveQrCodeParams, void> {
   String get description => 'saving qr-code';
 
   @override
-  Future<void> action(SaveQrCodeParams input, BehaviourTrack? track) async {
+  FutureOr<void> action(SaveQrCodeParams input, BehaviourTrack? track) async {
     final qrImage = await input.qrCode.toImageData(1024);
     if (qrImage == null) {
       return;

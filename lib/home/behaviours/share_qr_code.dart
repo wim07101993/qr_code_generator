@@ -1,7 +1,9 @@
+import 'dart:async';
+
 import 'package:behaviour/behaviour.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
-import 'package:share_plus/share_plus.dart';
+// import 'package:share_plus/share_plus.dart';
 
 class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
   ShareQrCode({
@@ -12,21 +14,21 @@ class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
   String get description => 'sharing qr-code';
 
   @override
-  Future<void> action(ShareQrCodeParams input, BehaviourTrack? track) async {
+  FutureOr<void> action(ShareQrCodeParams input, BehaviourTrack? track) async {
     final data = await input.qrCode.toImageData(1024);
     if (data == null) {
       return;
     }
-    await Share.shareXFiles(
-      [
-        XFile.fromData(
-          data.buffer.asUint8List(),
-          name: 'QR-code.png',
-          mimeType: 'image/png',
-        ),
-      ],
-      text: input.translations.qrCode,
-    );
+    // await Share.shareXFiles(
+    //   [
+    //     XFile.fromData(
+    //       data.buffer.asUint8List(),
+    //       name: 'QR-code.png',
+    //       mimeType: 'image/png',
+    //     ),
+    //   ],
+    //   text: input.translations.qrCode,
+    // );
   }
 }
 
