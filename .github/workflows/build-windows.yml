@@ -37,13 +37,14 @@ jobs:
         uses: actions/checkout@v3
           
       - name: Install flutter
-        uses: subosito/flutter-action@v2.10.0
+        uses: subosito/flutter-action@v2.14.0
       
       - run: flutter doctor -v
       - run: flutter pub get
+      - run: flutter analyze
       
       - name: Build app
-        run: flutter pub run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
+        run: dart run msix:create --version ${{ needs.getVersion.outputs.majorMinorPatch }}.${{ github.run_number }}
             
       - name: Stage artifact file
         run: mv build/windows/runner/Release/qr_code_generator.msix ${{ vars.WINDOWS_INSTALLER_ARTIFACT_PATH }}
