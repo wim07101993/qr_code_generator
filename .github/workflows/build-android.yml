@@ -81,7 +81,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ${{ vars.ANDROID_ARTIFACT }}
+          name: ${{ vars.ANDROID_AAB_ARTIFACT }}
           path: ${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }}
           if-no-files-found: error
   
@@ -133,7 +133,7 @@ jobs:
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v4.3.3
         with:
-          name: ${{ vars.ANDROID_ARTIFACT }}
+          name: ${{ vars.ANDROID_APK_ARTIFACT }}
           path:  ${{ vars.ANDROID_APK_ARTIFACT_PATH }}
           if-no-files-found: error
 
@@ -145,7 +145,7 @@ jobs:
       - name: Download Build Artifact
         uses: actions/download-artifact@v4.1.7
         with:
-          name: ${{ vars.ANDROID_ARTIFACT }}
+          name: ${{ vars.ANDROID_AAB_ARTIFACT }}
 
       - name: Create service_account.json
         run: echo '${{ secrets.PLAY_STORE_CONFIG_JSON }}' > service_account.json
@@ -155,6 +155,6 @@ jobs:
         with:
           serviceAccountJson: service_account.json
           packageName: com.wimvanlaer.qr_code_generator
-          releaseFiles: qr_code_generator.aab
+          releaseFiles: ${{ vars.ANDROID_APP_BUNDLE_ARTIFACT_PATH }}
           status: completed
           track: alpha
