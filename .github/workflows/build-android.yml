@@ -7,6 +7,7 @@ on:
     branches: [ "main" ]
 
 env:
+  JAVA_DISTRIBUTION: microsoft
   JAVA_VERSION: 21
   BUILD_NUMBER_OFFSET: 136
   
@@ -47,6 +48,7 @@ jobs:
         uses: actions/setup-java@v4.2.1
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
 
       - run: flutter doctor -v
       - run: flutter pub get
@@ -93,6 +95,7 @@ jobs:
         uses: actions/setup-java@v4.2.1
         with:
           java-version: ${{ env.JAVA_VERSION }}
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
       
       - run: flutter doctor -v
       - run: flutter pub get
