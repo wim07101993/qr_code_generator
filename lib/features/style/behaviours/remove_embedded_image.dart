@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:behaviour/behaviour.dart';
@@ -15,7 +16,7 @@ class RemoveEmbeddedImage extends BehaviourWithoutInput<void> {
   final SharedPreferences sharedPreferences;
 
   @override
-  Future<void> action(BehaviourTrack? track) async {
+  FutureOr<void> action(BehaviourTrack? track) async {
     return kIsWeb ? removeImageWeb() : removeImage();
   }
 

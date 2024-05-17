@@ -18,7 +18,7 @@ class GetQrImage extends Behaviour<GetQrImageParams, QrPainter?> {
   final SharedPreferences sharedPreferences;
 
   @override
-  Future<QrPainter?> action(
+  FutureOr<QrPainter?> action(
     GetQrImageParams input,
     BehaviourTrack? track,
   ) async {

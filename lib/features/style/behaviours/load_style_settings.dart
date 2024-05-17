@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
@@ -24,7 +25,7 @@ class LoadStyleSettings extends BehaviourWithoutInput<void> {
   String get description => 'loading style settings';
 
   @override
-  Future<void> action(BehaviourTrack? track) async {
+  FutureOr<void> action(BehaviourTrack? track) async {
     final jsonData = sharedPreferences
         .get(sharedPreferences.qrCodeStyleSettingsKey) as String?;
     final embeddedImage =
@@ -43,7 +44,6 @@ class LoadStyleSettings extends BehaviourWithoutInput<void> {
     styleSettingsNotifier.value = map.toStyleSettings(
       embeddedImage: embeddedImage,
     );
-    return Future.value();
   }
 }
 

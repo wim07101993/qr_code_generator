@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:behaviour/behaviour.dart';
 import 'package:download/download.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
@@ -11,7 +13,7 @@ class DownloadQrCode extends Behaviour<QrPainter, void> {
   String get description => 'downloading qr-code';
 
   @override
-  Future<void> action(QrPainter qrImage, BehaviourTrack? track) async {
+  FutureOr<void> action(QrPainter qrImage, BehaviourTrack? track) async {
     final data = await qrImage.toImageData(1024);
     if (data == null) {
       return;

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -16,7 +17,7 @@ class SaveEmbeddedImageFile extends Behaviour<Uint8List, void> {
   final SharedPreferences sharedPreferences;
 
   @override
-  Future<void> action(Uint8List bytes, BehaviourTrack? track) async {
+  FutureOr<void> action(Uint8List bytes, BehaviourTrack? track) async {
     return kIsWeb ? saveFileWeb(bytes) : saveFile(bytes);
   }
 
