@@ -5,12 +5,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/home/behaviours/download_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/get_qr_image.dart';
 import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/share_qr_code.dart';
+import 'package:qr_code_generator/qr_data_controller.dart';
 import 'package:qr_code_generator/shared/l10n/behaviour_extensions.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 
@@ -39,7 +39,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
   ) {
     return GetIt.I<GetQrImage>()(
       GetQrImageParams(
-        qrData: GetIt.I<EpcDataNotifier>().value.qrData,
+        qrData: GetIt.I<QrDataController>().value,
         styleSettings: GetIt.I<StyleSettingsNotifier>().value,
       ),
     ).thenStartNextWhenSuccess((qrCode) {

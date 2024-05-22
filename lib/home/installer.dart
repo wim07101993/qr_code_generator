@@ -4,6 +4,7 @@ import 'package:qr_code_generator/home/behaviours/get_qr_image.dart';
 import 'package:qr_code_generator/home/behaviours/save_qr_code.dart';
 import 'package:qr_code_generator/home/behaviours/share_qr_code.dart';
 import 'package:qr_code_generator/home/notifiers/navigation_notifier.dart';
+import 'package:qr_code_generator/qr_data_controller.dart';
 import 'package:qr_code_generator/shared/shared_preferences/shared_preferences_feature.dart';
 
 class HomeFeature extends Feature {
@@ -20,6 +21,13 @@ class HomeFeature extends Feature {
     GetIt.I.registerFactory(() => DownloadQrCode(monitor: GetIt.I()));
     GetIt.I.registerFactory(() => SaveQrCode(monitor: GetIt.I()));
     GetIt.I.registerFactory(() => ShareQrCode(monitor: GetIt.I()));
-    GetIt.I.registerLazySingleton(() => NavigationNotifier());
+    GetIt.I.registerLazySingleton(
+      () => NavigationNotifier(),
+      dispose: (notifier) => notifier.dispose(),
+    );
+    GetIt.I.registerLazySingleton(
+      () => QrDataController(''),
+      dispose: (notifier) => notifier.dispose(),
+    );
   }
 }

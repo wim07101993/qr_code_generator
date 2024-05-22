@@ -19,10 +19,7 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   final formKey = GlobalKey<FormState>();
   final SharedPreferences sharedPreferences = GetIt.I();
   final EpcDataNotifier epcDataNotifier = GetIt.I();
-  late final qrDataNotifier = QrDataController(
-    listenable: epcDataNotifier,
-    valueGetter: () => epcDataNotifier.value.qrData,
-  );
+  final QrDataController qrDataController = GetIt.I();
 
   late EpcData lastValidEpcData;
 
@@ -32,7 +29,10 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
     );
   }
 
-  void amountChanged() => setState(() {});
+  void amountChanged() {
+    // setState(() {});
+    qrDataController.value = epcDataNotifier.value.qrData;
+  }
 
   @override
   void initState() {
@@ -44,14 +44,13 @@ class _EpcQrCodeScreenState extends State<EpcQrCodeScreen> {
   @override
   void dispose() {
     epcDataNotifier.amount.removeListener(amountChanged);
-    qrDataNotifier.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return QrCodeScreen(
-      qrData: qrDataNotifier,
+      qrData: qrDataController,
       inputBuilder: (context) => ValueTextField(
         controller: epcDataNotifier.amount,
         amountValueInCents: epcDataNotifier.value.amountInCents,
