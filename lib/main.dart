@@ -14,7 +14,6 @@ import 'package:qr_code_generator/shared/shared_preferences/shared_preferences_f
 Future<void> main() async {
   GetIt.I
     ..registerSingleton(const QrCodeStyleFeature())
-    ..registerSingleton(const TextQrCodeRoute())
     ..registerSingleton(const EpcFeature())
     ..registerSingleton(const SharedPreferencesFeature())
     ..registerSingleton(const HomeFeature())
