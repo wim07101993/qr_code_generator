@@ -9,37 +9,23 @@
 
 part of 'app_router.dart';
 
-abstract class _$AppRouter extends RootStackRouter {
-  // ignore: unused_element
-  _$AppRouter({super.navigatorKey});
+/// generated route for
+/// [EpcQrCodeScreen]
+class EpcQrCodeRoute extends PageRouteInfo<void> {
+  const EpcQrCodeRoute({List<PageRouteInfo>? children})
+      : super(
+          EpcQrCodeRoute.name,
+          initialChildren: children,
+        );
 
-  @override
-  final Map<String, PageFactory> pagesMap = {
-    HomeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const HomeScreen(),
-      );
+  static const String name = 'EpcQrCodeRoute';
+
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const EpcQrCodeScreen();
     },
-    TextQrCodeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const TextQrCodeScreen(),
-      );
-    },
-    StyleRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const StyleScreen(),
-      );
-    },
-    EpcQrCodeRoute.name: (routeData) {
-      return AutoRoutePage<dynamic>(
-        routeData: routeData,
-        child: const EpcQrCodeScreen(),
-      );
-    },
-  };
+  );
 }
 
 /// generated route for
@@ -53,21 +39,12 @@ class HomeRoute extends PageRouteInfo<void> {
 
   static const String name = 'HomeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
-}
-
-/// generated route for
-/// [TextQrCodeScreen]
-class TextQrCodeRoute extends PageRouteInfo<void> {
-  const TextQrCodeRoute({List<PageRouteInfo>? children})
-      : super(
-          TextQrCodeRoute.name,
-          initialChildren: children,
-        );
-
-  static const String name = 'TextQrCodeRoute';
-
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const HomeScreen();
+    },
+  );
 }
 
 /// generated route for
@@ -81,19 +58,29 @@ class StyleRoute extends PageRouteInfo<void> {
 
   static const String name = 'StyleRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const StyleScreen();
+    },
+  );
 }
 
 /// generated route for
-/// [EpcQrCodeScreen]
-class EpcQrCodeRoute extends PageRouteInfo<void> {
-  const EpcQrCodeRoute({List<PageRouteInfo>? children})
+/// [TextQrCodeScreen]
+class TextQrCodeRoute extends PageRouteInfo<void> {
+  const TextQrCodeRoute({List<PageRouteInfo>? children})
       : super(
-          EpcQrCodeRoute.name,
+          TextQrCodeRoute.name,
           initialChildren: children,
         );
 
-  static const String name = 'EpcQrCodeRoute';
+  static const String name = 'TextQrCodeRoute';
 
-  static const PageInfo<void> page = PageInfo<void>(name);
+  static PageInfo page = PageInfo(
+    name,
+    builder: (data) {
+      return const TextQrCodeScreen();
+    },
+  );
 }
