@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
@@ -148,9 +149,9 @@ class StyleSettings {
 MaterialColor createMaterialColor(Color color) {
   final strengths = <double>[.05];
   final swatch = <int, Color>{};
-  final r = color.red;
-  final g = color.green;
-  final b = color.blue;
+  final r = color.r;
+  final g = color.g;
+  final b = color.b;
 
   for (var i = 1; i < 10; i++) {
     strengths.add(0.1 * i);
@@ -158,18 +159,18 @@ MaterialColor createMaterialColor(Color color) {
   for (final strength in strengths) {
     final double ds = 0.5 - strength;
     swatch[(strength * 1000).round()] = Color.fromRGBO(
-      r + ((ds < 0 ? r : (255 - r)) * ds).round(),
-      g + ((ds < 0 ? g : (255 - g)) * ds).round(),
-      b + ((ds < 0 ? b : (255 - b)) * ds).round(),
+      (r + (ds < 0 ? r : (255 - r)) * ds).round(),
+      (g + (ds < 0 ? g : (255 - g)) * ds).round(),
+      (b + (ds < 0 ? b : (255 - b)) * ds).round(),
       1,
     );
   }
-  return MaterialColor(color.value, swatch);
+  return MaterialColor(color.value32bit, swatch);
 }
 
 bool isDarkColor(Color color) {
-  final colorArray = [color.red, color.green, color.blue].map((e) {
-    final v = e.toDouble() / 255;
+  final colorArray = [color.r, color.g, color.b].map((e) {
+    final v = e / 255;
     if (v <= 0.03928) {
       return v / 12.92;
     }
