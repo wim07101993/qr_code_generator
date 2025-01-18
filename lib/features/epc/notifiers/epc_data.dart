@@ -178,8 +178,6 @@ class EpcData {
   final String? originatorInfo;
 
   String get qrData {
-    print(amountInCents);
-    print('EUR${(amountInCents / 100).toInt()}.${amountInCents % 100}');
     return [
       serviceTag,
       version.toEpcDataString(),
