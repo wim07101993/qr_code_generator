@@ -110,9 +110,8 @@ class StyleSettings {
   }
 
   ThemeData toThemeData() {
-    // final isDark = isDarkColor(backgroundColor);
-    // const textColor = isDark ? Colors.white : Colors.black;
-    const textColor = Colors.black;
+    final isDark = isDarkColor(backgroundColor);
+    final textColor = isDark ? Colors.white : Colors.black;
     final primaryColor = dataModuleStyle.color ?? Colors.black;
     return ThemeData(
       appBarTheme: AppBarTheme(
@@ -124,8 +123,9 @@ class StyleSettings {
         accentColor: createMaterialColor(eyeStyle.color ?? Colors.black),
         backgroundColor: backgroundColor,
         cardColor: backgroundColor,
+        brightness: isDark ? Brightness.dark : Brightness.light,
       ),
-      textTheme: const TextTheme(
+      textTheme: TextTheme(
         headlineLarge: TextStyle(color: textColor),
         headlineMedium: TextStyle(color: textColor),
         headlineSmall: TextStyle(color: textColor),
@@ -169,12 +169,10 @@ MaterialColor createMaterialColor(Color color) {
 }
 
 bool isDarkColor(Color color) {
-  final colorArray = [color.r, color.g, color.b].map((e) {
-    final v = e / 255;
+  final colorArray = [color.r, color.g, color.b].map((v) {
     if (v <= 0.03928) {
       return v / 12.92;
     }
-
     return pow((v + 0.055) / 1.055, 2.4);
   }).toList();
 
