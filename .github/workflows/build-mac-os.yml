@@ -74,7 +74,7 @@ jobs:
         run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ vars.MAC_ARTIFACT }}
           path:  ${{ vars.MAC_ARTIFACT_PATH }}
