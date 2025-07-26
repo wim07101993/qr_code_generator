@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Download artifact
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build-github-pages.yml
           workflow_conclusion: success

@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Android 🤖
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build-android.yml
           workflow_conclusion: success
@@ -19,7 +19,7 @@ jobs:
           name: ${{ vars.ANDROID_ARTIFACT }}
           
       - name: Download iOS 🍏
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         if: false
         with:
           workflow: build-ios.yml
@@ -28,7 +28,7 @@ jobs:
           name: ${{ vars.IOS_ARTIFACT }}
           
       - name: Download linux 🐧
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build-linux.yml
           workflow_conclusion: success
@@ -36,7 +36,7 @@ jobs:
           name: ${{ vars.LINUX_ARTIFACT }}
           
       - name: Download windows 🪟
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build-windows.yml
           workflow_conclusion: success
@@ -44,7 +44,7 @@ jobs:
           name: ${{ vars.WINDOWS_ARTIFACT }}
 
       - name: Download web 🌐
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@v6
         with:
           workflow: build-web.yml
           workflow_conclusion: success
