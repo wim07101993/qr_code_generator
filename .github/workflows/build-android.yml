@@ -52,8 +52,6 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/wrapper-validation@v4
-        with:
-          gradle-version: 8.7
 
       - run: flutter doctor -v
       - run: flutter pub get
@@ -104,8 +102,6 @@ jobs:
       
       - name: Setup Gradle
         uses: gradle/actions/wrapper-validation@v4
-        with:
-          gradle-version: 8.7
 
       - run: flutter doctor -v
       - run: flutter pub get
