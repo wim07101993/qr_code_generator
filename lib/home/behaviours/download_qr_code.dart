@@ -13,7 +13,7 @@ class DownloadQrCode extends Behaviour<QrPainter, void> {
   String get description => 'downloading qr-code';
 
   @override
-  FutureOr<void> action(QrPainter qrImage, BehaviourTrack? track) async {
+  Future<void> action(QrPainter qrImage, BehaviourTrack? track) async {
     final data = await qrImage.toImageData(1024);
     if (data == null) {
       return;

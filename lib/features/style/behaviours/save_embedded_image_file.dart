@@ -17,7 +17,7 @@ class SaveEmbeddedImageFile extends Behaviour<Uint8List, void> {
   final SharedPreferences sharedPreferences;
 
   @override
-  FutureOr<void> action(Uint8List bytes, BehaviourTrack? track) async {
+  Future<void> action(Uint8List bytes, BehaviourTrack? track) {
     return kIsWeb ? saveFileWeb(bytes) : saveFile(bytes);
   }
 

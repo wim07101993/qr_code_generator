@@ -1,8 +1,8 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:qr_code_generator/features/epc/notifiers/epc_version.dart';
+import 'package:qr_code_generator/shared/l10n/app_localizations.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
-export 'package:flutter_gen/gen_l10n/app_localizations.dart';
+export 'package:qr_code_generator/shared/l10n/app_localizations.dart';
 
 extension EpcVersionExtension on EpcVersion {
   String translate(AppLocalizations s) {

@@ -186,7 +186,7 @@ class EpcData {
       bic,
       beneficiaryName,
       iban,
-      'EUR${(amountInCents / 100).toInt()}.${amountInCents % 100}',
+      'EUR${amountInCents ~/ 100}.${amountInCents % 100}',
       purpose,
       remittanceInfo,
       originatorInfo,

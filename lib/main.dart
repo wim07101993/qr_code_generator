@@ -6,6 +6,7 @@ import 'package:qr_code_generator/features/epc/epc_feature.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/features/style/qr_code_style_feature.dart';
 import 'package:qr_code_generator/home/installer.dart';
+import 'package:qr_code_generator/shared/l10n/app_localizations.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 import 'package:qr_code_generator/shared/router/app_router.dart';
 import 'package:qr_code_generator/shared/router/routing_feature.dart';

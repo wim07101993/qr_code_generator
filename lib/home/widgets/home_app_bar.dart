@@ -34,7 +34,7 @@ class HomeAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _HomeAppBarState extends State<HomeAppBar> {
-  FutureOr<void> getQrCode(
+  Future<void> getQrCode(
     FutureOr<ExceptionOr<dynamic>> Function(QrPainter qrCode) sendToUser,
   ) {
     return GetIt.I<GetQrImage>()(
@@ -50,7 +50,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     }).handleException(context, isMounted: () => mounted);
   }
 
-  FutureOr<void> shareQrData() {
+  Future<void> shareQrData() {
     return getQrCode((qrCode) {
       return GetIt.I<ShareQrCode>()(
         ShareQrCodeParams(
@@ -82,7 +82,7 @@ class _HomeAppBarState extends State<HomeAppBar> {
     });
   }
 
-  FutureOr<void> downloadQrCode() {
+  Future<void> downloadQrCode() {
     return getQrCode((qrCode) => GetIt.I<DownloadQrCode>()(qrCode));
   }
 
