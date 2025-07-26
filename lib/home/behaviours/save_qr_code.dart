@@ -14,7 +14,7 @@ class SaveQrCode extends Behaviour<SaveQrCodeParams, void> {
   String get description => 'saving qr-code';
 
   @override
-  FutureOr<void> action(SaveQrCodeParams input, BehaviourTrack? track) async {
+  Future<void> action(SaveQrCodeParams input, BehaviourTrack? track) async {
     final qrImage = await input.qrCode.toImageData(1024);
     if (qrImage == null) {
       return;

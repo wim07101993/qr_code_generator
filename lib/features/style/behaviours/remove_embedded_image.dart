@@ -16,7 +16,7 @@ class RemoveEmbeddedImage extends BehaviourWithoutInput<void> {
   final SharedPreferences sharedPreferences;
 
   @override
-  FutureOr<void> action(BehaviourTrack? track) async {
+  Future<void> action(BehaviourTrack? track) {
     return kIsWeb ? removeImageWeb() : removeImage();
   }
 

@@ -14,7 +14,7 @@ class PickFile extends BehaviourWithoutInput<Uint8List?> {
   final FilePicker filePicker;
 
   @override
-  FutureOr<Uint8List?> action(BehaviourTrack? track) async {
+  Future<Uint8List?> action(BehaviourTrack? track) async {
     final fileResult = await filePicker.pickFiles();
     final file = fileResult?.files.singleOrNull;
     if (file == null) {
@@ -23,7 +23,7 @@ class PickFile extends BehaviourWithoutInput<Uint8List?> {
     return kIsWeb ? getFileBytesWeb(file) : getFileBytes(file);
   }
 
-  FutureOr<Uint8List?> getFileBytes(PlatformFile file) async {
+  FutureOr<Uint8List?> getFileBytes(PlatformFile file) {
     final path = file.path;
     return path == null ? null : File(path).readAsBytes();
   }

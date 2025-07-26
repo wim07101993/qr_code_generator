@@ -73,7 +73,7 @@ jobs:
         run: mv build/ios/ipa/*.ipa  ${{ vars.IOS_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v4.3.3
         with:
           name: ${{ vars.IOS_ARTIFACT }}
           path:  ${{ vars.IOS_ARTIFACT_PATH }}
@@ -92,7 +92,7 @@ jobs:
     needs: buildIos
     steps:
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v4.3.0
         with:
           name: ${{ vars.IOS_ARTIFACT }}
 

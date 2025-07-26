@@ -25,7 +25,7 @@ class LoadStyleSettings extends BehaviourWithoutInput<void> {
   String get description => 'loading style settings';
 
   @override
-  FutureOr<void> action(BehaviourTrack? track) async {
+  Future<void> action(BehaviourTrack? track) async {
     final jsonData = sharedPreferences
         .get(sharedPreferences.qrCodeStyleSettingsKey) as String?;
     final embeddedImage =
