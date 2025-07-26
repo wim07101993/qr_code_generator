@@ -14,7 +14,7 @@ class ShareQrCode extends Behaviour<ShareQrCodeParams, void> {
   String get description => 'sharing qr-code';
 
   @override
-  FutureOr<void> action(ShareQrCodeParams input, BehaviourTrack? track) async {
+  Future<void> action(ShareQrCodeParams input, BehaviourTrack? track) async {
     final data = await input.qrCode.toImageData(1024);
     if (data == null) {
       return;

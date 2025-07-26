@@ -21,7 +21,7 @@ class SaveStyleSettings extends BehaviourWithoutInput<void> {
   String get description => 'saving style settings';
 
   @override
-  FutureOr<void> action(BehaviourTrack? track) async {
+  Future<void> action(BehaviourTrack? track) async {
     final map = styleSettingsNotifier.value.toJson();
     await sharedPreferences.setString(
       sharedPreferences.qrCodeStyleSettingsKey,

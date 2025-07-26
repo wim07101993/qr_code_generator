@@ -6,11 +6,11 @@ import 'package:qr_code_generator/shared/l10n/exception_extensions.dart';
 
 extension ExceptionOrLocalizationExtension<TSuccess>
     on FutureOr<ExceptionOr<TSuccess>> {
-  FutureOr<void> handleException(
+  Future<void> handleException(
     BuildContext context, {
     required bool Function() isMounted,
-  }) {
-    return thenWhen(
+  }) async {
+    await thenWhen(
       (exception) {
         if (isMounted()) {
           showException(context, exception);
