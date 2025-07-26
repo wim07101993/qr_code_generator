@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:behaviour/behaviour.dart';
+import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:qr_code_generator/features/style/notifiers/style_settings.dart';
 import 'package:qr_code_generator/shared/shared_preferences/keys.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -32,7 +33,7 @@ class SaveStyleSettings extends BehaviourWithoutInput<void> {
 extension _StyleSettingsExtensions on StyleSettings {
   Map<String, dynamic> toJson() {
     return {
-      'backgroundColor': backgroundColor.value,
+      'backgroundColor': backgroundColor.value32bit,
       'dataModuleStyle': dataModuleStyle.toJsonMap(),
       'embeddedImageStyle': embeddedImageStyle?.toJsonMap(),
       'eyeStyle': eyeStyle.toJson(),
@@ -45,7 +46,7 @@ extension _QrDataModuleStyleExtensions on QrDataModuleStyle {
   Map<String, dynamic> toJsonMap() {
     return {
       'dataModuleShape': dataModuleShape?.name,
-      'color': color?.value,
+      'color': color?.value32bit,
     };
   }
 }
@@ -54,7 +55,7 @@ extension _QrEmbeddedImageStyleExtensions on QrEmbeddedImageStyle {
   Map<String, dynamic> toJsonMap() {
     return {
       'size': size?.toJsonMap(),
-      'color': color?.value,
+      'color': color?.value32bit,
     };
   }
 }
@@ -72,7 +73,7 @@ extension _QrEyeStyleExtensions on QrEyeStyle {
   Map<String, dynamic> toJson() {
     return {
       'eyeShape': eyeShape?.name,
-      'color': color?.value,
+      'color': color?.value32bit,
     };
   }
 }

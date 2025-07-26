@@ -10,7 +10,7 @@ apply from: 'signing_settings.gradle'
 android {
     namespace "com.wimvanlaer.qr_code_generator"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "26.1.10909125"
+    ndkVersion = "27.0.12077973"
 
 
     defaultConfig {
@@ -37,8 +37,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 }
 

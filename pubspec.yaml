@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   ansicolor: ">=2.0.0 <3.0.0"
-  auto_route: ">=8.0.0 <9.0.0"
+  auto_route: ">=9.0.0 <10.0.0"
   behaviour: ">=3.0.0 <4.0.0"
   collection: ">=1.0.0 <2.0.0"
   download: ">=1.0.0 <2.0.0"
@@ -19,7 +19,7 @@ dependencies:
   flutter_app_base:
     git:
       url: https://github.com/wim07101993/flutter_app_base.git
-      ref: 921445b60c8acab050ae9f365078a4208c6c1f13
+      ref: 066fa584110ea9070260b43438f007f2fe256fd5
   flutter_fox_logging: ">=2.0.0 <3.0.0"
   flutter_localizations:
     sdk: flutter
@@ -30,7 +30,7 @@ dependencies:
   path_provider: ">=2.0.0 <3.0.0"
   qr: ">=3.0.0 <4.0.0"
   qr_flutter: ">=4.0.0 <5.0.0"
-  share_plus: ">=9.0.0 <10.0.0"
+  share_plus: ">=10.0.0 <11.0.0"
   shared_preferences: ">=2.0.0 <3.0.0"
 
 
