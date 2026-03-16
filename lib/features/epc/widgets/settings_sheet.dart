@@ -4,9 +4,7 @@ import 'package:qr_code_generator/features/epc/notifiers/epc_data.dart';
 import 'package:qr_code_generator/shared/l10n/localization.dart';
 
 class SettingsSheet extends StatefulWidget {
-  const SettingsSheet({
-    super.key,
-  });
+  const SettingsSheet({super.key});
 
   @override
   State<SettingsSheet> createState() => _SettingsSheetState();
@@ -106,7 +104,7 @@ class _SettingsSheetState extends State<SettingsSheet> {
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField(
-          value: notifier.version.value,
+          initialValue: notifier.version.value,
           validator: (value) =>
               EpcData.validateVersion(value, notifier.bic.text),
           decoration: InputDecoration(
