@@ -44,21 +44,16 @@ class QrDataModuleStyleEditor extends StatelessWidget {
 
   Widget _shape(AppLocalizations s) {
     return DropdownButtonFormField<QrDataModuleShape>(
-      value: style.dataModuleShape,
+      initialValue: style.dataModuleShape,
       decoration: InputDecoration(label: Text(s.shape)),
       items: QrDataModuleShape.values
           .map(
-            (shape) => DropdownMenuItem(
-              value: shape,
-              child: Text(shape.translate(s)),
-            ),
+            (shape) =>
+                DropdownMenuItem(value: shape, child: Text(shape.translate(s))),
           )
           .toList(),
       onChanged: (shape) => onStyleChanged(
-        QrDataModuleStyle(
-          color: style.color,
-          dataModuleShape: shape,
-        ),
+        QrDataModuleStyle(color: style.color, dataModuleShape: shape),
       ),
     );
   }

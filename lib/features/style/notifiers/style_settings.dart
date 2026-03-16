@@ -50,9 +50,7 @@ class StyleSettings {
     );
   }
 
-  StyleSettings copyWithDataModuleStyle(
-    QrDataModuleStyle dataModuleStyle,
-  ) {
+  StyleSettings copyWithDataModuleStyle(QrDataModuleStyle dataModuleStyle) {
     return StyleSettings(
       backgroundColor: backgroundColor,
       dataModuleStyle: dataModuleStyle,
@@ -115,7 +113,7 @@ class StyleSettings {
     final primaryColor = dataModuleStyle.color ?? Colors.black;
     return ThemeData(
       appBarTheme: AppBarTheme(
-        color: Colors.transparent,
+        backgroundColor: Colors.transparent,
         foregroundColor: primaryColor,
       ),
       colorScheme: ColorScheme.fromSwatch(

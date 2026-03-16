@@ -31,10 +31,7 @@ class QrEyeStyleEditor extends StatelessWidget {
           child: ColorPickerDialogButton(
             color: style.color ?? Colors.black,
             onColorChanged: (color) => onStyleChanged(
-              QrEyeStyle(
-                color: color,
-                eyeShape: style.eyeShape,
-              ),
+              QrEyeStyle(color: color, eyeShape: style.eyeShape),
             ),
           ),
         ),
@@ -44,22 +41,16 @@ class QrEyeStyleEditor extends StatelessWidget {
 
   Widget _shape(AppLocalizations s) {
     return DropdownButtonFormField<QrEyeShape>(
-      value: style.eyeShape,
+      initialValue: style.eyeShape,
       items: QrEyeShape.values
           .map(
-            (shape) => DropdownMenuItem(
-              value: shape,
-              child: Text(shape.translate(s)),
-            ),
+            (shape) =>
+                DropdownMenuItem(value: shape, child: Text(shape.translate(s))),
           )
           .toList(),
       decoration: InputDecoration(label: Text(s.shape)),
-      onChanged: (shape) => onStyleChanged(
-        QrEyeStyle(
-          color: style.color,
-          eyeShape: shape,
-        ),
-      ),
+      onChanged: (shape) =>
+          onStyleChanged(QrEyeStyle(color: style.color, eyeShape: shape)),
     );
   }
 }
