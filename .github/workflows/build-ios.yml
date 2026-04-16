@@ -3,8 +3,9 @@ name: Build ios
 on:
   workflow_call:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
+  # provisioning profile has expired TODO: regenerate it
+  # push:
+  #   branches: [ "main" ]
 
 jobs:
   getVersion:
