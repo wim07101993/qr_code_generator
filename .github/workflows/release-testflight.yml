@@ -2,6 +2,13 @@ name: Release to testflight
 
 on:
   workflow_call:
+   secrets:
+    APPSTORE_ISSUER_ID: 
+      required: true
+    APPSTORE_API_KEY_ID:
+      required: true
+    APPSTORE_API_PRIVATE_KEY:
+      required: true
   workflow_dispatch:
 
 jobs:
