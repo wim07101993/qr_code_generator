@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Promote Google Play Release Track
-        uses: kevin-david/promote-play-release@v1.0.0
+        uses: kevin-david/promote-play-release@v1
         with:
           service-account-json-raw: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
           package-name: com.wimvanlaer.qr_code_generator
