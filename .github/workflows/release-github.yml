@@ -53,7 +53,7 @@ jobs:
           path: web
           
       - name: Zip web
-        uses: thedoctor0/zip-release@0.7
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'zip'
           path: web

@@ -51,7 +51,7 @@ jobs:
         run: flutter build linux --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
 
       - name: Create tarball
-        uses: thedoctor0/zip-release@0.7
+        uses: thedoctor0/zip-release@0.7.6
         with:
           type: 'tar'
           directory: build/linux/x64/release
