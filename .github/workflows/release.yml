@@ -12,8 +12,12 @@ jobs:
     uses: ./.github/workflows/release-github.yml
   google-play:
     uses: ./.github/workflows/release-google-play.yml
-    secrets: inherit
+    secrets:
+      PLAY_STORE_CONFIG_JSON: ${{ secrets.PLAY_STORE_CONFIG_JSON }}
   testflight:
     if: false
     uses: ./.github/workflows/release-testflight.yml
-    secrets: inherit
+    secrets:
+      APPSTORE_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
+      APPSTORE_API_KEY_ID: ${{ secrets.APPSTORE_API_KEY_ID }}
+      APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
