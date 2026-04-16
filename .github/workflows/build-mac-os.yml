@@ -13,18 +13,18 @@ jobs:
       majorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
   
       - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0.9.7
+        uses: gittools/actions/gitversion/setup@v3
         with:
           versionSpec: '5.x'
 
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.7
+        uses: gittools/actions/gitversion/execute@v3
         
   buildMac:
     name: build mac 🍏
@@ -32,10 +32,10 @@ jobs:
     needs: getVersion
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v6
   
       - name: Install flutter
-        uses: subosito/flutter-action@v2.10.0
+        uses: subosito/flutter-action@v2
       
       - name: Import certificate and provisioning profile
         run: |
@@ -74,7 +74,7 @@ jobs:
         run: mv build/macos/Build/Products/Release/qr_code_generator.app  ${{ vars.MAC_ARTIFACT_PATH }}
       
       - name: Upload a Build Artifact
-        uses: actions/upload-artifact@v4.3.3
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ vars.MAC_ARTIFACT }}
           path:  ${{ vars.MAC_ARTIFACT_PATH }}
@@ -93,12 +93,12 @@ jobs:
     needs: buildMac
     steps:
       - name: Download Build Artifact
-        uses: actions/download-artifact@v3.0.2
+        uses: actions/download-artifact@v8
         with:
           name: ${{ vars.MAC_ARTIFACT }}
 
       - name: Upload to TestFlight
-        uses: Apple-Actions/upload-testflight-build@v1
+        uses: Apple-Actions/upload-testflight-build@v4
         with:
           app-path: ${{ vars.MAC_ARTIFACT_PATH }}
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
