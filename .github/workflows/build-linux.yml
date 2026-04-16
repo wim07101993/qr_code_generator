@@ -50,7 +50,7 @@ jobs:
       - name: Build linux
         run: flutter build linux --build-name ${{ needs.getVersion.outputs.fullSemVer }} --build-number ${{ github.run_number }}
 
-      - name: Creat tarball
+      - name: Create tarball
         uses: thedoctor0/zip-release@0.7
         with:
           type: 'tar'
