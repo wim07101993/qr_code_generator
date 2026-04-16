@@ -13,4 +13,5 @@ jobs:
   google-play:
     uses: ./.github/workflows/release-google-play.yml
   testflight:
+    if: false
     uses: ./.github/workflows/release-testflight.yml

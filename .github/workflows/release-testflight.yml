@@ -10,17 +10,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Download Build Artifact
-        uses: dawidd6/action-download-artifact@v20
+        uses: actions/download-artifact@v8
         with:
-          workflow: build-ios.yml
-          workflow_conclusion: success
-          branch: main
           name: ${{ vars.IOS_ARTIFACT }}
           
       - name: Upload to TestFlight
         uses: Apple-Actions/upload-testflight-build@v4
         with:
-          app-path: ${{ vars.IOS_ARTIFACT_PATH }}
+          app-path: qr_code_generator.ipa
           issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
           api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
