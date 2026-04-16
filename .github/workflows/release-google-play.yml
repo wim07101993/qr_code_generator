@@ -2,6 +2,9 @@ name: Release to goole play
 
 on:
   workflow_call:
+    secrets:
+      PLAY_STORE_CONFIG_JSON:
+        required: true
   workflow_dispatch:
 
 jobs:
