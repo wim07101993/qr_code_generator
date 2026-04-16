@@ -31,7 +31,7 @@ jobs:
 
       - name: Determine Version
         id: gitversion
-        uses: gittools/actions/gitversion/execute@v4
+        uses: gittools/actions/gitversion/execute@v3
         
   buildAndroidAppBundle:
     name: build Android app-bundle 🤖
